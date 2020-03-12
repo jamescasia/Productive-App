@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:ProductiveApp/ScopedModels/pomodoro_tab_model.dart';
+import 'package:ProductiveApp/ScopedModels/app_model.dart';
 
 import 'package:ProductiveApp/DataModels/Globals.dart';
 import './TimePicker.dart';
@@ -15,13 +16,19 @@ class PomodoroTab extends StatefulWidget {
 class _PomodoroTabState extends State<PomodoroTab> {
   @override
   Widget build(BuildContext context) {
-    return ScopedModel<PomodoroModel>(
-        model: PomodoroModel(),
-        child: ScopedModelDescendant<PomodoroModel>(
-            builder: (context, snapshot, pomModel) {
-          return Material(
-            child: (pomModel.pomodoroState == PomodoroState.CountingDown)? CountdownShow(): TimePicker()
-          );
-        }));
+    print("pomodoro tab rebuilt!!!");
+    return ScopedModelDescendant<AppModel>(
+        builder: (context, snapshot, appModel) {
+      return ScopedModel<PomodoroModel>(
+          model: appModel.pomModel,
+          child: ScopedModelDescendant<PomodoroModel>(
+              builder: (context, snapshot, pomModel) {
+            return Material(
+                child: (pomModel.pomodoroState == PomodoroState.SetTimer ||
+                        pomModel.countdownState == CountdownState.Neutral)
+                    ? TimePicker()
+                    : CountdownShow());
+          }));
+    });
   }
 }

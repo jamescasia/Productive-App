@@ -50,23 +50,24 @@ class _TimePickerState extends State<TimePicker> {
                   "assets/app_icons/clock_icon.png",
                   height: 0.4 * Globals.height,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 60),
+                Center(
+                  // padding: const EdgeInsets.only(left: 60),
                   child: ClipRRect(
                     child: Container(
-                      width: Globals.width * 0.9,
+                      width: Globals.width * 0.7,
                       height: Globals.height * 0.14,
                       decoration: BoxDecoration(
-                        // color: Colors.red
-                        ),
+                          // color: Colors.red
+                          ),
                       child: CupertinoTimerPicker(
                         // backgroundColor: Colors.red,
                         mode: CupertinoTimerPickerMode.ms,
                         minuteInterval: 1,
                         secondInterval: 1,
-                        initialTimerDuration:
-                            Duration(minutes: 10, seconds: 30),
-                        onTimerDurationChanged: (Duration changedtimer) {},
+                        initialTimerDuration: pomModel.lastSetDuration,
+                        onTimerDurationChanged: (Duration changedtimer) {
+                          pomModel.lastSetDuration = changedtimer;
+                        },
                       ),
                     ),
                   ),
@@ -75,7 +76,9 @@ class _TimePickerState extends State<TimePicker> {
                 MaterialButton(
                   minWidth: Globals.dwidth * 200,
                   height: Globals.dheight * 40,
-                  onPressed: () {},
+                  onPressed: () {
+                    pomModel.startCountdown(pomModel.lastSetDuration);
+                  },
                   color: Colors.blue,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(7))),

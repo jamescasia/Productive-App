@@ -7,7 +7,7 @@ class TabChangerModel extends Model {
   void doneSwiping(int index) async {
     this.currentTab = index;
     print("called");
-    await Future.delayed(Duration(milliseconds: 1000));
+    await Future.delayed(Duration(milliseconds: 700));
     notifyListeners();
   }
 

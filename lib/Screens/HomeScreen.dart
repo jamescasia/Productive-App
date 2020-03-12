@@ -19,6 +19,10 @@ class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   TabController tC;
   TabChangerModel tabChangerModel;
+  HomeTab homeTab = HomeTab();
+  CollabTab collabTab = CollabTab();
+  PomodoroTab pomodoroTab = PomodoroTab();
+  ProfileTab profileTab = ProfileTab();
   var currentPage = 0;
   @override
   void initState() {
@@ -54,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen>
     Globals.width = MediaQuery.of(context).size.width;
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
-      statusBarColor: Colors.white,
+      statusBarColor: Colors.grey[100],
       systemNavigationBarColor: const Color(0xFF1BA977),
       // #61C350
     ));
@@ -62,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen>
       child: ScopedModel<AppModel>(
         model: AppModel(),
         child: ScopedModelDescendant<AppModel>(
-            builder: (context, snapshot, appModel) {
+            builder: (context, snapshot, appModel) { 
           tabChangerModel = TabChangerModel();
           tC.animation.addListener(() => tabChangerModel.doneSwiping(tC.index));
 
@@ -70,12 +74,9 @@ class _HomeScreenState extends State<HomeScreen>
             child: DefaultTabController(
               length: 4,
               child: Scaffold(
-                  body: TabBarView(controller: tC, children: [
-                    HomeTab(),
-                    CollabTab(),
-                    PomodoroTab(),
-                    ProfileTab()
-                  ]),
+                  body: TabBarView(
+                      controller: tC,
+                      children: [homeTab, collabTab, pomodoroTab, profileTab]),
                   bottomNavigationBar: Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
