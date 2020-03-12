@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'HomeTab.dart';
 import 'PomodoroTab.dart';
@@ -8,6 +8,7 @@ import 'package:ProductiveApp/DataModels/Globals.dart';
 
 import 'package:scoped_model/scoped_model.dart';
 import 'package:ProductiveApp/ScopedModels/app_model.dart';
+import 'package:ProductiveApp/ScopedModels/tab_changer_model.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -17,20 +18,20 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   TabController tC;
+  TabChangerModel tabChangerModel;
   var currentPage = 0;
   @override
   void initState() {
     super.initState();
     tC = TabController(vsync: this, length: 4);
-
-    tC.animation.addListener(() => this.doneSwiping());
   }
+
+  void afterBuild() {}
 
   void doneSwiping() {
     print("done swiping ");
     print(tC.index);
     // this.setState(() {});
- 
   }
 
   @override
@@ -39,8 +40,8 @@ class _HomeScreenState extends State<HomeScreen>
     super.dispose();
   }
 
-  void switchPage() {
-    tC.animateTo(this.currentPage);
+  void switchPage(int index) {
+    tC.animateTo(index);
   }
 
   @override
@@ -62,6 +63,9 @@ class _HomeScreenState extends State<HomeScreen>
         model: AppModel(),
         child: ScopedModelDescendant<AppModel>(
             builder: (context, snapshot, appModel) {
+          tabChangerModel = TabChangerModel();
+          tC.animation.addListener(() => tabChangerModel.doneSwiping(tC.index));
+
           return Material(
             child: DefaultTabController(
               length: 4,
@@ -81,72 +85,78 @@ class _HomeScreenState extends State<HomeScreen>
                       color: Colors.grey[200],
                     ),
                     height: Globals.dheight * 80,
-                    child: Flex(
-                        direction: Axis.horizontal,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: InkWell(
-                                onTap: () {
-                                  this.currentPage = 0;
-                                  this.switchPage();
-                                },
-                                splashColor: Colors.blue,
-                                highlightColor: Colors.blueAccent,
-                                child: (tC.index == 0)
-                                    ? Image.asset(
-                                        "assets/app_icons/home_icon.png")
-                                    : Image.asset(
-                                        "assets/app_icons/home_grey_icon.png")),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: InkWell(
-                                onTap: () {
-                                  this.currentPage = 1;
-                                  this.switchPage();
-                                },
-                                splashColor: Colors.blue,
-                                highlightColor: Colors.black,
-                                child: (tC.index == 1)
-                                    ? Image.asset(
-                                        "assets/app_icons/collab_icon.png")
-                                    : Image.asset(
-                                        "assets/app_icons/collab_grey_icon.png")),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: InkWell(
-                                onTap: () {
-                                  this.currentPage = 2;
-                                  this.switchPage();
-                                },
-                                splashColor: Colors.blue,
-                                highlightColor: Colors.black,
-                                child: (tC.index == 2)
-                                    ? Image.asset(
-                                        "assets/app_icons/pomodoro_icon.png")
-                                    : Image.asset(
-                                        "assets/app_icons/pomodoro_grey_icon.png")),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: InkWell(
-                                onTap: () {
-                                  this.currentPage = 3;
-                                  this.switchPage();
-                                },
-                                splashColor: Colors.blue,
-                                highlightColor: Colors.black,
-                                child: (tC.index == 3)
-                                    ? Image.asset(
-                                        "assets/app_icons/profile_icon.png")
-                                    : Image.asset(
-                                        "assets/app_icons/profile_grey_icon.png")),
-                          ),
-                        ]),
+                    child: ScopedModel<TabChangerModel>(
+                        model: tabChangerModel,
+                        child: ScopedModelDescendant<TabChangerModel>(
+                            builder: (context, snapshot, tabChangerModel) {
+                          return Flex(
+                              direction: Axis.horizontal,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: InkWell(
+                                      onTap: () {
+                                        switchPage(0);
+                                        tabChangerModel.switchPage(0);
+                                      },
+                                      splashColor: Colors.blue.withAlpha(0),
+                                      highlightColor:
+                                          Colors.blueAccent.withAlpha(0),
+                                      child: (tabChangerModel.currentTab == 0)
+                                          ? Image.asset(
+                                              "assets/app_icons/home_icon.png")
+                                          : Image.asset(
+                                              "assets/app_icons/home_grey_icon.png")),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: InkWell(
+                                      onTap: () {
+                                        switchPage(1);
+                                        tabChangerModel.switchPage(1);
+                                      },
+                                      splashColor: Colors.blue,
+                                      highlightColor: Colors.black,
+                                      child: (tabChangerModel.currentTab == 1)
+                                          ? Image.asset(
+                                              "assets/app_icons/collab_icon.png")
+                                          : Image.asset(
+                                              "assets/app_icons/collab_grey_icon.png")),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: InkWell(
+                                      onTap: () {
+                                        switchPage(2);
+                                        tabChangerModel.switchPage(2);
+                                      },
+                                      splashColor: Colors.blue,
+                                      highlightColor: Colors.black,
+                                      child: (tabChangerModel.currentTab == 2)
+                                          ? Image.asset(
+                                              "assets/app_icons/pomodoro_icon.png")
+                                          : Image.asset(
+                                              "assets/app_icons/pomodoro_grey_icon.png")),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: InkWell(
+                                      onTap: () {
+                                        switchPage(3);
+                                        tabChangerModel.switchPage(3);
+                                      },
+                                      splashColor: Colors.blue.withAlpha(0),
+                                      highlightColor: Colors.black.withAlpha(0),
+                                      child: (tabChangerModel.currentTab == 3)
+                                          ? Image.asset(
+                                              "assets/app_icons/profile_icon.png")
+                                          : Image.asset(
+                                              "assets/app_icons/profile_grey_icon.png")),
+                                ),
+                              ]);
+                        })),
                   )
 
                   //     new TabBar(indicatorColor: Colors.white.withAlpha(0), tabs: [
