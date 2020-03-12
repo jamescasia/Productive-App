@@ -27,8 +27,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  scoped_model:
-  bmnav: ^0.3.4
+  scoped_model: 
+  slide_countdown_clock: ^1.0.3
 
 
 # For information on the generic Dart part of this file, see the
