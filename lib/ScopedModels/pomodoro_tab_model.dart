@@ -8,7 +8,6 @@ class PomodoroModel extends Model {
   CountdownState countdownState;
 
   Timer pomTimer;
-  int timeLeftSeconds;
   Duration lastSetDuration = Duration(seconds: 30, minutes: 1);
   Duration timeLeftDuration;
   bool paused;
@@ -25,24 +24,22 @@ class PomodoroModel extends Model {
     } catch (e) {}
     this.pomodoroState = PomodoroState.CountingDown;
     this.countdownState = CountdownState.Playing;
-    this.timeLeftSeconds = countdownLength.inSeconds;
     this.timeLeftDuration = countdownLength;
     notifyListeners();
 
     this.pomTimer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
       print("ruiining");
 
-      if (this.timeLeftSeconds < 1) {
+      if (this.timeLeftDuration < Duration(seconds: 1)) {
         finishedTimer();
       } else if (this.countdownState == CountdownState.Playing) {
-        this.timeLeftSeconds -= 1;
+        this.timeLeftDuration -= Duration(seconds: 1);
         tickCallback();
       }
     });
   }
 
   pauseTimer() {
-    this.timeLeftDuration = this.secondsToDuration(this.timeLeftSeconds);
     this.countdownState = CountdownState.Paused;
     pomTimer.cancel();
     notifyListeners();
@@ -67,16 +64,14 @@ class PomodoroModel extends Model {
   resumeTimer() {
     this.countdownState = CountdownState.Playing;
 
-    startCountdown(this.secondsToDuration(this.timeLeftSeconds));
+    startCountdown(this.timeLeftDuration);
     notifyListeners();
   }
 
   tickCallback() {
     print("time left:");
-    print(this.timeLeftSeconds);
     print("time lefts:");
     print(this.timeLeftDuration.toString());
-    this.timeLeftDuration = this.secondsToDuration(this.timeLeftSeconds);
     notifyListeners();
   }
 

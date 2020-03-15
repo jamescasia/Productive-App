@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:ProductiveApp/ScopedModels/pomodoro_tab_model.dart';
-import 'package:slide_countdown_clock/slide_countdown_clock.dart';
+// import 'package:slide_countdown_clock/slide_countdown_clock.dart';
 import 'package:ProductiveApp/DataModels/Globals.dart';
+import 'package:ProductiveApp/Libraries/Slide_countdown/slide_countdown_clock.dart';
+
+import 'package:ProductiveApp/Libraries/Slide_countdown/slide_direction.dart';
 
 class CountdownShow extends StatefulWidget {
   @override
@@ -16,7 +19,6 @@ class _CountdownShowState extends State<CountdownShow> {
     return ScopedModelDescendant<PomodoroModel>(
         builder: (context, snapshot, pomModel) {
       return Container(
-        color: Colors.red,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -31,21 +33,23 @@ class _CountdownShowState extends State<CountdownShow> {
                     ),
                   ),
                   Positioned(
-                    top: 0,
+                    top: 30 * Globals.dheight,
                     bottom: 0,
                     right: 0,
                     left: 0,
                     child: (pomModel.countdownState == CountdownState.Paused)
-                        ? Text(
-                            pomModel.timeLeftDuration
-                                .toString()
-                                .substring(2, 7),
-                            style: TextStyle(
-                                fontSize: 70,
-                                fontWeight: FontWeight.w800,
-                                color: Colors.white),
+                        ? Center(
+                            child: Text(
+                              pomModel.timeLeftDuration
+                                  .toString()
+                                  .substring(2, 7),
+                              style: TextStyle(
+                                  fontSize: 70,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.white),
+                            ),
                           )
-                        : SlideCountdownClock(
+                        : SlideCountdownClocks(
                             tightLabel: true,
                             shouldShowDays: false,
                             duration: pomModel.timeLeftDuration,
@@ -61,7 +65,7 @@ class _CountdownShowState extends State<CountdownShow> {
               ),
               Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
                 MaterialButton(
-                  height: Globals.dheight * 140,
+                  height: Globals.dheight * 160,
                   onPressed: () {
                     pomModel.stopTimer();
                   },
@@ -76,7 +80,7 @@ class _CountdownShowState extends State<CountdownShow> {
                   ),
                 ),
                 MaterialButton(
-                  height: Globals.dheight * 140,
+                  height: Globals.dheight * 160,
                   onPressed: () {
                     if (pomModel.countdownState == CountdownState.Paused) {
                       pomModel.resumeTimer();
@@ -86,7 +90,9 @@ class _CountdownShowState extends State<CountdownShow> {
                     }
                   },
                   shape: CircleBorder(),
-                  color: Colors.yellow[800],
+                  color: (pomModel.countdownState == CountdownState.Paused)
+                      ? Colors.greenAccent[700]
+                      : Colors.yellow[800],
                   child: Text(
                     (pomModel.countdownState == CountdownState.Paused)
                         ? "Resume"
