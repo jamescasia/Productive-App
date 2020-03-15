@@ -9,24 +9,9 @@ class TipView extends StatefulWidget {
 }
 
 class _TipViewState extends State<TipView> with TickerProviderStateMixin {
-  var currentPage = images.length - 1.0;
-  List<String> welcomeImages = [
-    "assets/mission_icons/mission_icon_1.png",
-    "assets/mission_icons/mission_icon_2.png",
-    "assets/mission_icons/mission_icon_3.png",
-    "assets/mission_icons/mission_icon_4.png",
-    "assets/mission_icons/mission_icon_5.png",
-    "assets/mission_icons/mission_icon_1.png",
-  ];
   @override
   Widget build(BuildContext context) {
     // CardController controller;
-    PageController controller = PageController(initialPage: images.length - 1);
-    controller.addListener(() {
-      setState(() {
-        currentPage = controller.page;
-      });
-    });
 
     return Material(
       child: Scaffold(
@@ -89,21 +74,16 @@ class _TipViewState extends State<TipView> with TickerProviderStateMixin {
                     //       borderRadius: BorderRadius.all(Radius.circular(30))),
                     // )
                     Container(
-                        width: Globals.width * 0.8,
+                        width: Globals.width ,
                         // height: Globals.height * 0.55,
                         child: Stack(
                           children: <Widget>[
-                            SwipeableCardStack(currentPage),
-                            Positioned.fill(
-                              child: PageView.builder(
-                                itemCount: images.length,
-                                controller: controller,
-                                reverse: true,
-                                itemBuilder: (context, index) {
-                                  return Container();
-                                },
-                              ),
-                            )
+                            SwipeableCardStack([], [], [
+                              "assets/mission_icons/mission_icon_1.png",
+                              "assets/mission_icons/mission_icon_2.png",
+                              "assets/mission_icons/mission_icon_3.png",
+                              "assets/mission_icons/mission_icon_4png",
+                            ]),
                           ],
                         ))
                   ],
