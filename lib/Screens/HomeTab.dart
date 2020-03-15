@@ -1,7 +1,10 @@
+import 'package:ProductiveApp/Libraries/SwipeableCardStack/SwipeableCardStack.dart';
 import 'package:ProductiveApp/Screens/HomeScreen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:page_transition/page_transition.dart';
 import 'package:ProductiveApp/DataModels/Globals.dart';
+import './TipView.dart';
 
 class HomeTab extends StatefulWidget {
   @override
@@ -20,15 +23,34 @@ class _HomeTabState extends State<HomeTab> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Container(
+                    MaterialButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                type: PageTransitionType.downToUp,
+                                child: TipView()));
+                        // Navigator.of(context).push(PageRouteBuilder(
+                        //     opaque: false,
+                        //     pageBuilder: (BuildContext context, _, __) =>
+                        //         TipView()));
+                      },
                       height: Globals.dheight * 70,
-                      width: Globals.dwidth * 70,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(1000)),
+                      shape: CircleBorder(),
+                      child: Image.asset(
+                        "assets/app_icons/light_bulb_icon.png",
+                        height: Globals.dheight * 70,
                       ),
-                      child:
-                          Image.asset("assets/app_icons/light_bulb_icon.png"),
                     ),
+                    // Container(
+                    //   height: Globals.dheight * 70,
+                    //   width: Globals.dwidth * 70,
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.all(Radius.circular(1000)),
+                    //   ),
+                    //   child:
+                    //       Image.asset("assets/app_icons/light_bulb_icon.png"),
+                    // ),
                     Text(
                       "Dashboard",
                       style: TextStyle(
@@ -114,7 +136,9 @@ class _HomeTabState extends State<HomeTab> {
             ),
             SingleChildScrollView(
                 child: Column(
-              children: <Widget>[],
+              children: <Widget>[
+ 
+              ],
             ))
           ],
         ),
