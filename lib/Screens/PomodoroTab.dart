@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:ProductiveApp/ScopedModels/pomodoro_tab_model.dart';
 import 'package:ProductiveApp/ScopedModels/app_model.dart';
-
+import './CountdownOver.dart';
 import 'package:ProductiveApp/DataModels/Globals.dart';
 import './TimePicker.dart';
 import './CountdownShow.dart';
@@ -24,10 +24,11 @@ class _PomodoroTabState extends State<PomodoroTab> {
           child: ScopedModelDescendant<PomodoroModel>(
               builder: (context, snapshot, pomModel) {
             return Material(
-                child: (pomModel.pomodoroState == PomodoroState.SetTimer ||
-                        pomModel.countdownState == CountdownState.Neutral)
+                child: (pomModel.pomodoroState == PomodoroState.SetTimer)
                     ? TimePicker()
-                    : CountdownShow());
+                    : (pomModel.pomodoroState == PomodoroState.CountingDown)
+                        ? CountdownShow()
+                        : CountdownOver());
           }));
     });
   }

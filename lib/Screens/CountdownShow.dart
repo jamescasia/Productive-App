@@ -16,7 +16,7 @@ class _CountdownShowState extends State<CountdownShow> {
     return ScopedModelDescendant<PomodoroModel>(
         builder: (context, snapshot, pomModel) {
       return Container(
-        color:Colors.red,
+        color: Colors.red,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -39,13 +39,14 @@ class _CountdownShowState extends State<CountdownShow> {
                         ? Text(
                             pomModel.timeLeftDuration
                                 .toString()
-                                .replaceAll(RegExp(r'.0'), '').substring(0,5),
+                                .substring(2, 7),
                             style: TextStyle(
                                 fontSize: 70,
                                 fontWeight: FontWeight.w800,
                                 color: Colors.white),
                           )
                         : SlideCountdownClock(
+                            tightLabel: true,
                             shouldShowDays: false,
                             duration: pomModel.timeLeftDuration,
                             slideDirection: SlideDirection.Up,
