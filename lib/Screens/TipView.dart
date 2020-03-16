@@ -82,7 +82,8 @@ class _TipViewState extends State<TipView> with TickerProviderStateMixin {
                               "assets/mission_icons/mission_icon_1.png",
                               "assets/mission_icons/mission_icon_2.png",
                               "assets/mission_icons/mission_icon_3.png",
-                              "assets/mission_icons/mission_icon_4png",
+                              "assets/mission_icons/mission_icon_4.png",
+                              "assets/mission_icons/mission_icon_5.png",
                             ]),
                           ],
                         ))
