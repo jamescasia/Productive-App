@@ -25,11 +25,29 @@ class _HomeTabState extends State<HomeTab> {
                   children: <Widget>[
                     MaterialButton(
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                type: PageTransitionType.downToUp,
-                                child: TipView()));
+                        showGeneralDialog(
+                            barrierColor: Colors.black.withOpacity(0.5),
+                            transitionBuilder: (context, a1, a2, widget) {
+                              final curvedValue =
+                                  Curves.linearToEaseOut.transform(a1.value) -
+                                      1.0;
+                              return Transform(
+                                transform: Matrix4.translationValues(
+                                    0.0, curvedValue * -800, 0.0),
+                                child: TipView(),
+                              );
+                            },
+                            transitionDuration: Duration(milliseconds: 500),
+                            barrierDismissible: true,
+                            barrierLabel: '',
+                            context: context,
+                            pageBuilder: (context, animation1, animation2) {});
+
+                        // Navigator.push(
+                        //     context,
+                        //     PageTransition(
+                        //         type: PageTransitionType.downToUp,
+                        //         child: TipView()));
                         // Navigator.of(context).push(PageRouteBuilder(
                         //     opaque: false,
                         //     pageBuilder: (BuildContext context, _, __) =>
@@ -136,9 +154,7 @@ class _HomeTabState extends State<HomeTab> {
             ),
             SingleChildScrollView(
                 child: Column(
-              children: <Widget>[
- 
-              ],
+              children: <Widget>[],
             ))
           ],
         ),
