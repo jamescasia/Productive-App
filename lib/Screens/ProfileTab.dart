@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:ProductiveApp/DataModels/Globals.dart';
+import './elements/ProfileAchievement.dart';
 
 class ProfileTab extends StatefulWidget {
   @override
@@ -12,32 +13,45 @@ class _ProfileTabState extends State<ProfileTab> {
   Widget build(BuildContext context) {
     return Material(
       child: Container(
-        child: Flex(direction: Axis.vertical, children: [
-          Expanded(
-              flex: 5,
-              child: Column(mainAxisSize: MainAxisSize.max, children: [
-                Container(
-                  width: double.infinity,
-                  height: Globals.dheight * 60,
-                  child: Center(
-                      child: Padding(
-                    padding: const EdgeInsets.only(top: 18.0),
-                    child: Text(
-                      "Profile",
-                      style: TextStyle(
-                          fontSize: 22,
-                          color: Colors.grey,
-                          fontWeight: FontWeight.w500),
+        child: Column(children: [
+          Container(
+            // color: Colors.red,
+            width: double.infinity,
+            height: Globals.height * 0.4,
+            child: Column(mainAxisSize: MainAxisSize.max, children: [
+              Container(
+                height: Globals.dheight * 63,
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      width: double.infinity,
+                      height: Globals.dheight * 60,
+                      child: Center(
+                          child: Padding(
+                        padding: const EdgeInsets.only(top: 18.0),
+                        child: Text(
+                          "Profile",
+                          style: TextStyle(
+                              fontSize: 22,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w900),
+                        ),
+                      )),
                     ),
-                  )),
+                    Container(
+                        width: double.infinity,
+                        height: Globals.dheight * 3,
+                        color: Colors.grey[300]),
+                  ],
                 ),
-                Container(
-                    width: double.infinity,
-                    height: Globals.dheight * 3,
-                    color: Colors.grey[300]),
-                Column(
+              ),
+              Expanded(
+                // color: Colors.blue,
+                // width: double.infinity,
+                // height: 262 * Globals.dheight,
+                child: Column(
                   mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     Container(
                       height: Globals.dheight * 110,
@@ -73,7 +87,7 @@ class _ProfileTabState extends State<ProfileTab> {
                                 curve: Curves.linearToEaseOut,
                                 duration: Duration(milliseconds: 200),
                                 decoration: BoxDecoration(
-                                    color: Colors.green,
+                                    color: Colors.amber[400],
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(50))),
                                 width: MediaQuery.of(context).size.width * 0.5,
@@ -83,9 +97,27 @@ class _ProfileTabState extends State<ProfileTab> {
                           ],
                         )),
                   ],
-                )
-              ])),
-          Expanded(flex: 6, child: Container(color: Colors.blue))
+                ),
+              ),
+              Container(
+                  width: double.infinity,
+                  height: Globals.dheight * 3,
+                  color: Colors.grey[300]),
+            ]),
+          ),
+          Expanded(
+            child: Container(
+              color: Colors.red,
+              child: SingleChildScrollView(
+                child: Column(children: [
+                  ProfileAchievementRowUIElement(),
+                  ProfileAchievementRowUIElement(),
+                  ProfileAchievementRowUIElement(),
+                  ProfileAchievementRowUIElement()
+                ]),
+              ),
+            ),
+          )
         ]),
       ),
     );
