@@ -12,8 +12,7 @@ class AppModel extends Model {
 
   }
 
-
-  AppData appData; //all the offline static data, missions , quotes etc.
+ 
   UserAdapter userAdapter;
 
 }

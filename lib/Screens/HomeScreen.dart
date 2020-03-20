@@ -80,9 +80,9 @@ class _HomeScreenState extends State<HomeScreen>
                   bottomNavigationBar: Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          topRight: Radius.circular(30)),
+                      // borderRadius: BorderRadius.only(
+                      //     topLeft: Radius.circular(30),
+                      //     topRight: Radius.circular(30)),
                       color: Colors.grey[200],
                     ),
                     height: Globals.dheight * 80,

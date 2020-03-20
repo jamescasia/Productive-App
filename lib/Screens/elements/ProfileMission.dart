@@ -2,17 +2,24 @@ import 'package:flutter/material.dart';
 
 import 'package:ProductiveApp/DataModels/Globals.dart';
 
-class ProfileAchievementRowUIElement extends StatefulWidget {
+import 'package:ProductiveApp/DataModels/Mission.dart';
+
+class ProfileMissionRowUIElement extends StatefulWidget {
+  Mission mission;
+  ProfileMissionRowUIElement(this.mission);
   @override
-  _ProfileAchievementRowUIElementState createState() =>
-      _ProfileAchievementRowUIElementState();
+  _ProfileMissionRowUIElementState createState() =>
+      _ProfileMissionRowUIElementState(this.mission);
 }
 
-class _ProfileAchievementRowUIElementState
-    extends State<ProfileAchievementRowUIElement> {
+class _ProfileMissionRowUIElementState
+    extends State<ProfileMissionRowUIElement> {
+  Mission mission;
+  _ProfileMissionRowUIElementState(this.mission);
+
   @override
   Widget build(BuildContext context) {
-    return Container( 
+    return Container(
       // margin: EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -22,8 +29,8 @@ class _ProfileAchievementRowUIElementState
       height: Globals.dheight * 140,
       child: Center(
         child: Container(
-          width: Globals.width*0.8,
-          height: Globals.dheight*80,
+          width: Globals.width * 0.8,
+          height: Globals.dheight * 80,
           child: Flex(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -36,13 +43,14 @@ class _ProfileAchievementRowUIElementState
                       height: Globals.dheight * 80,
                       width: Globals.dheight * 80,
                       child: Image.asset(
-                        "assets/mission_icons/mission_icon_4.png",
+                        this.mission.badgeIconPathid,
                         height: Globals.dheight * 140,
                         width: Globals.dheight * 140,
                       ),
                       decoration: BoxDecoration(
                           color: Colors.blue[100],
-                          borderRadius: BorderRadius.all(Radius.circular(1000))),
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(1000))),
                     ),
                   ),
                 ),
@@ -54,18 +62,18 @@ class _ProfileAchievementRowUIElementState
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Tomato Farmer",
+                          Text(this.mission.title,
                               style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                   color: Colors.black,
                                   fontSize: 16)),
                           Flexible(
-                            child: Text("Complete 10 tomatoes using the timer",
+                            child: Text(this.mission.desc,
                                 overflow: TextOverflow.clip,
                                 textAlign: TextAlign.left,
                                 maxLines: 2,
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 16)),
+                                style: TextStyle(
+                                    color: Colors.grey, fontSize: 16)),
                           )
                         ]),
                   ),

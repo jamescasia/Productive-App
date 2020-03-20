@@ -11,7 +11,6 @@ class TipView extends StatefulWidget {
 class _TipViewState extends State<TipView> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    // CardController controller;
 
     return Material(
       child: Scaffold(
