@@ -1,4 +1,4 @@
-package com.example.ProductiveApp
+package org.aetherapps.mansana
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

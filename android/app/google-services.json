@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "441302941476",
+    "firebase_url": "https://productiveapp-80e90.firebaseio.com",
+    "project_id": "productiveapp-80e90",
+    "storage_bucket": "productiveapp-80e90.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:441302941476:android:c992279220c78dc70d3db1",
+        "android_client_info": {
+          "package_name": "org.aetherapps.mansana"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "441302941476-e83kjp0cb562t22e8sp6difcm2rgnqiq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6sR62qqmXUH0gu4UQnsWTFICArMggGv8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "441302941476-e83kjp0cb562t22e8sp6difcm2rgnqiq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

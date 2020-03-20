@@ -9,6 +9,8 @@ import 'package:ProductiveApp/DataModels/Globals.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:ProductiveApp/ScopedModels/app_model.dart';
 import 'package:ProductiveApp/ScopedModels/tab_changer_model.dart';
+import './SignUpScreen.dart';
+import './LogInScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -24,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen>
   PomodoroTab pomodoroTab = PomodoroTab();
   ProfileTab profileTab = ProfileTab();
   var currentPage = 0;
+  AppModel appModelSingleton = AppModel();
   @override
   void initState() {
     super.initState();
@@ -64,12 +67,12 @@ class _HomeScreenState extends State<HomeScreen>
     ));
     return SafeArea(
       child: ScopedModel<AppModel>(
-        model: AppModel(),
+        model: appModelSingleton,
         child: ScopedModelDescendant<AppModel>(
-            builder: (context, snapshot, appModel) { 
+            builder: (context, snapshot, appModel) {
           tabChangerModel = TabChangerModel();
           tC.animation.addListener(() => tabChangerModel.doneSwiping(tC.index));
-
+          return LogInScreen();
           return Material(
             child: DefaultTabController(
               length: 4,
