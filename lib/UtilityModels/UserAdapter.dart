@@ -14,6 +14,22 @@ class UserAdapter {
   FirebaseUser fUser;
 
 
+  UserAdapter(){
+    groupTaskAdapter = GroupTaskAdapter();
+    soloTaskAdapter = SoloTaskAdapter();
+    user = User();
+    
+    
+
+
+  }
+
+
+  
+
+
+
+
 
 
 

@@ -33,6 +33,7 @@ dev_dependencies:
   flutter_tindercard: ^0.1.7
   firebase_database: ^3.1.3
   firebase_auth:
+  progress_indicators: ^0.1.4
   # flutter_card_selector: 
 
 # For information on the generic Dart part of this file, see the
