@@ -18,9 +18,7 @@ class UserAdapter {
     groupTaskAdapter = GroupTaskAdapter();
     soloTaskAdapter = SoloTaskAdapter();
     user = User();
-    
-    
-
+      
 
   }
 

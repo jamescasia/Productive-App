@@ -1,3 +1,4 @@
+import 'package:ProductiveApp/DataModels/AppDatabase.dart';
 import 'package:ProductiveApp/ScopedModels/pomodoro_tab_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:ProductiveApp/DataModels/AppData.dart';
@@ -12,6 +13,7 @@ class AppModel extends Model {
   PomodoroModel pomModel;
   UserAdapter userAdapter;
   AppAuth appAuth;
+  AppDatabase appDatabase;
   AuthState authState = AuthState.LoggedOut;
   SignUpState signUpState = SignUpState.NotSignedUp;
 
@@ -20,6 +22,7 @@ class AppModel extends Model {
     pomModel = PomodoroModel();
     userAdapter = UserAdapter();
     appAuth = AppAuth();
+    appDatabase = AppDatabase();
   }
 
   logInScreenLogIn(email, pass) async {
@@ -79,7 +82,11 @@ class AppModel extends Model {
       print(userAdapter.fUser);
 
       signUpState = SignUpState.SignedUp;
+
+      await appDatabase.addNewUser(username, userAdapter.fUser.email.toString(),
+          userAdapter.fUser.uid.toString());
     } catch (E) {
+      print(E.toString());
       signUpState = SignUpState.InvalidSignUp;
       Future.delayed(const Duration(milliseconds: 2500), () {
         signUpState = SignUpState.NotSignedUp;
