@@ -13,6 +13,7 @@ class AppModel extends Model {
   UserAdapter userAdapter;
   AppAuth appAuth;
   AuthState authState = AuthState.LoggedOut;
+  SignUpState signUpState = SignUpState.NotSignedUp;
 
   AppModel() {
     print("Appmodel is built");
@@ -66,6 +67,34 @@ class AppModel extends Model {
     print(await FirebaseAuth.instance.currentUser());
     return authState;
   }
+
+  signUpScreenSignUp(username, email, pass) async {
+    try {
+      signUpState = SignUpState.SigningUp;
+      print(signUpState);
+      notifyListeners();
+
+      userAdapter.fUser = await appAuth.signUpWithEmailAndPass(email, pass);
+
+      print(userAdapter.fUser);
+
+      signUpState = SignUpState.SignedUp;
+    } catch (E) {
+      signUpState = SignUpState.InvalidSignUp;
+      Future.delayed(const Duration(milliseconds: 2500), () {
+        signUpState = SignUpState.NotSignedUp;
+
+        print(signUpState);
+        notifyListeners();
+      });
+    }
+
+    notifyListeners();
+    print(signUpState);
+    print(await FirebaseAuth.instance.currentUser());
+    return signUpState;
+  }
 }
 
+enum SignUpState { SigningUp, NotSignedUp, InvalidSignUp, SignedUp }
 enum AuthState { LoggedIn, LoggingIn, LoggedOut, LoggingOut, InvalidLogIn }

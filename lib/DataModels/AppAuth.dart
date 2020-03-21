@@ -16,4 +16,8 @@ class AppAuth {
   logOut() async {
     await fbAuth.signOut();
   }
+
+  signUpWithEmailAndPass(email, pass) async {
+    (await fbAuth.createUserWithEmailAndPassword(email: email, password: pass)).user;
+  }
 }
