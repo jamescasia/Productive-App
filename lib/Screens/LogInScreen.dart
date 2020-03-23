@@ -20,6 +20,7 @@ class Mansana extends StatelessWidget {
     return ScopedModel<AppModel>(
         model: AppModel(),
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           home: LogInScreen(),
         ));
   }

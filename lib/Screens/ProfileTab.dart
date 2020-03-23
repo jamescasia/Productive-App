@@ -5,6 +5,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:ProductiveApp/DataModels/Globals.dart';
 import './elements/ProfileMission.dart';
 import 'package:ProductiveApp/ScopedModels/app_model.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ProfileTab extends StatefulWidget {
   @override
@@ -12,6 +13,11 @@ class ProfileTab extends StatefulWidget {
 }
 
 class _ProfileTabState extends State<ProfileTab> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<AppModel>(
@@ -34,30 +40,37 @@ class _ProfileTabState extends State<ProfileTab> {
                         child: Center(
                             child: Padding(
                           padding: const EdgeInsets.only(top: 18.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          child: Stack(
                             children: <Widget>[
-                              SizedBox(width: 1),
-                              Text(
-                                "Profile",
-                                style: TextStyle(
-                                    fontSize: 22,
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w900),
+                              Center(
+                                child: Text(
+                                  "Profile",
+                                  style: TextStyle(
+                                      fontSize: 22,
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.w900),
+                                ),
                               ),
-                              InkWell(
-                                  onTap: () async {
-                                    var success =
-                                        await appModel.logInScreenLogOut();
-                                    if (success == AuthState.LoggedOut) {
-                                      Navigator.pushReplacement(
-                                          context,
-                                          new MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  LogInScreen()));
-                                    }
-                                  },
-                                  child: Icon(Icons.supervised_user_circle))
+                              Positioned(
+                                right: 10,
+                                child: InkWell(
+                                    onTap: () async {
+                                      var success =
+                                          await appModel.logInScreenLogOut();
+                                      if (success == AuthState.LoggedOut) {
+                                        Navigator.pushReplacement(
+                                            context,
+                                            new MaterialPageRoute(
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        LogInScreen()));
+                                      }
+                                    },
+                                    child: Icon(
+                                      FontAwesomeIcons.signOutAlt,
+                                      color: Colors.red[300],
+                                    )),
+                              )
                             ],
                           ),
                         )),
