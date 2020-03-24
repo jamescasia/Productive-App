@@ -12,8 +12,7 @@ class PomodoroModel extends Model {
   Duration timeLeftDuration;
   bool paused;
 
-  PomodoroModel() {
-    print("pommodel is built!");
+  PomodoroModel() { 
     this.pomodoroState = PomodoroState.SetTimer;
     this.countdownState = CountdownState.Neutral;
   }

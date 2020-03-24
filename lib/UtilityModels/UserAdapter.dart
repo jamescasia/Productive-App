@@ -9,18 +9,18 @@ class UserAdapter {
 
 
   GroupTaskAdapter groupTaskAdapter;
-  SoloTaskAdapter soloTaskAdapter;
   User user;
   FirebaseUser fUser;
 
 
   UserAdapter(){
     groupTaskAdapter = GroupTaskAdapter();
-    soloTaskAdapter = SoloTaskAdapter();
     user = User();
       
 
   }
+
+
 
 
   

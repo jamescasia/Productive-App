@@ -8,13 +8,13 @@ class User {
   List<UserInfo> friends = [];
   List<SoloTask> soloTasks = [];
   List<GroupTask> groupTasks = [];
-  List<double> loginEvents = [];
   Stats stats;
 
   User() {
     friends = [];
     soloTasks = [];
     groupTasks = [];
-    loginEvents = [];
+    stats = Stats();
+    userInfo = UserInfo("","","");
   }
 }

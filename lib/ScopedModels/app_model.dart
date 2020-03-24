@@ -1,6 +1,7 @@
 import 'package:ProductiveApp/DataModels/AppDatabase.dart';
 import 'package:ProductiveApp/ScopedModels/home_tab_model.dart';
 import 'package:ProductiveApp/ScopedModels/pomodoro_tab_model.dart';
+import 'package:ProductiveApp/ScopedModels/profile_tab_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:ProductiveApp/DataModels/AppData.dart';
 import 'package:ProductiveApp/DataModels/AppAuth.dart';
@@ -15,6 +16,7 @@ import 'package:ProductiveApp/DataModels/SoloTask.dart';
 class AppModel extends Model {
   PomodoroModel pomModel;
   HomeTabModel homeTabModel;
+  ProfileTabModel profileTabModel;
   UserAdapter userAdapter;
   AppAuth appAuth;
   AppDatabase appDatabase;
@@ -22,12 +24,12 @@ class AppModel extends Model {
   SignUpState signUpState = SignUpState.NotSignedUp;
 
   AppModel() {
-    print("Appmodel is built");
     pomModel = PomodoroModel();
     homeTabModel = HomeTabModel();
     userAdapter = UserAdapter();
     appAuth = AppAuth();
     appDatabase = AppDatabase();
+    profileTabModel = ProfileTabModel();
   }
 
   logInScreenLogIn(email, pass) async {
@@ -40,7 +42,11 @@ class AppModel extends Model {
       print(userAdapter.fUser);
       authState = AuthState.LoggedIn;
 
-      appDatabase.initializeUserDatabase(userAdapter.fUser.uid.toString());
+      await appDatabase
+          .initializeUserDatabase(userAdapter.fUser.uid.toString());
+      userAdapter.user.stats.numOfLoginsCompleted += 1;
+      await profileTabFetchUserStats();
+      profileTabUpdateStats();
     } catch (E) {
       authState = AuthState.InvalidLogIn;
       Future.delayed(const Duration(milliseconds: 2500), () {
@@ -52,6 +58,7 @@ class AppModel extends Model {
     }
 
     await homeTabFetchSoloTasks();
+    await profileTabFetchUserInfo();
     notifyListeners();
 
     print(authState);
@@ -93,7 +100,12 @@ class AppModel extends Model {
 
       await appDatabase.addNewUser(username, userAdapter.fUser.email.toString(),
           userAdapter.fUser.uid.toString());
-      appDatabase.initializeUserDatabase(userAdapter.fUser.uid.toString());
+      await appDatabase
+          .initializeUserDatabase(userAdapter.fUser.uid.toString());
+      userAdapter.user.stats.numOfLoginsCompleted += 1;
+
+      await profileTabFetchUserStats();
+      profileTabUpdateStats();
     } catch (E) {
       print(E.toString());
       signUpState = SignUpState.InvalidSignUp;
@@ -105,6 +117,7 @@ class AppModel extends Model {
       });
     }
     await homeTabFetchSoloTasks();
+    await profileTabFetchUserInfo();
     notifyListeners();
     print(signUpState);
     print(await FirebaseAuth.instance.currentUser());
@@ -151,6 +164,8 @@ class AppModel extends Model {
     for (Subtask subtask in soloTask.subtasks) {
       if (subtask.completed) {
         completedSubtasks += 1;
+
+        userAdapter.user.stats.numOfSoloTasksCompleted += 1;
       }
     }
 
@@ -167,6 +182,8 @@ class AppModel extends Model {
       print("Error");
       print(E);
     }
+
+    profileTabUpdateStats();
     notifyListeners();
   }
 
@@ -183,6 +200,8 @@ class AppModel extends Model {
       }
     }
     print("subtask");
+    userAdapter.user.stats.numOfSubtasksCompleted += 1;
+    profileTabUpdateStats();
     userAdapter.user.soloTasks.add(soloTask);
     userAdapter.user.soloTasks.removeLast();
     homeTabUpdateSoloTask(soloTask);
@@ -190,13 +209,17 @@ class AppModel extends Model {
 
   homeTabUpdateAllTasksProgress() {
     double sumOfProgressPercentages = 0.0;
+    int soloTasksCompleted = 0;
     for (SoloTask st in userAdapter.user.soloTasks) {
       sumOfProgressPercentages += st.totalProgress;
+      soloTasksCompleted += (st.completed) ? 1 : 0;
     }
     homeTabModel.percentCompletedTasks =
         (userAdapter.user.soloTasks.length == 0)
             ? 0
             : sumOfProgressPercentages / userAdapter.user.soloTasks.length;
+    userAdapter.user.stats.numOfSoloTasksCompleted = soloTasksCompleted;
+    profileTabUpdateStats();
   }
 
   homeTabUpdateHomeState() {
@@ -212,6 +235,38 @@ class AppModel extends Model {
     homeTabUpdateHomeState();
 
     notifyListeners();
+  }
+
+  pomodoroTabAcceptFinishedTimer() {
+    userAdapter.user.stats.numOfPomodorosCompleted += 1;
+
+    profileTabUpdateStats();
+  }
+
+  profileTabUpdateStats() async {
+    userAdapter.user.stats.update();
+    int numOfCompletedMissions = 0;
+
+    for (bool b in userAdapter.user.stats.missionsCompleted) {
+      if (b) {
+        numOfCompletedMissions += 1;
+      }
+    }
+    profileTabModel.updateProfilePercentageCompletedMissions(
+        numOfCompletedMissions /
+            userAdapter.user.stats.missionsCompleted.length);
+    notifyListeners();
+    await appDatabase.updateUserStats(userAdapter.user.stats);
+  }
+
+  profileTabFetchUserStats() async {
+    userAdapter.user.stats = await appDatabase.fetchUserStats();
+    notifyListeners();
+  }
+
+  profileTabFetchUserInfo() async {
+    userAdapter.user.userInfo =
+        await appDatabase.fetchUserInfo(userAdapter.fUser.uid);
   }
 }
 

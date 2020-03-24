@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:firebase_database/firebase_database.dart';
 
 import 'package:ProductiveApp/DataModels/SoloTask.dart';
+import 'package:ProductiveApp/DataModels/Stats.dart';
+
+import 'package:ProductiveApp/DataModels/UserInfo.dart';
 
 class AppDatabase {
   FirebaseDatabase fDatabase;
@@ -28,11 +31,13 @@ class AppDatabase {
 
   addNewUser(String name, String email, String uid) {
     usersRef.child(uid).set(name);
+    Stats stats = Stats();
     userDataRef.child(uid).set({
       "Friends": {"dummyUid1": "dummyName1", "dummyUid2": "dummyName2"},
-      "GroupTasks": {"dummyGroupTask1": false},
-      "UserInfo": {"email": email, "name": name, "ppID": 0},
-      "SoloTasks": {"dummySoloTask1": false},
+      // "GroupTasks": {"dummyGroupTask1": false},
+      "UserInfo": UserInfo(name, email, "ppID").toJson(),
+      // "SoloTasks": {"dummySoloTask1": false},
+      "Stats": stats.toJson(),
       "LoginLog": {"dummyTimestamp1": "dummyTimestampValue"}
     });
   }
@@ -69,9 +74,7 @@ class AppDatabase {
 
       print(listOfSoloTaskIds);
 
-      await soloTasksRef.once().then((data) {
-        print(data.value);
-
+      await soloTasksRef.once().then((data) { 
         data.value.forEach((k, value) {
           print(k);
           print(value);
@@ -84,5 +87,35 @@ class AppDatabase {
     } catch (E) {}
 
     return listOfSoloTasks;
+  }
+
+  fetchUserStats() async {
+    Stats stats;
+
+    try {
+      await personalUserRef.child("Stats").once().then((data) { 
+        stats = Stats.fromJson(jsonDecode(data.value.toString()));
+      });
+    } catch (e) {
+      print(e);
+    }
+    return stats;
+  }
+
+  updateUserStats(Stats stats) async {
+    personalUserRef.child('Stats').set(stats.toJson());
+  }
+
+  fetchUserInfo(String uid) async {
+    UserInfo userInfo;
+
+    try {
+      await personalUserRef.child("UserInfo").once().then((data) { 
+        userInfo = UserInfo.fromJson(jsonDecode(data.value.toString()));
+      });
+    } catch (e) {
+      print(e);
+    }
+    return userInfo;
   }
 }

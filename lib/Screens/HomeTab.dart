@@ -49,7 +49,7 @@ class _HomeTabState extends State<HomeTab> {
                                   left: -15 * Globals.dwidth,
                                   child: MaterialButton(
                                     onPressed: () {
-                                      appModel.homeTabFetchSoloTasks();
+                                      // appModel.homeTabFetchSoloTasks();
                                       showGeneralDialog(
                                           barrierColor:
                                               Colors.black.withOpacity(0.5),

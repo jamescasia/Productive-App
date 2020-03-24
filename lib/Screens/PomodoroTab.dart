@@ -15,8 +15,7 @@ class PomodoroTab extends StatefulWidget {
 
 class _PomodoroTabState extends State<PomodoroTab> {
   @override
-  Widget build(BuildContext context) {
-    print("pomodoro tab rebuilt!!!");
+  Widget build(BuildContext context) { 
     return ScopedModelDescendant<AppModel>(
         builder: (context, snapshot, appModel) {
       return ScopedModel<PomodoroModel>(
