@@ -1,16 +1,25 @@
+import 'package:ProductiveApp/DataModels/AppData.dart';
 import 'package:flutter/material.dart';
 import 'package:ProductiveApp/DataModels/Globals.dart';
+import 'package:ProductiveApp/DataModels/Tip.dart';
 import 'package:flutter_tindercard/flutter_tindercard.dart';
 import 'package:ProductiveApp/Libraries/SwipeableCardStack/SwipeableCardStack.dart';
+import 'dart:math';
 
 class TipView extends StatefulWidget {
+  int rand;
+  TipView(this.rand);
   @override
-  _TipViewState createState() => _TipViewState();
+  _TipViewState createState() => _TipViewState(this.rand);
 }
 
 class _TipViewState extends State<TipView> with TickerProviderStateMixin {
   @override
+  int rand;
+  _TipViewState(this.rand);
   Widget build(BuildContext context) {
+    // print("chosen");
+    // print(AppData.tips[rng.nextInt(AppData.tips.length - 1)].imagePath);
     return Material(
       child: Scaffold(
         body: Container(
@@ -62,74 +71,69 @@ class _TipViewState extends State<TipView> with TickerProviderStateMixin {
                 flex: 3,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: Globals.width * 0.76,
-                      height: Globals.height * 0.5,
-                      decoration: BoxDecoration(
-                          color: Colors.amber[100],
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.amber[600],
-                              blurRadius: 3.0,
-                              spreadRadius: 3.0,
-                              offset: Offset(
-                                -5.0,
-                                8.0,
-                              ),
-                            )
-                          ],
-                          borderRadius: BorderRadius.all(Radius.circular(30))),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            SizedBox(height: Globals.dheight * 10),
-                            Text("Do the Pomodoro!",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.grey[700],
-                                    fontSize: 28)),
-                            Container(
-                              height: Globals.dheight * 2,
-                              width: Globals.width * 0.76 * 0.9,
-                              color: Colors.grey[300],
-                            ),
-                            Container(
-                              width: Globals.width * 0.76 * 0.9,
-                              child: Text(
-                                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w300,
-                                      color: Colors.grey[700],
-                                      fontSize: 14)),
-                            ),
-                            Image.asset(
-                              "assets/mission_icons/mission_icon_1.png",
-                              height: Globals.dheight * 220,
-                            ),
-                          ]),
-                    )
-                    // Container(
-                    //     width: Globals.width ,
-                    //     // height: Globals.height * 0.55,
-                    //     child:
-
-                    //     Stack(
-                    //       children: <Widget>[
-                    //         SwipeableCardStack([], [], [
-                    //           "assets/mission_icons/mission_icon_1.png",
-                    //           "assets/mission_icons/mission_icon_2.png",
-                    //           "assets/mission_icons/mission_icon_3.png",
-                    //           "assets/mission_icons/mission_icon_4.png",
-                    //           "assets/mission_icons/mission_icon_5.png",
-                    //         ]),
-                    //       ],
-                    //     ))
-                  ],
+                  children: [TipCard(AppData.tips[rand])],
                 )),
           ]),
           // color: Colors.red,
         ),
+      ),
+    );
+  }
+}
+
+class TipCard extends StatelessWidget {
+  Tip tip;
+
+  TipCard(this.tip);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: Globals.width * 0.76,
+      height: Globals.height * 0.5,
+      decoration: BoxDecoration(
+          color: Colors.amber[100],
+          boxShadow: [
+            BoxShadow(
+              color: Colors.amber[600],
+              blurRadius: 3.0,
+              spreadRadius: 3.0,
+              offset: Offset(
+                -5.0,
+                8.0,
+              ),
+            )
+          ],
+          borderRadius: BorderRadius.all(Radius.circular(30))),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 7),
+        child:
+            Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          SizedBox(height: Globals.dheight * 10),
+          Text(tip.title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey[700],
+                  fontSize: 28)),
+          Container(
+            height: Globals.dheight * 2,
+            width: Globals.width * 0.76 * 0.9,
+            color: Colors.grey[400],
+          ),
+          Container(
+            width: Globals.width * 0.76 * 0.9,
+            child: Text(tip.text,
+                style: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    color: Colors.grey[700],
+                    fontSize: 16)),
+          ),
+          Image.asset(
+            tip.imagePath,
+            height: Globals.dheight * 220,
+          ),
+        ]),
       ),
     );
   }

@@ -401,10 +401,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                   child: Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
-                                                            .spaceBetween,
+                                                            .start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
                                                     children: <Widget>[
                                                       //insert google logo here
-                                                      Container(),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                bottom: 7),
+                                                        child: Image.asset(
+                                                          "assets/app_icons/google.png",
+                                                          height:
+                                                              Globals.dheight *
+                                                                  40,
+                                                          scale: 2,
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: 1),
                                                       Text(
                                                         "GOOGLE",
                                                         style: TextStyle(
@@ -429,10 +445,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                   child: Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
-                                                            .spaceBetween,
+                                                            .start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
                                                     children: <Widget>[
                                                       //insert google logo here
-                                                      Container(),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                bottom: 7),
+                                                        child: Image.asset(
+                                                          "assets/app_icons/fb.png",
+                                                          height:
+                                                              Globals.dheight *
+                                                                  40,
+                                                          scale: 2,
+                                                        ),
+                                                      ),
+                                                      // Container(),
+
+                                                      SizedBox(width: 1),
                                                       Text(
                                                         "FACEBOOK",
                                                         style: TextStyle(

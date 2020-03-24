@@ -1,3 +1,4 @@
+import 'package:ProductiveApp/DataModels/AppData.dart';
 import 'package:ProductiveApp/Libraries/SwipeableCardStack/SwipeableCardStack.dart';
 import 'package:ProductiveApp/ScopedModels/app_model.dart';
 import 'package:ProductiveApp/ScopedModels/home_tab_model.dart';
@@ -12,7 +13,7 @@ import './SoloTaskView.dart';
 import './AddTaskDialog.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+import 'dart:math';
 import 'package:ProductiveApp/DataModels/Globals.dart';
 
 class HomeTab extends StatefulWidget {
@@ -50,6 +51,8 @@ class _HomeTabState extends State<HomeTab> {
                                   child: MaterialButton(
                                     onPressed: () {
                                       // appModel.homeTabFetchSoloTasks();
+                                      int rand = Random()
+                                          .nextInt(AppData.tips.length - 1);
                                       showGeneralDialog(
                                           barrierColor:
                                               Colors.black.withOpacity(0.5),
@@ -63,7 +66,7 @@ class _HomeTabState extends State<HomeTab> {
                                               transform:
                                                   Matrix4.translationValues(0.0,
                                                       curvedValue * -800, 0.0),
-                                              child: TipView(),
+                                              child: TipView(rand),
                                             );
                                           },
                                           transitionDuration:

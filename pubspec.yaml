@@ -53,6 +53,7 @@ flutter:
   assets:
     - assets/app_icons/
     - assets/mission_icons/
+    - assets/tips/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
