@@ -59,7 +59,7 @@ class CollabSubtask {
         '"id"': '"$id"',
         '"title"': '"$title"',
         '"deadline"': '"$deadline"',
-        '"assignedEmail"': assignedEmail,
+        '"assignedEmail"': '"$assignedEmail"',
         '"completed"': completed,
       };
 

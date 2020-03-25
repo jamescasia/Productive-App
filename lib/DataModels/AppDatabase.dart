@@ -214,12 +214,11 @@ class AppDatabase {
     String name = "";
     try {
       await userDataRef.child("$uid/UserInfo").once().then((data) {
-        
-        name = data.value['"name"']; 
+        name = data.value['"name"'];
       });
     } catch (E) {
       print(E.toString());
-    } 
-    return name;
+    }
+    return name.replaceAll('"', "");
   }
 }

@@ -280,6 +280,10 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
                                   child: InkWell(
                                     onTap: () {
                                       if (collabSubtask.completed) return;
+
+                                      if (appModel
+                                              .userAdapter.user.userInfo.name !=
+                                          collabSubtask.assignedEmail) return;
                                       showGeneralDialog(
                                           barrierColor:
                                               Colors.black.withOpacity(0.5),
@@ -360,7 +364,7 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Text(
-                              collabSubtask.assignedEmail,
+                              collabSubtask.assignedEmail.replaceAll('"', ""),
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                   color: Colors.grey[700],

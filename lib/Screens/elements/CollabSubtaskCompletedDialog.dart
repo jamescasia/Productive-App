@@ -55,6 +55,7 @@ class _CollabSubtaskCompletedDialogState
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(6))),
             onPressed: () async {
+              
               collabSubtask.completed = true;
 
               Navigator.pop(context);
