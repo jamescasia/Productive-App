@@ -8,6 +8,8 @@ import 'package:ProductiveApp/DataModels/Stats.dart';
 import 'package:ProductiveApp/DataModels/UserInfo.dart';
 import 'CollabTask.dart';
 
+import 'package:ProductiveApp/DataModels/Notification.dart';
+
 class AppDatabase {
   FirebaseDatabase fDatabase;
   DatabaseReference personalUserRef;
@@ -226,6 +228,12 @@ class AppDatabase {
       await userDataRef
           .child("$uid/CollabTasks/${collabTask.id}")
           .set(collabTask.completed);
+    } catch (e) {}
+  }
+
+  notifyUser(String uid, Notification notif) async {
+    try {
+      await userDataRef.child("$uid/Notifications").push().set(notif.toJson());
     } catch (e) {}
   }
 }

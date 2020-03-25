@@ -334,7 +334,9 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
                         ),
                         InkWell(
                           customBorder: CircleBorder(),
-                          onTap: () {},
+                          onTap: () {
+                            
+                          },
                           child: Container(
                             width: Globals.dheight * 50,
                             height: Globals.dheight * 50,

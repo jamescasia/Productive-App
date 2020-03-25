@@ -10,6 +10,7 @@ import 'package:ProductiveApp/Screens/LogInScreen.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:ProductiveApp/DataModels/AppData.dart';
 import 'package:ProductiveApp/DataModels/AppAuth.dart';
+import 'package:ProductiveApp/DataModels/Notification.dart';
 import 'package:ProductiveApp/UtilityModels/UserAdapter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
@@ -567,6 +568,13 @@ class AppModel extends Model {
     collabTabUpdateAllTasksProgress();
     collabTabUpdateCollabTabState(); 
     notifyListeners();
+  }
+
+  collabTabNotifyUser(String uid, String taskName, String message) async{
+
+    appDatabase.notifyUser(uid, Notification(taskName, DateTime.now().toIso8601String(), message));
+
+
   }
 }
 
