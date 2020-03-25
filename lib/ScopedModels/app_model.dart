@@ -25,8 +25,7 @@ class AppModel extends Model {
   ProfileTabModel profileTabModel;
   CollabTabModel collabTabModel;
   UserAdapter userAdapter;
-  AppAuth appAuth;
-  int updateTicker = 1;
+  AppAuth appAuth; 
   AppDatabase appDatabase;
   AuthState authState = AuthState.LoggedOut;
   SignUpState signUpState = SignUpState.NotSignedUp;
@@ -565,19 +564,8 @@ class AppModel extends Model {
   }
 
   collabTabUpdateCollabTasks() {
-    print("after");
-    userAdapter.user.collabTasks.forEach((collabTask) {
-      print(collabTask.toJson());
-    });
-    print("called updates");
     collabTabUpdateAllTasksProgress();
-    collabTabUpdateCollabTabState();
-    updateTicker += 1;
-
-    notifyListeners();
-    updateTicker = 0;
-    notifyListeners();
-    updateTicker = 1;
+    collabTabUpdateCollabTabState(); 
     notifyListeners();
   }
 }

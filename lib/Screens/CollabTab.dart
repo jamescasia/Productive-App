@@ -269,19 +269,15 @@ class _CollabTabState extends State<CollabTab> {
                                             children: <Widget>[
                                               Column(
                                                 mainAxisSize: MainAxisSize.max,
-                                                children: (appModel
-                                                            .updateTicker >
-                                                        0)
-                                                    ? appModel.userAdapter.user
-                                                        .collabTasks
-                                                        .map((s) {
-                                                        print(s.toJson());
-                                                        print("revbuillltt");
+                                                children: appModel.userAdapter
+                                                    .user.collabTasks
+                                                    .map((s) {
+                                                  print(s.toJson());
+                                                  print("revbuillltt");
 
-                                                        return new CollabTaskView(
-                                                            s, appModel);
-                                                      }).toList()
-                                                    : null,
+                                                  return new CollabTaskView(
+                                                      s, appModel, UniqueKey());
+                                                }).toList(),
                                               ),
                                               SizedBox(
                                                   height:

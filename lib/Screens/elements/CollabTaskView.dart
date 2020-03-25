@@ -9,7 +9,8 @@ import 'package:scoped_model/scoped_model.dart';
 class CollabTaskView extends StatefulWidget {
   CollabTask collabTask;
   AppModel appModel;
-  CollabTaskView(this.collabTask, this.appModel);
+  Key key;
+  CollabTaskView(this.collabTask, this.appModel, this.key);
 
   @override
   _CollabTaskViewState createState() =>
