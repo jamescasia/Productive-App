@@ -111,7 +111,7 @@ class AppModel extends Model {
         Fluttertoast.showToast(
             msg: "User does not exist. Register first!",
             toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.CENTER,
+            gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,
             fontSize: 16.0);
 
@@ -156,14 +156,13 @@ class AppModel extends Model {
 
       var exists = await appDatabase.userExists(userAdapter.uid);
       if (exists) {
-          Fluttertoast.showToast(
+        Fluttertoast.showToast(
             msg: "User already registered! Logging in.",
             toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.CENTER,
+            gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,
             fontSize: 16.0);
         await logInScreenGoogleLogIn();
-
       }
 
       print(userAdapter.gUser);
