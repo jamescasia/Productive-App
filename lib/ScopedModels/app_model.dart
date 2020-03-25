@@ -310,6 +310,7 @@ class AppModel extends Model {
 
   collabTabAddCollabSubTask(
       CollabTask collabTask, CollabSubtask collabSubtask) async {
+        print(collabSubtask.assignedEmail);
     for (CollabTask ct in userAdapter.user.collabTasks) {
       if (ct.id == collabTask.id) {
         collabSubtask.id = ct.collabSubtasks.length.toString();
@@ -522,6 +523,16 @@ class AppModel extends Model {
     userAdapter.user.userInfo =
         await appDatabase.fetchUserInfo(userAdapter.uid);
   }
+
+  collabTabCheckUserExists(String email) async {
+    return await appDatabase.userExistsThruEmail(email);
+  }
+
+  collabTabFetchNameThroughUid(String uid) async {
+    return await appDatabase.userFetchName(uid);
+  }
+
+
 }
 
 enum SignUpState {

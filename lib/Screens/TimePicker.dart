@@ -39,7 +39,8 @@ class _TimePickerState extends State<TimePicker> {
                         width: 5,
                       ),
                       Text(
-                        pomModel.completedCtr.toString(),
+                        appModel.userAdapter.user.stats.numOfPomodorosCompleted
+                            .toString(),
                         style: TextStyle(
                           fontWeight: FontWeight.w900,
                           fontSize: 28,

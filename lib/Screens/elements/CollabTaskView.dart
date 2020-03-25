@@ -98,8 +98,8 @@ class _CollabTaskViewState extends State<CollabTaskView> {
                                       : Colors.grey[200] /*variable*/,
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(500))),
-                              child: Image.asset(
-                                  "assets/app_icons/apple_icon.png"),
+                              child: Image.asset("assets/app_icons/basket.png",
+                                  fit: BoxFit.cover),
                             ),
                           ),
                         ],
@@ -230,88 +230,114 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
                 Center(
                   child: Container(
                     // color: Colors.red,
-                    height: Globals.dheight * 40,
-                    // width: Globals.width,
-                    child: Container(
-                      child: Stack(
-                        children: <Widget>[
-                          Center(
-                            child: Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.grey[350],
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(500))),
-                                width: MediaQuery.of(context).size.width * 0.75,
-                                height: Globals.dheight * 17,
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: <Widget>[
-                                    Positioned(
-                                      left: 0,
-                                      child: AnimatedContainer(
-                                        curve: Curves.linearToEaseOut,
-                                        duration: Duration(milliseconds: 1300),
-                                        decoration: BoxDecoration(
-                                            color: Colors.blue,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(500))),
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.75 *
+                    height: Globals.dheight * 50,
+                    width: Globals.width,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          child: Stack(
+                            children: <Widget>[
+                              Center(
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.grey[350],
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(500))),
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.6,
+                                    height: Globals.dheight * 17,
+                                    child: Stack(
+                                      alignment: Alignment.center,
+                                      children: <Widget>[
+                                        Positioned(
+                                          left: 0,
+                                          child: AnimatedContainer(
+                                            curve: Curves.linearToEaseOut,
+                                            duration:
+                                                Duration(milliseconds: 1300),
+                                            decoration: BoxDecoration(
+                                                color: Colors.blue,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(500))),
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.6 *
                                                 ((this.collabSubtask.completed)
                                                     ? 1
                                                     : 0),
-                                        height: Globals.dheight * 17,
+                                            height: Globals.dheight * 17,
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                              ),
+                              Positioned.fill(
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: InkWell(
+                                    onTap: () {
+                                      if (collabSubtask.completed) return;
+                                      showGeneralDialog(
+                                          barrierColor:
+                                              Colors.black.withOpacity(0.5),
+                                          transitionBuilder:
+                                              (context, a1, a2, widget) {
+                                            return Transform.scale(
+                                              scale: a1.value,
+                                              child: Opacity(
+                                                  opacity: a1.value,
+                                                  child:
+                                                      CollabSubtaskCompletedDialog(
+                                                          appModel,
+                                                          collabTask,
+                                                          collabSubtask)),
+                                            );
+                                          },
+                                          transitionDuration:
+                                              Duration(milliseconds: 200),
+                                          barrierDismissible: true,
+                                          barrierLabel: '',
+                                          context: context,
+                                          pageBuilder: (context, animation1,
+                                              animation2) {});
+                                    },
+                                    child: Container(
+                                      width: Globals.dheight * 40,
+                                      height: Globals.dheight * 40,
+                                      decoration: BoxDecoration(
+                                          color: (this.collabSubtask.completed)
+                                              ? Colors.blue
+                                              : Colors.grey[350] /*variable*/,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(500))),
+                                      child: Image.asset(
+                                        "assets/app_icons/slice.png",
+                                        fit: BoxFit.fitHeight,
                                       ),
                                     ),
-                                  ],
-                                )),
-                          ),
-                          Positioned(
-                            right: Globals.dwidth * 7,
-                            child: InkWell(
-                              onTap: () {
-                                if (collabSubtask.completed) return;
-                                showGeneralDialog(
-                                    barrierColor: Colors.black.withOpacity(0.5),
-                                    transitionBuilder:
-                                        (context, a1, a2, widget) {
-                                      return Transform.scale(
-                                        scale: a1.value,
-                                        child: Opacity(
-                                            opacity: a1.value,
-                                            child: CollabSubtaskCompletedDialog(
-                                                appModel,
-                                                collabTask,
-                                                collabSubtask)),
-                                      );
-                                    },
-                                    transitionDuration:
-                                        Duration(milliseconds: 200),
-                                    barrierDismissible: true,
-                                    barrierLabel: '',
-                                    context: context,
-                                    pageBuilder:
-                                        (context, animation1, animation2) {});
-                              },
-                              child: Container(
-                                width: Globals.dheight * 40,
-                                height: Globals.dheight * 40,
-                                decoration: BoxDecoration(
-                                    color: (this.collabSubtask.completed)
-                                        ? Colors.blue
-                                        : Colors.grey[350] /*variable*/,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(500))),
-                                child: Image.asset(
-                                  "assets/app_icons/slice.png",
-                                  fit: BoxFit.fitHeight,
+                                  ),
                                 ),
                               ),
+                              Container(width: 10, height: 10)
+                            ],
+                          ),
+                        ),
+                        InkWell(
+                          customBorder: CircleBorder(),
+                          onTap: () {},
+                          child: Container(
+                            width: Globals.dheight * 50,
+                            height: Globals.dheight * 50,
+                            child: Image.asset(
+                              "assets/app_icons/bell_icon.png",
+                              fit: BoxFit.cover,
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -330,13 +356,27 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
                             fontSize: 14,
                           ),
                         ),
-                        Text(
-                          "${month[DateTime.parse(this.collabSubtask.deadline).month - 1]} ${DateTime.parse(this.collabSubtask.deadline).day}",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            color: Colors.grey[700],
-                            fontSize: 12,
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              collabSubtask.assignedEmail,
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  color: Colors.grey[700],
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              "${month[DateTime.parse(this.collabSubtask.deadline).month - 1]} ${DateTime.parse(this.collabSubtask.deadline).day}",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                color: Colors.grey[700],
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
                         )
                       ]),
                 ),

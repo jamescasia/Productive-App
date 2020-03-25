@@ -13,6 +13,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:ProductiveApp/DataModels/Globals.dart';
 
+enum UserExistence { NotExist, Exist, Undefined }
+
 class AddCollabSubtaskDialog extends StatefulWidget {
   AppModel appModel;
   CollabTask collabTask;
@@ -25,6 +27,9 @@ class AddCollabSubtaskDialog extends StatefulWidget {
 class _AddCollabSubtaskDialogState extends State<AddCollabSubtaskDialog> {
   AppModel appModel;
   CollabTask collabTask;
+  UserExistence userExists = UserExistence.Undefined;
+  String userUid;
+  String userName;
   _AddCollabSubtaskDialogState(this.appModel, this.collabTask);
   TextEditingController taskTitleController = TextEditingController();
   TextEditingController taskDateController = TextEditingController();
@@ -110,13 +115,32 @@ class _AddCollabSubtaskDialogState extends State<AddCollabSubtaskDialog> {
             decoration: BoxDecoration(
                 color: Colors.grey[350],
                 borderRadius: BorderRadius.all(Radius.circular(10)),
-                border: Border.all(color: Colors.grey[400])),
+                border: Border.all(
+                    color: (userExists == UserExistence.Exist)
+                        ? Colors.green[200]
+                        : (userExists == UserExistence.NotExist)
+                            ? Colors.red[200]
+                            : Colors.grey[400])),
             padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
             width: Globals.width * 0.8,
             child: Center(
               child: TextField(
                 controller: taskAssignedController,
-                decoration: new InputDecoration.collapsed(hintText: 'assigned email'),
+                onChanged: (text) async {
+                  await Future.delayed(Duration(milliseconds: 1500));
+                  var result = await appModel.collabTabCheckUserExists(text);
+                  userExists = (result["exists"])
+                      ? UserExistence.Exist
+                      : UserExistence.NotExist;
+                  userUid = result["uid"];
+                  print("yuid");
+                  print(userUid);
+                  try {
+                    setState(() {});
+                  } catch (e) {}
+                },
+                decoration:
+                    new InputDecoration.collapsed(hintText: 'assigned email'),
               ),
             ),
           ),
@@ -169,19 +193,27 @@ class _AddCollabSubtaskDialogState extends State<AddCollabSubtaskDialog> {
             ),
             MaterialButton(
               color: Colors.green[400],
+              disabledColor: Colors.green[400],
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(6))),
-              onPressed: () async {
-                var collabSubtask = CollabSubtask(
-                    "0",
-                    taskTitleController.text.toString(),
-                    selectedDate.toIso8601String(),
-                    taskAssignedController.text.toString(),
-                    false);
-                await appModel.collabTabAddCollabSubTask(
-                    collabTask, collabSubtask);
-                Navigator.pop(context);
-              },
+              onPressed: (userExists == UserExistence.Exist)
+                  ? () async {
+                      String name =
+                          await appModel.collabTabFetchNameThroughUid(userUid);
+
+                      print("addiong subtask");
+                      print(name);
+                      var collabSubtask = await CollabSubtask(
+                          "0",
+                          taskTitleController.text.toString(),
+                          selectedDate.toIso8601String(),
+                          name,
+                          false);
+                      await appModel.collabTabAddCollabSubTask(
+                          collabTask, collabSubtask);
+                      Navigator.pop(context);
+                    }
+                  : null,
               height: Globals.dheight * 40,
               minWidth: Globals.width * 0.8 * 0.42,
               child: Text(
@@ -205,4 +237,3 @@ class _AddCollabSubtaskDialogState extends State<AddCollabSubtaskDialog> {
 // user can't press create subtask until the user is confirmed exists
 // when user is confirmed to exist, the startbtn is clickable, and userinfo is fetched
 // when  started, the collabtask id is added to the users collabtaskids list
-

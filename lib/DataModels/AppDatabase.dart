@@ -186,4 +186,40 @@ class AppDatabase {
     print(exists);
     return exists;
   }
+
+  userExistsThruEmail(String email) async {
+    var exists = false;
+    var uid = "";
+    try {
+      await usersRef.once().then((data) {
+        data.value.forEach((k, value) {
+          if (!exists) {
+            exists = value == email;
+            uid = k;
+          }
+        });
+      });
+    } catch (E) {
+      print(E.toString());
+      exists = false;
+    }
+
+    print("does exist");
+    print(exists);
+
+    return {"exists": exists, "uid": uid};
+  }
+
+  userFetchName(String uid) async {
+    String name = "";
+    try {
+      await userDataRef.child("$uid/UserInfo").once().then((data) {
+        
+        name = data.value['"name"']; 
+      });
+    } catch (E) {
+      print(E.toString());
+    } 
+    return name;
+  }
 }
