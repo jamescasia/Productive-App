@@ -10,21 +10,22 @@ import 'package:ProductiveApp/DataModels/Globals.dart';
 import 'package:ProductiveApp/DataModels/SoloTask.dart';
 import './TipView.dart';
 import './SoloTaskView.dart';
-import './AddTaskDialog.dart';
+import './elements/AddCollabTaskDialog.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:math';
 import 'package:ProductiveApp/DataModels/Globals.dart';
+
+import 'elements/CollabTaskView.dart';
 
 class CollabTab extends StatefulWidget {
   @override
   _CollabTabState createState() => _CollabTabState();
 }
 
-class _CollabTabState extends State<CollabTab> { 
-
+class _CollabTabState extends State<CollabTab> {
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     return ScopedModelDescendant<AppModel>(
         rebuildOnChange: true,
         builder: (context, snapshot, appModel) {
@@ -45,7 +46,7 @@ class _CollabTabState extends State<CollabTab> {
                                   top: 0 * Globals.dwidth,
                                   left: -15 * Globals.dwidth,
                                   child: MaterialButton(
-                                    onPressed: () { 
+                                    onPressed: () {
                                       int rand = Random()
                                           .nextInt(AppData.tips.length - 1);
                                       showGeneralDialog(
@@ -109,8 +110,9 @@ class _CollabTabState extends State<CollabTab> {
                                                     scale: a1.value,
                                                     child: Opacity(
                                                         opacity: a1.value,
-                                                        child: AddTaskDialog(
-                                                            appModel)),
+                                                        child:
+                                                            AddCollabTaskDialog(
+                                                                appModel)),
                                                   );
                                                 },
                                                 transitionDuration:
@@ -244,7 +246,7 @@ class _CollabTabState extends State<CollabTab> {
                                     CollabTabState.SomeCollabTasks)
                                 ? Container(
                                     // color: Colors.red,
-                                    padding: EdgeInsets.all(30),
+                                    padding: EdgeInsets.only(top:5),
                                     child: ScrollConfiguration(
                                       behavior: NoScrollLimitIndicator(),
                                       child: SingleChildScrollView(
@@ -253,9 +255,9 @@ class _CollabTabState extends State<CollabTab> {
                                           Column(
                                             mainAxisSize: MainAxisSize.max,
                                             children: appModel
-                                                .userAdapter.user.soloTasks
+                                                .userAdapter.user.collabTasks
                                                 .map((s) =>
-                                                    SoloTaskView(s, appModel))
+                                                    CollabTaskView(s, appModel))
                                                 .toList(),
                                           ),
                                           SizedBox(
@@ -272,8 +274,9 @@ class _CollabTabState extends State<CollabTab> {
                                                       scale: a1.value,
                                                       child: Opacity(
                                                           opacity: a1.value,
-                                                          child: AddTaskDialog(
-                                                              appModel)),
+                                                          child:
+                                                              AddCollabTaskDialog(
+                                                                  appModel)),
                                                     );
                                                   },
                                                   transitionDuration: Duration(
@@ -324,8 +327,9 @@ class _CollabTabState extends State<CollabTab> {
                                                       scale: a1.value,
                                                       child: Opacity(
                                                           opacity: a1.value,
-                                                          child: AddTaskDialog(
-                                                              appModel)),
+                                                          child:
+                                                              AddCollabTaskDialog(
+                                                                  appModel)),
                                                     );
                                                   },
                                                   transitionDuration: Duration(

@@ -20,7 +20,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   TabController tC;
-  TabChangerModel tabChangerModel;
   HomeTab homeTab = HomeTab();
   CollabTab collabTab = CollabTab();
   PomodoroTab pomodoroTab = PomodoroTab();
@@ -30,7 +29,6 @@ class _HomeScreenState extends State<HomeScreen>
   void initState() {
     print("in homescren");
     super.initState();
-    // tabChangerModel = TabChangerModel();
     tC = TabController(vsync: this, length: 4);
   }
 
@@ -61,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen>
       systemNavigationBarColor: const Color(0xFF1BA977),
       // #61C350
     ));
+    
     return SafeArea(
       child: ScopedModelDescendant<AppModel>(
           builder: (context, snapshot, appModel) {
@@ -81,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
                   height: Globals.dheight * 80,
                   child: ScopedModel<TabChangerModel>(
-                      model: TabChangerModel(),
+                      model: appModel.tabChangerModel,
                       child: ScopedModelDescendant<TabChangerModel>(
                           builder: (context, snapshot, tabChangerModel) {
                         tC.animation.addListener(

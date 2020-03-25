@@ -35,6 +35,7 @@ class CollabTask {
     } catch (E) {}
 
     var list = json["CollabSubtasks"] as List;
+    if (list == null) list = [];
     if (list.length > 0) {
       List<CollabSubtask> rList =
           list.map<CollabSubtask>((i) => CollabSubtask.fromJson(i)).toList();

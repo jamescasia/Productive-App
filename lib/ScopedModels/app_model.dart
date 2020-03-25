@@ -3,6 +3,7 @@ import 'package:ProductiveApp/ScopedModels/home_tab_model.dart';
 import 'package:ProductiveApp/ScopedModels/pomodoro_tab_model.dart';
 import 'package:ProductiveApp/ScopedModels/profile_tab_model.dart';
 import 'package:ProductiveApp/ScopedModels/collab_tab_model.dart';
+import 'package:ProductiveApp/ScopedModels/tab_changer_model.dart';
 import 'package:ProductiveApp/Screens/LogInScreen.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:ProductiveApp/DataModels/AppData.dart';
@@ -27,7 +28,9 @@ class AppModel extends Model {
   AuthState authState = AuthState.LoggedOut;
   SignUpState signUpState = SignUpState.NotSignedUp;
 
+  TabChangerModel tabChangerModel;
   AppModel() {
+    tabChangerModel = TabChangerModel();
     pomModel = PomodoroModel();
     homeTabModel = HomeTabModel();
     userAdapter = UserAdapter();
@@ -50,8 +53,8 @@ class AppModel extends Model {
       userAdapter.uid = userAdapter.fUser.uid.toString();
 
       await appDatabase.initializeUserDatabase(userAdapter.uid);
-      userAdapter.user.stats.numOfLoginsCompleted += 1;
       await profileTabFetchUserStats();
+      userAdapter.user.stats.numOfLoginsCompleted += 1;
       profileTabUpdateStats();
 
       await homeTabFetchSoloTasks();
@@ -69,6 +72,7 @@ class AppModel extends Model {
     }
 
     print(authState);
+    tabChangerModel.currentTab = 0;
 
     return authState;
   }
@@ -130,8 +134,8 @@ class AppModel extends Model {
       // if it doesn't, just show toast and show Invalid login
 
       await appDatabase.initializeUserDatabase(userAdapter.uid);
-      userAdapter.user.stats.numOfLoginsCompleted += 1;
       await profileTabFetchUserStats();
+      userAdapter.user.stats.numOfLoginsCompleted += 1;
       profileTabUpdateStats();
       await homeTabFetchSoloTasks();
       await collabTabFetchCollabTasks();
@@ -149,6 +153,7 @@ class AppModel extends Model {
       });
     }
 
+    tabChangerModel.currentTab = 0;
     return authState;
   }
 
@@ -212,6 +217,7 @@ class AppModel extends Model {
     }
 
     print(signUpState);
+    tabChangerModel.currentTab = 0;
     return signUpState;
   }
 

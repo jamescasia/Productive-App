@@ -248,8 +248,7 @@ class _HomeTabState extends State<HomeTab> {
                             child: (homeTabModel.homeTabState ==
                                     HomeTabState.SomeSoloTasks)
                                 ? Container(
-                                    // color: Colors.red,
-                                    padding: EdgeInsets.all(30),
+                                    padding: EdgeInsets.only(top: 5),
                                     child: ScrollConfiguration(
                                       behavior: NoScrollLimitIndicator(),
                                       child: SingleChildScrollView(

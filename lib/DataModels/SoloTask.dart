@@ -35,6 +35,7 @@ class SoloTask {
     } catch (E) {}
 
     var list = json["subtasks"] as List;
+    if(list == null) list = [];
     if (list.length > 0) {
       List<Subtask> rList =
           list.map<Subtask>((i) => Subtask.fromJson(i)).toList();

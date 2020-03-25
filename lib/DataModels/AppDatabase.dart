@@ -85,8 +85,8 @@ class AppDatabase {
 
     try {
       await personalUserRef.child("CollabTasks").once().then((data) {
-        print("collabtasks");
-        print(data.value);
+        // print("collabtasks");
+        // print(data.value);
         data.value.forEach((k, value) {
           listOfCollabTaskIds.add(k.toString());
         });
@@ -96,15 +96,17 @@ class AppDatabase {
 
       await collabTasksRef.once().then((data) {
         data.value.forEach((k, value) {
-          print(k);
-          print(value);
+          // print(k);
+          // print(value);
           if (listOfCollabTaskIds.contains(k.toString())) {
             CollabTask cT = CollabTask.fromJson(jsonDecode(value.toString()));
             listOfCollabTasks.add(cT);
           }
         });
       });
-    } catch (E) {}
+    } catch (E) {
+      print("error fetching collab tasks ${E.toString()}");
+    }
 
     return listOfCollabTasks;
   }
@@ -116,8 +118,8 @@ class AppDatabase {
 
     try {
       await personalUserRef.child("SoloTasks").once().then((data) {
-        print("solotasks");
-        print(data.value);
+        // print("solotasks");
+        // print(data.value);
         data.value.forEach((k, value) {
           listOfSoloTaskIds.add(k.toString());
         });
@@ -127,15 +129,17 @@ class AppDatabase {
 
       await soloTasksRef.once().then((data) {
         data.value.forEach((k, value) {
-          print(k);
-          print(value);
+          // print(k);
+          // print(value);
           if (listOfSoloTaskIds.contains(k.toString())) {
             SoloTask sT = SoloTask.fromJson(jsonDecode(value.toString()));
             listOfSoloTasks.add(sT);
           }
         });
       });
-    } catch (E) {}
+    } catch (E) {
+      print("error fetching solo tasks ${E.toString()}");
+    }
 
     return listOfSoloTasks;
   }

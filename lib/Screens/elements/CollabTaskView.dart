@@ -142,7 +142,7 @@ class _CollabTaskViewState extends State<CollabTaskView> {
               children: this
                   .collabTask
                   .collabSubtasks
-                  .map((s) => SubtaskView(s, this.collabTask, appModel))
+                  .map((s) => CollabSubtaskView(s, this.collabTask, appModel))
                   .toList()),
           SizedBox(height: Globals.dheight * 20),
           MaterialButton(
@@ -182,18 +182,18 @@ class _CollabTaskViewState extends State<CollabTaskView> {
   }
 }
 
-class SubtaskView extends StatefulWidget {
+class CollabSubtaskView extends StatefulWidget {
   AppModel appModel;
   CollabTask collabTask;
   CollabSubtask collabSubtask;
 
-  SubtaskView(this.collabSubtask, this.collabTask, this.appModel);
+  CollabSubtaskView(this.collabSubtask, this.collabTask, this.appModel);
   @override
   _SubtaskViewState createState() =>
       _SubtaskViewState(this.collabSubtask, this.collabTask, this.appModel);
 }
 
-class _SubtaskViewState extends State<SubtaskView> {
+class _SubtaskViewState extends State<CollabSubtaskView> {
   AppModel appModel;
   CollabTask collabTask;
   CollabSubtask collabSubtask;
