@@ -393,15 +393,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                           BorderRadius.all(
                                                               Radius.circular(
                                                                   6))),
-                                                  onPressed: () {},
+                                                  onPressed: () async {
+                                                    FocusScope.of(context)
+                                                        .requestFocus(
+                                                            FocusNode());
+                                                    print("sign up pressed");
+                                                    if (appModel.signUpState ==
+                                                        SignUpState
+                                                            .InvalidSignUp)
+                                                      return;
+                                                    var success = await appModel
+                                                        .signUpScreenGoogleSignUp();
+                                                    if (success ==
+                                                        SignUpState.SignedUp) {
+                                                      Navigator.pushReplacement(
+                                                          context,
+                                                          new MaterialPageRoute(
+                                                              builder: (BuildContext
+                                                                      context) =>
+                                                                  HomeScreen()));
+                                                    }
+                                                  },
                                                   height: Globals.dheight * 60,
-                                                  minWidth: Globals.width *
-                                                      0.8 *
-                                                      0.48,
+                                                  minWidth: Globals.width * 0.8,
                                                   child: Row(
                                                     mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .start,
+                                                        MainAxisAlignment.start,
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
                                                             .center,
@@ -430,52 +447,51 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                     ],
                                                   ),
                                                 ),
-                                                MaterialButton(
-                                                  color: Colors.blue,
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  6))),
-                                                  onPressed: () {},
-                                                  height: Globals.dheight * 60,
-                                                  minWidth: Globals.width *
-                                                      0.8 *
-                                                      0.48,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: <Widget>[
-                                                      //insert google logo here
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                bottom: 7),
-                                                        child: Image.asset(
-                                                          "assets/app_icons/fb.png",
-                                                          height:
-                                                              Globals.dheight *
-                                                                  40,
-                                                          scale: 2,
-                                                        ),
-                                                      ),
-                                                      // Container(),
+                                                // MaterialButton(
+                                                //   color: Colors.blue,
+                                                //   shape: RoundedRectangleBorder(
+                                                //       borderRadius:
+                                                //           BorderRadius.all(
+                                                //               Radius.circular(
+                                                //                   6))),
+                                                //   onPressed: () {},
+                                                //   height: Globals.dheight * 60,
+                                                //   minWidth: Globals.width *
+                                                //       0.8 *
+                                                //       0.48,
+                                                //   child: Row(
+                                                //     mainAxisAlignment:
+                                                //         MainAxisAlignment.start,
+                                                //     crossAxisAlignment:
+                                                //         CrossAxisAlignment
+                                                //             .center,
+                                                //     children: <Widget>[
+                                                //       //insert google logo here
+                                                //       Padding(
+                                                //         padding:
+                                                //             const EdgeInsets
+                                                //                     .only(
+                                                //                 bottom: 7),
+                                                //         child: Image.asset(
+                                                //           "assets/app_icons/fb.png",
+                                                //           height:
+                                                //               Globals.dheight *
+                                                //                   40,
+                                                //           scale: 2,
+                                                //         ),
+                                                //       ),
+                                                //       // Container(),
 
-                                                      SizedBox(width: 1),
-                                                      Text(
-                                                        "FACEBOOK",
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 17),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
+                                                //       SizedBox(width: 1),
+                                                //       Text(
+                                                //         "FACEBOOK",
+                                                //         style: TextStyle(
+                                                //             color: Colors.white,
+                                                //             fontSize: 17),
+                                                //       )
+                                                //     ],
+                                                //   ),
+                                                // ),
                                               ]),
                                         ),
                                       ],

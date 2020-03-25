@@ -2,6 +2,7 @@ import 'package:ProductiveApp/DataModels/AppDatabase.dart';
 import 'package:ProductiveApp/ScopedModels/home_tab_model.dart';
 import 'package:ProductiveApp/ScopedModels/pomodoro_tab_model.dart';
 import 'package:ProductiveApp/ScopedModels/profile_tab_model.dart';
+import 'package:ProductiveApp/Screens/LogInScreen.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:ProductiveApp/DataModels/AppData.dart';
 import 'package:ProductiveApp/DataModels/AppAuth.dart';
@@ -9,7 +10,7 @@ import 'package:ProductiveApp/UtilityModels/UserAdapter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
 import 'package:ProductiveApp/Screens/HomeScreen.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ProductiveApp/DataModels/SoloTask.dart';
 
 //this is the main communicator between the ui and the backend
@@ -42,11 +43,16 @@ class AppModel extends Model {
       print(userAdapter.fUser);
       authState = AuthState.LoggedIn;
 
-      await appDatabase
-          .initializeUserDatabase(userAdapter.fUser.uid.toString());
+      userAdapter.uid = userAdapter.fUser.uid.toString();
+
+      await appDatabase.initializeUserDatabase(userAdapter.uid);
       userAdapter.user.stats.numOfLoginsCompleted += 1;
       await profileTabFetchUserStats();
       profileTabUpdateStats();
+
+      await homeTabFetchSoloTasks();
+      await profileTabFetchUserInfo();
+      notifyListeners();
     } catch (E) {
       authState = AuthState.InvalidLogIn;
       Future.delayed(const Duration(milliseconds: 2500), () {
@@ -56,10 +62,6 @@ class AppModel extends Model {
         notifyListeners();
       });
     }
-
-    await homeTabFetchSoloTasks();
-    await profileTabFetchUserInfo();
-    notifyListeners();
 
     print(authState);
 
@@ -82,8 +84,115 @@ class AppModel extends Model {
 
     notifyListeners();
     print(authState);
-    print(await FirebaseAuth.instance.currentUser());
     return authState;
+  }
+
+  logInScreenGoogleLogIn() async {
+    try {
+      authState = AuthState.LoggingIn;
+      print(authState);
+
+      notifyListeners();
+
+      userAdapter.gUser = await appAuth.signUpWithGoogle();
+      authState = AuthState.LoggedIn;
+
+      userAdapter.uid = userAdapter.gUser.id.toString();
+      var exists = await appDatabase.userExists(userAdapter.uid);
+      if (!exists) {
+        authState = AuthState.InvalidLogIn;
+        Future.delayed(const Duration(milliseconds: 2500), () {
+          authState = AuthState.LoggedOut;
+
+          print(authState);
+          notifyListeners();
+        });
+
+        Fluttertoast.showToast(
+            msg: "User does not exist. Register first!",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            fontSize: 16.0);
+
+        return authState;
+      }
+
+      // check if the uid exists in user list
+      // if it does, continue signing in
+      // if it doesn't, just show toast and show Invalid login
+
+      await appDatabase.initializeUserDatabase(userAdapter.uid);
+      userAdapter.user.stats.numOfLoginsCompleted += 1;
+      await profileTabFetchUserStats();
+      profileTabUpdateStats();
+      await homeTabFetchSoloTasks();
+      await profileTabFetchUserInfo();
+      notifyListeners();
+
+      print(authState);
+    } catch (E) {
+      authState = AuthState.InvalidLogIn;
+      Future.delayed(const Duration(milliseconds: 2500), () {
+        authState = AuthState.LoggedOut;
+
+        print(authState);
+        notifyListeners();
+      });
+    }
+
+    return authState;
+  }
+
+  signUpScreenGoogleSignUp() async {
+    try {
+      signUpState = SignUpState.SigningUp;
+      print(signUpState);
+      notifyListeners();
+
+      userAdapter.gUser = await appAuth.signUpWithGoogle();
+
+      userAdapter.uid = userAdapter.gUser.id.toString();
+
+      var exists = await appDatabase.userExists(userAdapter.uid);
+      if (exists) {
+          Fluttertoast.showToast(
+            msg: "User already registered! Logging in.",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            fontSize: 16.0);
+        await logInScreenGoogleLogIn();
+
+      }
+
+      print(userAdapter.gUser);
+
+      signUpState = SignUpState.SignedUp;
+
+      await appDatabase.addNewUser(userAdapter.gUser.displayName,
+          userAdapter.gUser.email.toString(), userAdapter.uid);
+      await appDatabase.initializeUserDatabase(userAdapter.uid);
+      userAdapter.user.stats.numOfLoginsCompleted += 1;
+
+      await profileTabFetchUserStats();
+      profileTabUpdateStats();
+      await homeTabFetchSoloTasks();
+      await profileTabFetchUserInfo();
+      notifyListeners();
+    } catch (E) {
+      print(E.toString());
+      signUpState = SignUpState.InvalidSignUp;
+      Future.delayed(const Duration(milliseconds: 2500), () {
+        signUpState = SignUpState.NotSignedUp;
+
+        print(signUpState);
+        notifyListeners();
+      });
+    }
+
+    print(signUpState);
+    return signUpState;
   }
 
   signUpScreenSignUp(username, email, pass) async {
@@ -96,16 +205,22 @@ class AppModel extends Model {
 
       print(userAdapter.fUser);
 
+      userAdapter.uid = userAdapter.fUser.uid.toString();
+
       signUpState = SignUpState.SignedUp;
 
-      await appDatabase.addNewUser(username, userAdapter.fUser.email.toString(),
-          userAdapter.fUser.uid.toString());
-      await appDatabase
-          .initializeUserDatabase(userAdapter.fUser.uid.toString());
+      await appDatabase.addNewUser(
+          username, userAdapter.fUser.email.toString(), userAdapter.uid);
+      await appDatabase.initializeUserDatabase(userAdapter.uid);
       userAdapter.user.stats.numOfLoginsCompleted += 1;
 
       await profileTabFetchUserStats();
       profileTabUpdateStats();
+      await homeTabFetchSoloTasks();
+      await profileTabFetchUserInfo();
+      notifyListeners();
+      print(signUpState);
+      print(await FirebaseAuth.instance.currentUser());
     } catch (E) {
       print(E.toString());
       signUpState = SignUpState.InvalidSignUp;
@@ -116,16 +231,12 @@ class AppModel extends Model {
         notifyListeners();
       });
     }
-    await homeTabFetchSoloTasks();
-    await profileTabFetchUserInfo();
-    notifyListeners();
-    print(signUpState);
-    print(await FirebaseAuth.instance.currentUser());
+
     return signUpState;
   }
 
   homeTabDialogAddNewTask(String taskTitle, DateTime dateDeadline) async {
-    appDatabase.initializeUserDatabase(userAdapter.fUser.uid.toString());
+    appDatabase.initializeUserDatabase(userAdapter.uid);
     print("added new task");
     print(taskTitle);
     print(dateDeadline);
@@ -266,7 +377,7 @@ class AppModel extends Model {
 
   profileTabFetchUserInfo() async {
     userAdapter.user.userInfo =
-        await appDatabase.fetchUserInfo(userAdapter.fUser.uid);
+        await appDatabase.fetchUserInfo(userAdapter.uid);
   }
 }
 

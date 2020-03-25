@@ -36,6 +36,8 @@ dev_dependencies:
   progress_indicators: ^0.1.4
   keyboard_visibility:
   font_awesome_flutter: 
+  google_sign_in: ^4.2.0
+  fluttertoast: ^4.0.0
   # flutter_card_selector: 
 
 # For information on the generic Dart part of this file, see the

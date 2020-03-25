@@ -14,6 +14,8 @@ import './SignUpScreen.dart';
 import 'dart:async';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 
+import 'package:fluttertoast/fluttertoast.dart';
+
 class Mansana extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -46,11 +48,10 @@ class _LogInScreenState extends State<LogInScreen> {
   void initState() {
     // TODO: implement initState\
 
-      WidgetsBinding.instance.addPostFrameCallback((_) => afterBuild());
+    WidgetsBinding.instance.addPostFrameCallback((_) => afterBuild());
     KeyboardVisibilityNotification().addNewListener(onChange: (bool visible) {
       print("Keyboardd is");
       print(visible);
-
 
       setState(() {
         if (visible) {
@@ -229,7 +230,9 @@ class _LogInScreenState extends State<LogInScreen> {
                                                       appModel.authState !=
                                                           AuthState.LoggingIn)
                                                   ? () async {
-                                                    FocusScope.of(context).requestFocus(FocusNode());
+                                                      FocusScope.of(context)
+                                                          .requestFocus(
+                                                              FocusNode());
                                                       if (appModel.authState ==
                                                           AuthState
                                                               .InvalidLogIn)
@@ -297,6 +300,59 @@ class _LogInScreenState extends State<LogInScreen> {
                                             ),
                                           )
                                         ]),
+                                    SizedBox(height: Globals.dheight * 5),
+                                    Container(
+                                      width: Globals.width * 0.8,
+                                      child: MaterialButton(
+                                        color: Colors.red,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(6))),
+                                        onPressed: () async {
+                                          FocusScope.of(context)
+                                              .requestFocus(FocusNode());
+                                          if (appModel.authState ==
+                                              AuthState.InvalidLogIn) return;
+                                          var success = await appModel
+                                              .logInScreenGoogleLogIn();
+                                          if (success == AuthState.LoggedIn) {
+                                            Navigator.pushReplacement(
+                                                context,
+                                                new MaterialPageRoute(
+                                                    builder: (BuildContext
+                                                            context) =>
+                                                        HomeScreen()));
+                                          }
+                                        },
+                                        height: Globals.dheight * 50,
+                                        minWidth: Globals.width * 0.8,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: <Widget>[
+                                            //insert google logo here
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 7),
+                                              child: Image.asset(
+                                                "assets/app_icons/google.png",
+                                                height: Globals.dheight * 40,
+                                                scale: 2,
+                                              ),
+                                            ),
+                                            SizedBox(width: 1),
+                                            Text(
+                                              "GOOGLE",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 17),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
                                     SizedBox(height: Globals.dheight * 14),
                                     Center(
                                         child: Row(

@@ -74,7 +74,7 @@ class AppDatabase {
 
       print(listOfSoloTaskIds);
 
-      await soloTasksRef.once().then((data) { 
+      await soloTasksRef.once().then((data) {
         data.value.forEach((k, value) {
           print(k);
           print(value);
@@ -93,7 +93,7 @@ class AppDatabase {
     Stats stats;
 
     try {
-      await personalUserRef.child("Stats").once().then((data) { 
+      await personalUserRef.child("Stats").once().then((data) {
         stats = Stats.fromJson(jsonDecode(data.value.toString()));
       });
     } catch (e) {
@@ -110,12 +110,25 @@ class AppDatabase {
     UserInfo userInfo;
 
     try {
-      await personalUserRef.child("UserInfo").once().then((data) { 
+      await personalUserRef.child("UserInfo").once().then((data) {
         userInfo = UserInfo.fromJson(jsonDecode(data.value.toString()));
       });
     } catch (e) {
       print(e);
     }
     return userInfo;
+  }
+
+    userExists(String uid) async {
+    var exists;
+    try {
+      await usersRef.child(uid).once().then((data) {
+        exists = true;
+      });
+    } catch (E) {
+      exists = false;
+    }
+
+    return exists;
   }
 }
