@@ -211,6 +211,8 @@ class _AddCollabSubtaskDialogState extends State<AddCollabSubtaskDialog> {
                           false);
                       await appModel.collabTabAddCollabSubTask(
                           collabTask, collabSubtask);
+                      await appModel.collabTabAddCollabTaskToCollaborator(
+                          userUid, collabTask);
                       Navigator.pop(context);
                     }
                   : null,

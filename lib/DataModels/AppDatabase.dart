@@ -6,7 +6,6 @@ import 'package:ProductiveApp/DataModels/SoloTask.dart';
 import 'package:ProductiveApp/DataModels/Stats.dart';
 
 import 'package:ProductiveApp/DataModels/UserInfo.dart';
-
 import 'CollabTask.dart';
 
 class AppDatabase {
@@ -220,5 +219,13 @@ class AppDatabase {
       print(E.toString());
     }
     return name.replaceAll('"', "");
+  }
+
+  userAddCollabTaskToCollaborator(String uid, CollabTask collabTask) async {
+    try {
+      await userDataRef
+          .child("$uid/CollabTasks/${collabTask.id}")
+          .set(collabTask.completed);
+    } catch (e) {}
   }
 }

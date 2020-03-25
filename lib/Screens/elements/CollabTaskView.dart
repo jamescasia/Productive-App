@@ -5,7 +5,7 @@ import './AddCollabSubtaskDialog.dart';
 import './CollabSubtaskCompletedDialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ProductiveApp/DataModels/CollabTask.dart';
-
+import 'package:scoped_model/scoped_model.dart'; 
 class CollabTaskView extends StatefulWidget {
   CollabTask collabTask;
   AppModel appModel;
@@ -215,6 +215,8 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
   ];
   @override
   Widget build(BuildContext context) {
+    print("rebuilt subtask");
+    print(this.collabSubtask.completed);
     return Container(
       width: Globals.width * 0.8,
       // color: Colors.blue,

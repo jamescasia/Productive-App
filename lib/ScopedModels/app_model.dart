@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:ProductiveApp/DataModels/AppDatabase.dart';
 import 'package:ProductiveApp/ScopedModels/home_tab_model.dart';
 import 'package:ProductiveApp/ScopedModels/pomodoro_tab_model.dart';
@@ -24,6 +26,7 @@ class AppModel extends Model {
   CollabTabModel collabTabModel;
   UserAdapter userAdapter;
   AppAuth appAuth;
+  int updateTicker = 1;
   AppDatabase appDatabase;
   AuthState authState = AuthState.LoggedOut;
   SignUpState signUpState = SignUpState.NotSignedUp;
@@ -60,6 +63,7 @@ class AppModel extends Model {
       await homeTabFetchSoloTasks();
       await collabTabFetchCollabTasks();
       await profileTabFetchUserInfo();
+      collabTablistenForChangesInCollabTasks();
       notifyListeners();
     } catch (E) {
       authState = AuthState.InvalidLogIn;
@@ -140,6 +144,8 @@ class AppModel extends Model {
       await homeTabFetchSoloTasks();
       await collabTabFetchCollabTasks();
       await profileTabFetchUserInfo();
+
+      collabTablistenForChangesInCollabTasks();
       notifyListeners();
 
       print(authState);
@@ -186,6 +192,9 @@ class AppModel extends Model {
         await homeTabFetchSoloTasks();
         await collabTabFetchCollabTasks();
         await profileTabFetchUserInfo();
+
+        collabTablistenForChangesInCollabTasks();
+
         notifyListeners();
         return signUpState;
       } else {
@@ -310,7 +319,7 @@ class AppModel extends Model {
 
   collabTabAddCollabSubTask(
       CollabTask collabTask, CollabSubtask collabSubtask) async {
-        print(collabSubtask.assignedEmail);
+    print(collabSubtask.assignedEmail);
     for (CollabTask ct in userAdapter.user.collabTasks) {
       if (ct.id == collabTask.id) {
         collabSubtask.id = ct.collabSubtasks.length.toString();
@@ -532,7 +541,45 @@ class AppModel extends Model {
     return await appDatabase.userFetchName(uid);
   }
 
+  collabTabAddCollabTaskToCollaborator(
+      String uid, CollabTask collabTask) async {
+    await appDatabase.userAddCollabTaskToCollaborator(uid, collabTask);
+  }
 
+  collabTablistenForChangesInCollabTasks() async {
+    print("before");
+    userAdapter.user.collabTasks.forEach((collabTask) {
+      print(collabTask.toJson());
+    });
+
+    appDatabase.collabTasksRef.onChildChanged.listen((data) {
+      print("changed!");
+      for (int i = 0; i < userAdapter.user.collabTasks.length; i++) {
+        if (userAdapter.user.collabTasks[i].id == data.snapshot.key) {
+          userAdapter.user.collabTasks[i] =
+              CollabTask.fromJson(jsonDecode(data.snapshot.value.toString()));
+          collabTabUpdateCollabTasks();
+        }
+      }
+    });
+  }
+
+  collabTabUpdateCollabTasks() {
+    print("after");
+    userAdapter.user.collabTasks.forEach((collabTask) {
+      print(collabTask.toJson());
+    });
+    print("called updates");
+    collabTabUpdateAllTasksProgress();
+    collabTabUpdateCollabTabState();
+    updateTicker += 1;
+
+    notifyListeners();
+    updateTicker = 0;
+    notifyListeners();
+    updateTicker = 1;
+    notifyListeners();
+  }
 }
 
 enum SignUpState {

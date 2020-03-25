@@ -16,13 +16,14 @@ class AddCollabTaskDialog extends StatefulWidget {
   AppModel appModel;
   AddCollabTaskDialog(this.appModel);
   @override
-  _AddCollabTaskDialogState createState() => _AddCollabTaskDialogState(this.appModel);
+  _AddCollabTaskDialogState createState() =>
+      _AddCollabTaskDialogState(this.appModel);
 }
 
 class _AddCollabTaskDialogState extends State<AddCollabTaskDialog> {
   AppModel appModel;
   _AddCollabTaskDialogState(this.appModel);
-  TextEditingController taskTitleController = TextEditingController(); 
+  TextEditingController taskTitleController = TextEditingController();
   TextEditingController taskDateController = TextEditingController();
   DateTime selectedDate = DateTime.now();
   void _showDatePicker(BuildContext context) {
@@ -99,7 +100,7 @@ class _AddCollabTaskDialogState extends State<AddCollabTaskDialog> {
                     new InputDecoration.collapsed(hintText: 'Task name'),
               ),
             ),
-          ), 
+          ),
           Container(
             margin: EdgeInsets.symmetric(vertical: Globals.dheight * 7),
             height: Globals.dheight * 40,
@@ -152,7 +153,8 @@ class _AddCollabTaskDialogState extends State<AddCollabTaskDialog> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(6))),
               onPressed: () {
-                appModel.collabTabDialogAddNewCollabTask(taskTitleController.text, selectedDate);
+                appModel.collabTabDialogAddNewCollabTask(
+                    taskTitleController.text, selectedDate);
                 Navigator.pop(context);
               },
               height: Globals.dheight * 40,
