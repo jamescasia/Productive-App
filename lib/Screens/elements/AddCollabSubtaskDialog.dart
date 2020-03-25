@@ -100,8 +100,7 @@ class _AddCollabSubtaskDialogState extends State<AddCollabSubtaskDialog> {
             child: Center(
               child: TextField(
                 controller: taskTitleController,
-                decoration:
-                    new InputDecoration.collapsed(hintText: 'subtask title'),
+                decoration: new InputDecoration.collapsed(hintText: 'title'),
               ),
             ),
           ),
@@ -116,9 +115,8 @@ class _AddCollabSubtaskDialogState extends State<AddCollabSubtaskDialog> {
             width: Globals.width * 0.8,
             child: Center(
               child: TextField(
-                controller: taskTitleController,
-                decoration:
-                    new InputDecoration.collapsed(hintText: 'subtask assigned'),
+                controller: taskAssignedController,
+                decoration: new InputDecoration.collapsed(hintText: 'assigned email'),
               ),
             ),
           ),
@@ -142,8 +140,8 @@ class _AddCollabSubtaskDialogState extends State<AddCollabSubtaskDialog> {
                   focusNode: null,
                   enabled: false,
                   controller: taskDateController,
-                  decoration: new InputDecoration.collapsed(
-                      hintText: 'CollabSubtask due date'),
+                  decoration:
+                      new InputDecoration.collapsed(hintText: 'due date'),
                 ),
               ),
             ),
@@ -203,3 +201,8 @@ class _AddCollabSubtaskDialogState extends State<AddCollabSubtaskDialog> {
     );
   }
 }
+// user writes name on email bar
+// user can't press create subtask until the user is confirmed exists
+// when user is confirmed to exist, the startbtn is clickable, and userinfo is fetched
+// when  started, the collabtask id is added to the users collabtaskids list
+
