@@ -405,7 +405,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                     var success = await appModel
                                                         .signUpScreenGoogleSignUp();
                                                     if (success ==
-                                                        SignUpState.SignedUp) {
+                                                            SignUpState
+                                                                .SignedUpWithGoogle ||
+                                                        success ==
+                                                            SignUpState
+                                                                .SignedUp) {
                                                       Navigator.pushReplacement(
                                                           context,
                                                           new MaterialPageRoute(

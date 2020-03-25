@@ -2,6 +2,7 @@ import 'package:ProductiveApp/DataModels/AppDatabase.dart';
 import 'package:ProductiveApp/ScopedModels/home_tab_model.dart';
 import 'package:ProductiveApp/ScopedModels/pomodoro_tab_model.dart';
 import 'package:ProductiveApp/ScopedModels/profile_tab_model.dart';
+import 'package:ProductiveApp/ScopedModels/collab_tab_model.dart';
 import 'package:ProductiveApp/Screens/LogInScreen.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:ProductiveApp/DataModels/AppData.dart';
@@ -12,12 +13,14 @@ import 'dart:async';
 import 'package:ProductiveApp/Screens/HomeScreen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ProductiveApp/DataModels/SoloTask.dart';
+import 'package:ProductiveApp/DataModels/CollabTask.dart';
 
 //this is the main communicator between the ui and the backend
 class AppModel extends Model {
   PomodoroModel pomModel;
   HomeTabModel homeTabModel;
   ProfileTabModel profileTabModel;
+  CollabTabModel collabTabModel;
   UserAdapter userAdapter;
   AppAuth appAuth;
   AppDatabase appDatabase;
@@ -31,6 +34,7 @@ class AppModel extends Model {
     appAuth = AppAuth();
     appDatabase = AppDatabase();
     profileTabModel = ProfileTabModel();
+    collabTabModel = CollabTabModel();
   }
 
   logInScreenLogIn(email, pass) async {
@@ -51,6 +55,7 @@ class AppModel extends Model {
       profileTabUpdateStats();
 
       await homeTabFetchSoloTasks();
+      await collabTabFetchCollabTasks();
       await profileTabFetchUserInfo();
       notifyListeners();
     } catch (E) {
@@ -108,6 +113,8 @@ class AppModel extends Model {
           notifyListeners();
         });
 
+        appAuth.logOut();
+
         Fluttertoast.showToast(
             msg: "User does not exist. Register first!",
             toastLength: Toast.LENGTH_LONG,
@@ -127,6 +134,7 @@ class AppModel extends Model {
       await profileTabFetchUserStats();
       profileTabUpdateStats();
       await homeTabFetchSoloTasks();
+      await collabTabFetchCollabTasks();
       await profileTabFetchUserInfo();
       notifyListeners();
 
@@ -145,6 +153,7 @@ class AppModel extends Model {
   }
 
   signUpScreenGoogleSignUp() async {
+    appAuth.logOut();
     try {
       signUpState = SignUpState.SigningUp;
       print(signUpState);
@@ -162,23 +171,35 @@ class AppModel extends Model {
             gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,
             fontSize: 16.0);
-        await logInScreenGoogleLogIn();
+
+        signUpState = SignUpState.SignedUpWithGoogle;
+        await appDatabase.initializeUserDatabase(userAdapter.uid);
+        await profileTabFetchUserStats();
+
+        userAdapter.user.stats.numOfLoginsCompleted += 1;
+        profileTabUpdateStats();
+        await homeTabFetchSoloTasks();
+        await collabTabFetchCollabTasks();
+        await profileTabFetchUserInfo();
+        notifyListeners();
+        return signUpState;
+      } else {
+        print(userAdapter.gUser);
+
+        signUpState = SignUpState.SignedUp;
+
+        await appDatabase.addNewUser(userAdapter.gUser.displayName,
+            userAdapter.gUser.email.toString(), userAdapter.uid);
+        await appDatabase.initializeUserDatabase(userAdapter.uid);
+        userAdapter.user.stats.numOfLoginsCompleted += 1;
+
+        await profileTabFetchUserStats();
+        profileTabUpdateStats();
+        await homeTabFetchSoloTasks();
+        await collabTabFetchCollabTasks();
+        await profileTabFetchUserInfo();
+        notifyListeners();
       }
-
-      print(userAdapter.gUser);
-
-      signUpState = SignUpState.SignedUp;
-
-      await appDatabase.addNewUser(userAdapter.gUser.displayName,
-          userAdapter.gUser.email.toString(), userAdapter.uid);
-      await appDatabase.initializeUserDatabase(userAdapter.uid);
-      userAdapter.user.stats.numOfLoginsCompleted += 1;
-
-      await profileTabFetchUserStats();
-      profileTabUpdateStats();
-      await homeTabFetchSoloTasks();
-      await profileTabFetchUserInfo();
-      notifyListeners();
     } catch (E) {
       print(E.toString());
       signUpState = SignUpState.InvalidSignUp;
@@ -257,6 +278,43 @@ class AppModel extends Model {
     notifyListeners();
   }
 
+  collabTabDialogAddNewCollabTask(
+      String taskTitle, DateTime dateDeadline) async {
+    appDatabase.initializeUserDatabase(userAdapter.uid);
+    print("added new task");
+    print(taskTitle);
+    print(dateDeadline);
+    var collabTask = CollabTask();
+
+    collabTask.title = taskTitle;
+    collabTask.deadline = dateDeadline.toIso8601String();
+    userAdapter.user.collabTasks.add(collabTask);
+    // soloTask.subtasks = [ Subtask("dummySubTask", "title", "deadline", false), Subtask("dummySubTask2", "title", "deadline", false)];
+
+    try {
+      await appDatabase.addNewCollabTask(collabTask);
+    } catch (E) {
+      print("Error");
+      print(E);
+    }
+    collabTabUpdateCollabTabState();
+    collabTabUpdateAllTasksProgress();
+    notifyListeners();
+  }
+
+  collabTabAddCollabSubTask(
+      CollabTask collabTask, CollabSubtask collabSubtask) async {
+    for (CollabTask ct in userAdapter.user.collabTasks) {
+      if (ct.id == collabTask.id) {
+        collabSubtask.id = ct.collabSubtasks.length.toString();
+        ct.collabSubtasks.add(collabSubtask);
+        collabTabUpdateCollabTask(ct);
+
+        break;
+      }
+    }
+  }
+
   homeTabAddSubTask(SoloTask soloTask, Subtask subtask) async {
     for (SoloTask st in userAdapter.user.soloTasks) {
       if (st.id == soloTask.id) {
@@ -267,6 +325,35 @@ class AppModel extends Model {
         break;
       }
     }
+  }
+
+  collabTabUpdateCollabTask(CollabTask collabTask) async {
+    var completedCollabSubtasks = 0;
+    for (CollabSubtask collabSubtask in collabTask.collabSubtasks) {
+      if (collabSubtask.completed) {
+        completedCollabSubtasks += 1;
+
+        userAdapter.user.stats.numOfCollabTasksCompleted += 1;
+      }
+    }
+
+    collabTask.totalProgress = (collabTask.collabSubtasks.length == 0)
+        ? 0.0
+        : (completedCollabSubtasks / (collabTask.collabSubtasks.length));
+    collabTask.completed =
+        completedCollabSubtasks == collabTask.collabSubtasks.length;
+
+    try {
+      await appDatabase.updateCollabTask(collabTask);
+
+      collabTabUpdateAllTasksProgress();
+    } catch (E) {
+      print("Error");
+      print(E);
+    }
+
+    profileTabUpdateStats();
+    notifyListeners();
   }
 
   homeTabUpdateSoloTask(SoloTask soloTask) async {
@@ -297,6 +384,27 @@ class AppModel extends Model {
     notifyListeners();
   }
 
+  collabTabTickFinishedCollabSubtask(
+      CollabTask collabTask, CollabSubtask collabSubtask) async {
+    for (CollabTask ct in userAdapter.user.collabTasks) {
+      if (ct.id == collabTask.id) {
+        for (CollabSubtask clbSbtsk in ct.collabSubtasks) {
+          if (clbSbtsk.id == collabSubtask.id) {
+            clbSbtsk = collabSubtask;
+          }
+        }
+
+        break;
+      }
+    }
+    print("subtask");
+    userAdapter.user.stats.numOfSubtasksCompleted += 1;
+    profileTabUpdateStats();
+    userAdapter.user.collabTasks.add(collabTask);
+    userAdapter.user.collabTasks.removeLast();
+    collabTabUpdateCollabTask(collabTask);
+  }
+
   homeTabTickFinishedSubtask(SoloTask soloTask, Subtask subtask) async {
     for (SoloTask st in userAdapter.user.soloTasks) {
       if (st.id == soloTask.id) {
@@ -317,6 +425,21 @@ class AppModel extends Model {
     homeTabUpdateSoloTask(soloTask);
   }
 
+  collabTabUpdateAllTasksProgress() {
+    double sumOfProgressPercentages = 0.0;
+    int collabTasksCompleted = 0;
+    for (CollabTask ct in userAdapter.user.collabTasks) {
+      sumOfProgressPercentages += ct.totalProgress;
+      collabTasksCompleted += (ct.completed) ? 1 : 0;
+    }
+    collabTabModel.percentCompletedTasks =
+        (userAdapter.user.collabTasks.length == 0)
+            ? 0
+            : sumOfProgressPercentages / userAdapter.user.collabTasks.length;
+    userAdapter.user.stats.numOfCollabTasksCompleted = collabTasksCompleted;
+    profileTabUpdateStats();
+  }
+
   homeTabUpdateAllTasksProgress() {
     double sumOfProgressPercentages = 0.0;
     int soloTasksCompleted = 0;
@@ -332,10 +455,25 @@ class AppModel extends Model {
     profileTabUpdateStats();
   }
 
+  collabTabUpdateCollabTabState() {
+    collabTabModel.collabTabState = (userAdapter.user.collabTasks.length > 0)
+        ? CollabTabState.SomeCollabTasks
+        : CollabTabState.NoCollabTasks;
+  }
+
   homeTabUpdateHomeState() {
     homeTabModel.homeTabState = (userAdapter.user.soloTasks.length > 0)
         ? HomeTabState.SomeSoloTasks
         : HomeTabState.NoSoloTasks;
+  }
+
+  collabTabFetchCollabTasks() async {
+    userAdapter.user.collabTasks = await appDatabase.fetchCollabTasks();
+
+    collabTabUpdateAllTasksProgress();
+    collabTabUpdateCollabTabState();
+
+    notifyListeners();
   }
 
   homeTabFetchSoloTasks() async {
@@ -380,5 +518,11 @@ class AppModel extends Model {
   }
 }
 
-enum SignUpState { SigningUp, NotSignedUp, InvalidSignUp, SignedUp }
+enum SignUpState {
+  SigningUp,
+  NotSignedUp,
+  InvalidSignUp,
+  SignedUp,
+  SignedUpWithGoogle
+}
 enum AuthState { LoggedIn, LoggingIn, LoggedOut, LoggingOut, InvalidLogIn }

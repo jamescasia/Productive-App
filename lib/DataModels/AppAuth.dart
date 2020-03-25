@@ -14,7 +14,10 @@ class AppAuth {
     return await gSignIn.signIn();
   }
 
-  loginWithGoogle() {}
+  logInSilentGoogle() async {
+    return await gSignIn.signInSilently();
+  }
+
   logInWithEmailAndPass(email, pass) async {
     //returns the user
     return (await fbAuth.signInWithEmailAndPassword(

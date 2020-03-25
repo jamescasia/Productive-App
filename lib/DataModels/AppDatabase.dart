@@ -7,11 +7,13 @@ import 'package:ProductiveApp/DataModels/Stats.dart';
 
 import 'package:ProductiveApp/DataModels/UserInfo.dart';
 
+import 'CollabTask.dart';
+
 class AppDatabase {
   FirebaseDatabase fDatabase;
   DatabaseReference personalUserRef;
   DatabaseReference userDataRef;
-  DatabaseReference groupTasksRef;
+  DatabaseReference collabTasksRef;
   DatabaseReference soloTasksRef;
   DatabaseReference usersRef;
   String userId;
@@ -20,7 +22,7 @@ class AppDatabase {
     fDatabase = FirebaseDatabase.instance;
     userDataRef = fDatabase.reference().child('App/UserData');
     soloTasksRef = fDatabase.reference().child('App/Tasks/SoloTasks');
-    groupTasksRef = fDatabase.reference().child('App/Tasks/GroupTasks');
+    collabTasksRef = fDatabase.reference().child('App/Tasks/CollabTasks');
     usersRef = fDatabase.reference().child('App/Users');
   }
 
@@ -30,7 +32,7 @@ class AppDatabase {
   }
 
   addNewUser(String name, String email, String uid) {
-    usersRef.child(uid).set(name);
+    usersRef.child(uid).set(email);
     Stats stats = Stats();
     userDataRef.child(uid).set({
       "Friends": {"dummyUid1": "dummyName1", "dummyUid2": "dummyName2"},
@@ -51,11 +53,60 @@ class AppDatabase {
     soloTasksRef.child(key).set(soloTask.toJson());
   }
 
+  addNewCollabTask(CollabTask collabTask) {
+    var key = personalUserRef.child('CollabTasks').push().key;
+    print("key");
+    print(key);
+    collabTask.id = key;
+    personalUserRef.child('CollabTasks/$key').set(false);
+    collabTasksRef.child(key).set(collabTask.toJson());
+  }
+
+  updateCollabTask(CollabTask collabTask) {
+    personalUserRef
+        .child('CollabTasks/${collabTask.id}')
+        .set(collabTask.completed);
+    collabTasksRef.child(collabTask.id).set(collabTask.toJson());
+    print("solo task in json");
+    print(collabTask.toJson());
+  }
+
   updateSoloTask(SoloTask soloTask) {
     personalUserRef.child('SoloTasks/${soloTask.id}').set(soloTask.completed);
     soloTasksRef.child(soloTask.id).set(soloTask.toJson());
     print("solo task in json");
     print(soloTask.toJson());
+  }
+
+  fetchCollabTasks() async {
+    List<String> listOfCollabTaskIds = [];
+
+    List<CollabTask> listOfCollabTasks = [];
+
+    try {
+      await personalUserRef.child("CollabTasks").once().then((data) {
+        print("collabtasks");
+        print(data.value);
+        data.value.forEach((k, value) {
+          listOfCollabTaskIds.add(k.toString());
+        });
+      });
+
+      print(listOfCollabTaskIds);
+
+      await collabTasksRef.once().then((data) {
+        data.value.forEach((k, value) {
+          print(k);
+          print(value);
+          if (listOfCollabTaskIds.contains(k.toString())) {
+            CollabTask cT = CollabTask.fromJson(jsonDecode(value.toString()));
+            listOfCollabTasks.add(cT);
+          }
+        });
+      });
+    } catch (E) {}
+
+    return listOfCollabTasks;
   }
 
   fetchSoloTasks() async {
@@ -119,16 +170,16 @@ class AppDatabase {
     return userInfo;
   }
 
-    userExists(String uid) async {
+  userExists(String uid) async {
     var exists;
     try {
-      await usersRef.child(uid).once().then((data) {
-        exists = true;
+      await usersRef.once().then((data) {
+        exists = data.value[uid] != null;
       });
     } catch (E) {
       exists = false;
     }
-
+    print(exists);
     return exists;
   }
 }

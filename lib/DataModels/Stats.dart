@@ -1,6 +1,6 @@
 class Stats {
   int numOfSoloTasksCompleted = 0;
-  int numOfGroupTasksCompleted = 0;
+  int numOfCollabTasksCompleted = 0;
   int numOfSubtasksCompleted = 0;
   int numOfGroupSubtasksCompleted = 0;
   int numOfPomodorosCompleted = 0;
@@ -20,7 +20,7 @@ class Stats {
 
   Map<String, dynamic> toJson() => {
         '"numOfSoloTasksCompleted"': numOfSoloTasksCompleted,
-        '"numOfGroupTasksCompleted"': numOfGroupTasksCompleted,
+        '"numOfCollabTasksCompleted"': numOfCollabTasksCompleted,
         '"numOfSubtasksCompleted"': numOfSubtasksCompleted,
         '"numOfGroupSubtasksCompleted"': numOfGroupSubtasksCompleted,
         '"numOfPomodorosCompleted"': numOfPomodorosCompleted,
@@ -38,7 +38,7 @@ class Stats {
 
     missionsCompleted[2] = numOfLoginsCompleted >= 10;
 
-    missionsCompleted[3] = numOfGroupTasksCompleted >= 10;
+    missionsCompleted[3] = numOfCollabTasksCompleted >= 10;
 
     missionsCompleted[4] = numOfFriendsCollaboratedWith >= 10;
 
@@ -47,7 +47,7 @@ class Stats {
 
   // Stats.fromJson(Map<String, dynamic> json)
   //     : numOfSoloTasksCompleted = json["numOfSoloTasksCompleted"],
-  //       numOfGroupTasksCompleted = json["numOfGroupTasksCompleted"],
+  //       numOfCollabTasksCompleted = json["numOfCollabTasksCompleted"],
   //       numOfSubtasksCompleted = json["numOfSubtasksCompleted"],
   //       numOfGroupSubtasksCompleted = json["numOfGroupSubtasksCompleted"],
   //       numOfPomodorosCompleted = json["numOfPomodorosCompleted"],
@@ -61,7 +61,7 @@ class Stats {
   factory Stats.fromJson(Map<String, dynamic> json) {
     var r = Stats();
     r.numOfSoloTasksCompleted = json["numOfSoloTasksCompleted"];
-    r.numOfGroupTasksCompleted = json["numOfGroupTasksCompleted"];
+    r.numOfCollabTasksCompleted = json["numOfCollabTasksCompleted"];
     r.numOfSubtasksCompleted = json["numOfSubtasksCompleted"];
     r.numOfGroupSubtasksCompleted = json["numOfGroupSubtasksCompleted"];
     r.numOfPomodorosCompleted = json["numOfPomodorosCompleted"];

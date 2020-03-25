@@ -105,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen>
                                         ? Image.asset(
                                             "assets/app_icons/home_icon.png")
                                         : Image.asset(
-                                            "assets/app_icons/home_grey_icon.png")),
+                                            "assets/app_icons/home - gray.png")),
                               ),
                               Expanded(
                                 flex: 1,
@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen>
                                         ? Image.asset(
                                             "assets/app_icons/collab_icon.png")
                                         : Image.asset(
-                                            "assets/app_icons/collab_grey_icon.png")),
+                                            "assets/app_icons/collabs - gray.png")),
                               ),
                               Expanded(
                                 flex: 1,
@@ -135,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen>
                                         ? Image.asset(
                                             "assets/app_icons/pomodoro_icon.png")
                                         : Image.asset(
-                                            "assets/app_icons/pomodoro_grey_icon.png")),
+                                            "assets/app_icons/timer - gray.png")),
                               ),
                               Expanded(
                                 flex: 1,
@@ -150,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen>
                                         ? Image.asset(
                                             "assets/app_icons/profile_icon.png")
                                         : Image.asset(
-                                            "assets/app_icons/profile_grey_icon.png")),
+                                            "assets/app_icons/profile - gray.png")),
                               ),
                             ]);
                       })),
