@@ -5,7 +5,8 @@ import './AddCollabSubtaskDialog.dart';
 import './CollabSubtaskCompletedDialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ProductiveApp/DataModels/CollabTask.dart';
-import 'package:scoped_model/scoped_model.dart'; 
+import 'package:scoped_model/scoped_model.dart';
+
 class CollabTaskView extends StatefulWidget {
   CollabTask collabTask;
   AppModel appModel;
@@ -286,7 +287,7 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
 
                                       if (appModel
                                               .userAdapter.user.userInfo.name !=
-                                          collabSubtask.assignedEmail) return;
+                                          collabSubtask.assignedName) return;
                                       showGeneralDialog(
                                           barrierColor:
                                               Colors.black.withOpacity(0.5),
@@ -335,7 +336,10 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
                         InkWell(
                           customBorder: CircleBorder(),
                           onTap: () {
-                            
+                            appModel.collabTabNotifyUser(
+                                collabSubtask.assignedUid,
+                                collabTask.title,
+                                "Do your part!");
                           },
                           child: Container(
                             width: Globals.dheight * 50,
@@ -369,7 +373,7 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Text(
-                              collabSubtask.assignedEmail.replaceAll('"', ""),
+                              collabSubtask.assignedName.replaceAll('"', ""),
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                   color: Colors.grey[700],

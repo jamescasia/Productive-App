@@ -319,7 +319,7 @@ class AppModel extends Model {
 
   collabTabAddCollabSubTask(
       CollabTask collabTask, CollabSubtask collabSubtask) async {
-    print(collabSubtask.assignedEmail);
+    print(collabSubtask.assignedName);
     for (CollabTask ct in userAdapter.user.collabTasks) {
       if (ct.id == collabTask.id) {
         collabSubtask.id = ct.collabSubtasks.length.toString();

@@ -208,6 +208,7 @@ class _AddCollabSubtaskDialogState extends State<AddCollabSubtaskDialog> {
                           taskTitleController.text.toString(),
                           selectedDate.toIso8601String(),
                           name,
+                          userUid,
                           false);
                       await appModel.collabTabAddCollabSubTask(
                           collabTask, collabSubtask);

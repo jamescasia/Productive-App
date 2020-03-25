@@ -208,7 +208,7 @@ class AppDatabase {
     print("does exist");
     print(exists);
 
-    return {"exists": exists, "uid": uid};
+    return {"exists": exists, "uid": uid.replaceAll('"', "")};
   }
 
   userFetchName(String uid) async {

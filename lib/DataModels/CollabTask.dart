@@ -51,15 +51,17 @@ class CollabSubtask {
   bool completed = false;
   String title = "";
   String deadline = "";
-  String assignedEmail = "";
+  String assignedName = "";
+  String assignedUid = "";
 
-  CollabSubtask(
-      this.id, this.title, this.deadline, this.assignedEmail, this.completed);
+  CollabSubtask(this.id, this.title, this.deadline, this.assignedName,
+      this.assignedUid, this.completed);
   Map<String, dynamic> toJson() => {
         '"id"': '"$id"',
         '"title"': '"$title"',
         '"deadline"': '"$deadline"',
-        '"assignedEmail"': '"$assignedEmail"',
+        '"assignedName"': '"$assignedName"',
+        '"assignedUid"': '"$assignedUid"',
         '"completed"': completed,
       };
 
@@ -67,6 +69,7 @@ class CollabSubtask {
       : id = json["id"],
         title = json["title"],
         deadline = json["deadline"],
-        assignedEmail = json["assignedEmail"],
+        assignedName = json["assignedName"],
+        assignedUid = json["assignedUid"],
         completed = json["completed"];
 }
