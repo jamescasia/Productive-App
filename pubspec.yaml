@@ -39,6 +39,7 @@ dev_dependencies:
   google_sign_in: ^4.2.0
   fluttertoast: ^4.0.0
   flutter_launcher_icons: ^0.7.3
+  flutter_ringtone_player: ^2.0.0
 flutter_icons:
   android: "launcher_icon"
   ios: true

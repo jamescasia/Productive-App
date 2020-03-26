@@ -23,6 +23,8 @@ import 'package:ProductiveApp/DataModels/SoloTask.dart';
 import 'package:ProductiveApp/DataModels/CollabTask.dart';
 import 'dart:math';
 
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
+
 //this is the main communicator between the ui and the backend
 class AppModel extends Model {
   PomodoroModel pomModel;
@@ -152,6 +154,7 @@ class AppModel extends Model {
   }
 
   logInScreenLogOut() async {
+    FlutterRingtonePlayer.stop();
     try {
       collabTablistenForNewCollabTasks.cancel();
       collabTablistenForChangesInCollabTasks.cancel();

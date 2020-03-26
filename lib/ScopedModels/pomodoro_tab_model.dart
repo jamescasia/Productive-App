@@ -1,6 +1,8 @@
 import 'package:scoped_model/scoped_model.dart';
 import 'dart:async';
 
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
+
 class PomodoroModel extends Model {
   int completedCtr = 0;
   Duration durationPicked;
@@ -45,6 +47,12 @@ class PomodoroModel extends Model {
   }
 
   finishedTimer() {
+    FlutterRingtonePlayer.play(
+      android: AndroidSounds.alarm,
+      ios: IosSounds.glass,
+      looping: true,
+      volume: 1.0,
+    );
     this.pomodoroState = PomodoroState.CountdownOver;
     this.countdownState = CountdownState.Neutral;
     pomTimer.cancel();

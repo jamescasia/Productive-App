@@ -1,6 +1,7 @@
 class SoloTask {
   String id = "";
   bool completed = false;
+  bool archived = false;
   String deadline = "";
   String title = "";
   double totalProgress = 0.0;
@@ -19,6 +20,7 @@ class SoloTask {
         '"id"': '"$id"',
         '"title"': '"$title"',
         '"deadline"': '"$deadline"',
+        '"completed"': completed,
         '"completed"': completed,
         '"totalProgress"': totalProgress,
         '"subtasks"': subtasks.map((f) => f.toJson()).toList(),
