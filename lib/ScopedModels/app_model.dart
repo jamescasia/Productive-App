@@ -583,7 +583,11 @@ class AppModel extends Model {
     } catch (e) {}
   }
 
+
   collabTablistenForNewCollabTasks() async {
+
+    print("num of collab tasks");
+    print(userAdapter.user.collabTasks.length);
     try {
       appDatabase.personalUserRef
           .child('CollabTasks')
@@ -593,12 +597,14 @@ class AppModel extends Model {
         print(data.snapshot.key.toString());
         CollabTask clb = await appDatabase
             .userFetchCollabTaskUsingId(data.snapshot.key.toString());
-        if (!clb.completed) {
+        if (!clb.completed && !userAdapter.user.collabTasks.contains(clb)) {
           userAdapter.user.collabTasks.add(clb);
 
           collabTabUpdateCollabTasks();
         }
       });
+
+
     } catch (e) {}
   }
 
@@ -653,6 +659,9 @@ class AppModel extends Model {
   }
 
   collabTabNotifyUser(String uid, String taskName, String message) async {
+
+    print("num of collab tasksd");
+    print(userAdapter.user.collabTasks.length);
     appDatabase.notifyUser(
         uid,
         CollabNotification(
