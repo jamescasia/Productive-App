@@ -49,4 +49,24 @@ class AppData {
     Mission('mission_4', "Friendly Harvest", "Complete 10 group tasks",
         'assets/mission_icons/mission_icon_5.png'),
   ];
+
+  static List<Reward> rewards = [
+    Reward("Chill, Sweet Thing", 'assets/tips/ChillSweetThing.png'),
+    Reward("Fast Food Friends!", 'assets/tips/FastFoodFriends.png'),
+
+    Reward("Have a Cookie!", 'assets/tips/HaveACookie.png'),
+
+    Reward("Social Media Scroll!", 'assets/tips/ChillSweetThing.png'),
+
+    Reward("Power Nap!", 'assets/tips/PowerNap.png'),
+
+  ];
+}
+
+class Reward {
+
+  String message;
+  String imagePath;
+
+  Reward(this.message, this.imagePath);
 }

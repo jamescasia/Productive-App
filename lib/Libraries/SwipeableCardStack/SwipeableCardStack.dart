@@ -101,7 +101,7 @@ class _SwipeableCardStackState extends State<SwipeableCardStack> {
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 16.0, vertical: 8.0),
                                     child: Text(this.assetPath[i],
-                                        style: TextStyle(
+                                        style: TextStyle(fontFamily:"QuickSand",
                                           color: Colors.white,
                                           fontSize: 25.0,
                                         )),
@@ -121,7 +121,7 @@ class _SwipeableCardStackState extends State<SwipeableCardStack> {
                                               BorderRadius.circular(20.0)),
                                       child: Text("Read Later",
                                           style:
-                                              TextStyle(color: Colors.white)),
+                                              TextStyle(fontFamily:"QuickSand",color: Colors.white)),
                                     ),
                                   )
                                 ],

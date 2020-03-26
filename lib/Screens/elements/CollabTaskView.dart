@@ -118,7 +118,7 @@ class _CollabTaskViewState extends State<CollabTaskView> {
                         Text(
                           this.collabTask.title,
                           textAlign: TextAlign.start,
-                          style: TextStyle(
+                          style: TextStyle(fontFamily:"QuickSand",
                             fontWeight: FontWeight.w800,
                             color: Colors.grey[700],
                             fontSize: 18,
@@ -128,7 +128,7 @@ class _CollabTaskViewState extends State<CollabTaskView> {
                         Text(
                           "${month[DateTime.parse(this.collabTask.deadline).month - 1]} ${DateTime.parse(this.collabTask.deadline).day}",
                           textAlign: TextAlign.start,
-                          style: TextStyle(
+                          style: TextStyle(fontFamily:"QuickSand",
                             color: Colors.grey[700],
                             fontSize: 16,
                           ),
@@ -366,7 +366,7 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
                         Text(
                           this.collabSubtask.title,
                           textAlign: TextAlign.start,
-                          style: TextStyle(
+                          style: TextStyle(fontFamily:"QuickSand",
                             fontWeight: FontWeight.w800,
                             color: Colors.grey[700],
                             fontSize: 16 * Globals.dwidth,
@@ -378,7 +378,7 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
                             Text(
                               collabSubtask.assignedName.replaceAll('"', ""),
                               textAlign: TextAlign.start,
-                              style: TextStyle(
+                              style: TextStyle(fontFamily:"QuickSand",
                                   color: Colors.grey[700],
                                   fontSize: 14 * Globals.dwidth,
                                   fontWeight: FontWeight.w600),
@@ -387,7 +387,7 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
                             Text(
                               "${month[DateTime.parse(this.collabSubtask.deadline).month - 1]} ${DateTime.parse(this.collabSubtask.deadline).day}",
                               textAlign: TextAlign.start,
-                              style: TextStyle(
+                              style: TextStyle(fontFamily:"QuickSand",
                                 color: Colors.grey[700],
                                 fontSize: 14 * Globals.dwidth,
                               ),

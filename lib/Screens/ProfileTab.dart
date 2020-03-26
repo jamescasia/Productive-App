@@ -59,7 +59,7 @@ class _ProfileTabState extends State<ProfileTab> {
                                                 Center(
                                                   child: Text(
                                                     "Profile",
-                                                    style: TextStyle(
+                                                    style: TextStyle(fontFamily:"QuickSand",
                                                         fontSize: 22,
                                                         color: Colors.grey,
                                                         fontWeight:
@@ -67,7 +67,7 @@ class _ProfileTabState extends State<ProfileTab> {
                                                   ),
                                                 ),
                                                 Positioned(
-                                                  right: 10,
+                                                  right: 18,
                                                   child: InkWell(
                                                       onTap: () async {
                                                         var success = await appModel
@@ -86,6 +86,8 @@ class _ProfileTabState extends State<ProfileTab> {
                                                       child: Icon(
                                                         FontAwesomeIcons
                                                             .signOutAlt,
+                                                        size: Globals.dheight *
+                                                            35,
                                                         color: Colors.red[300],
                                                       )),
                                                 )
@@ -123,7 +125,7 @@ class _ProfileTabState extends State<ProfileTab> {
                                         Text(
                                           appModel
                                               .userAdapter.user.userInfo.name,
-                                          style: TextStyle(
+                                          style: TextStyle(fontFamily:"QuickSand",
                                               fontSize: 23,
                                               color: Colors.grey[600],
                                               fontWeight: FontWeight.w500),
@@ -178,7 +180,7 @@ class _ProfileTabState extends State<ProfileTab> {
                                 ]),
                           ),
                           Expanded(
-                            child: Container( 
+                            child: Container(
                               child: ScrollConfiguration(
                                 behavior: NoScrollLimitIndicator(),
                                 child: SingleChildScrollView(

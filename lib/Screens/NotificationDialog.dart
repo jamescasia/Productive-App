@@ -41,7 +41,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Text(
             "You've been dinged!",
-            style: TextStyle(
+            style: TextStyle(fontFamily:"QuickSand",
                 color: Colors.black,
                 fontSize: 26 * Globals.dheight,
                 fontWeight: FontWeight.w600),
@@ -57,7 +57,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
           ),
           Text(
             "A gentle reminder to do your part in ${collabNotif.taskName.replaceAll('""', "")} task.",
-            style: TextStyle(
+            style: TextStyle(fontFamily:"QuickSand",
                 color: Colors.black,
                 fontSize: 18 * Globals.dheight,
                 fontWeight: FontWeight.w400),
@@ -76,7 +76,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
             // minWidth: Globals.width * 0.7,
             child: Text(
               "Got it",
-              style: TextStyle(
+              style: TextStyle(fontFamily:"QuickSand",
                   color: Colors.white,
                   fontSize: 17,
                   fontWeight: FontWeight.w700),

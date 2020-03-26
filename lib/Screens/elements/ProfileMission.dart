@@ -76,7 +76,7 @@ class _ProfileMissionRowUIElementState
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(this.mission.title,
-                              style: TextStyle(
+                              style: TextStyle(fontFamily:"QuickSand",
                                   fontWeight: FontWeight.w700,
                                   color: Colors.black,
                                   fontSize: 16 * Globals.dheight)),
@@ -85,7 +85,7 @@ class _ProfileMissionRowUIElementState
                                 overflow: TextOverflow.clip,
                                 textAlign: TextAlign.left,
                                 maxLines: 2,
-                                style: TextStyle(
+                                style: TextStyle(fontFamily:"QuickSand",
                                     color: Colors.grey,
                                     fontSize: 14 * Globals.dheight)),
                           ),
@@ -95,7 +95,7 @@ class _ProfileMissionRowUIElementState
                                   : "",
                               overflow: TextOverflow.clip,
                               textAlign: TextAlign.left,
-                              style: TextStyle(
+                              style: TextStyle(fontFamily:"QuickSand",
                                   color: Colors.grey,
                                   fontSize: 14 * Globals.dheight)),
                         ]),

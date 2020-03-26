@@ -27,7 +27,7 @@ class _CountdownOverState extends State<CountdownOver> {
                 children: <Widget>[
                   Text(
                     "Time's up!",
-                    style: TextStyle(
+                    style: TextStyle(fontFamily:"QuickSand",
                       color: Colors.grey[900],
                       fontWeight: FontWeight.bold,
                       fontSize: 41,
@@ -45,7 +45,7 @@ class _CountdownOverState extends State<CountdownOver> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(7))),
                     child: Text("Okay",
-                        style: TextStyle(
+                        style: TextStyle(fontFamily:"QuickSand",
                           fontSize: 26,
                           color: Colors.white,
                           fontWeight: FontWeight.w800,

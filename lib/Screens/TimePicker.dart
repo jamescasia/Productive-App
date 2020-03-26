@@ -41,7 +41,7 @@ class _TimePickerState extends State<TimePicker> {
                       Text(
                         appModel.userAdapter.user.stats.numOfPomodorosCompleted
                             .toString(),
-                        style: TextStyle(
+                        style: TextStyle(fontFamily:"QuickSand",
                           fontWeight: FontWeight.w900,
                           fontSize: 28,
                         ),
@@ -84,7 +84,7 @@ class _TimePickerState extends State<TimePicker> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(7))),
                   child: Text("Start Timer",
-                      style: TextStyle(
+                      style: TextStyle(fontFamily:"QuickSand",
                         fontSize: 26,
                         color: Colors.white,
                         fontWeight: FontWeight.w800,

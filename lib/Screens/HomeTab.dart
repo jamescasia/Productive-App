@@ -90,7 +90,7 @@ class _HomeTabState extends State<HomeTab> {
                                     padding: const EdgeInsets.only(top: 25),
                                     child: Text(
                                       "Dashboard",
-                                      style: TextStyle(
+                                      style: TextStyle(fontFamily:"QuickSand",
                                           fontSize: 25,
                                           color: Colors.grey,
                                           fontWeight: FontWeight.w500),
@@ -360,7 +360,7 @@ class _HomeTabState extends State<HomeTab> {
                                           Text(
                                             "Have things to do?\nKeep track of them here",
                                             textAlign: TextAlign.center,
-                                            style: TextStyle(
+                                            style: TextStyle(fontFamily:"QuickSand",
                                                 color: Colors.grey[400],
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w500),

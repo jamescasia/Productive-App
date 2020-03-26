@@ -27,7 +27,7 @@ class SlideCountdownClocks extends StatefulWidget {
   SlideCountdownClocks({
     Key key,
     @required this.duration,
-    this.textStyle: const TextStyle(
+    this.textStyle: const TextStyle(fontFamily:"QuickSand",
       fontSize: 30,
       color: Colors.black,
     ),

@@ -81,7 +81,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
         width: Globals.width * 0.9,
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Text("What's the task?",
-              style: TextStyle(fontSize: 18, color: Colors.grey[600])),
+              style: TextStyle(fontFamily:"QuickSand",fontSize: 18, color: Colors.grey[600])),
           SizedBox(height: Globals.dheight * 10),
           Container(
             margin: EdgeInsets.symmetric(vertical: Globals.dheight * 7),
@@ -93,7 +93,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
             padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
             width: Globals.width * 0.8,
             child: Center(
-              child: TextField(
+              child: TextField(style:TextStyle(fontFamily:"QuickSand"),
                 controller: taskTitleController,
                 decoration:
                     new InputDecoration.collapsed(hintText: 'Task name'),
@@ -116,7 +116,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                   _selectDate(context);
                   // _showDatePicker(context);
                 },
-                child: TextField(
+                child: TextField(style:TextStyle(fontFamily:"QuickSand"),
                   focusNode: null,
                   enabled: false,
                   controller: taskDateController,
@@ -146,7 +146,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                     minWidth: Globals.width * 0.8 * 0.42,
                     child: Text(
                       "Cancel",
-                      style: TextStyle(
+                      style: TextStyle(fontFamily:"QuickSand",
                           color: Colors.white,
                           fontSize: Globals.dheight * 16,
                           fontWeight: FontWeight.w700),
@@ -169,7 +169,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                     minWidth: Globals.width * 0.8 * 0.42,
                     child: Text(
                       "Start Task",
-                      style: TextStyle(
+                      style: TextStyle(fontFamily:"QuickSand",
                           color: Colors.white,
                           fontSize: Globals.dheight * 16,
                           fontWeight: FontWeight.w700),

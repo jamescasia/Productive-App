@@ -17,9 +17,11 @@ import 'package:ProductiveApp/UtilityModels/UserAdapter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
 import 'package:ProductiveApp/Screens/HomeScreen.dart';
+import 'package:ProductiveApp/Screens/RewardDialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ProductiveApp/DataModels/SoloTask.dart';
 import 'package:ProductiveApp/DataModels/CollabTask.dart';
+import 'dart:math';
 
 //this is the main communicator between the ui and the backend
 class AppModel extends Model {
@@ -85,8 +87,7 @@ class AppModel extends Model {
       print(data.snapshot.key.toString());
       CollabTask clb = await appDatabase
           .userFetchCollabTaskUsingId(data.snapshot.key.toString());
-      if (
-          !userAdapter.user.collabTasks.contains(clb) &&
+      if (!userAdapter.user.collabTasks.contains(clb) &&
           !collabTaskIds.contains(clb.id)) {
         userAdapter.user.collabTasks.add(clb);
         collabTaskIds.add(clb.id);
@@ -547,7 +548,11 @@ class AppModel extends Model {
     int collabTasksCompleted = 0;
     for (CollabTask ct in userAdapter.user.collabTasks) {
       sumOfProgressPercentages += ct.totalProgress;
-      collabTasksCompleted += (ct.completed) ? 1 : 0;
+
+      if (ct.completed) {
+        showReward();
+        collabTasksCompleted += 1;
+      }
     }
     collabTabModel.percentCompletedTasks =
         (userAdapter.user.collabTasks.length == 0)
@@ -562,7 +567,11 @@ class AppModel extends Model {
     int soloTasksCompleted = 0;
     for (SoloTask st in userAdapter.user.soloTasks) {
       sumOfProgressPercentages += st.totalProgress;
-      soloTasksCompleted += (st.completed) ? 1 : 0;
+      if (st.completed) {
+        showReward();
+
+        soloTasksCompleted += 1;
+      }
     }
     homeTabModel.percentCompletedTasks =
         (userAdapter.user.soloTasks.length == 0)
@@ -767,6 +776,25 @@ class AppModel extends Model {
     userAdapter.user.collabNotification = newList;
 
     await appDatabase.deleteNotification(notif.taskName);
+  }
+
+  showReward() {
+    showGeneralDialog(
+        barrierColor: Colors.black.withOpacity(0.5),
+        transitionBuilder: (context, a1, a2, widget) {
+          return Transform.scale(
+              scale: a1.value,
+              child: Opacity(
+                opacity: a1.value,
+                child: RewardDialog(AppData
+                    .rewards[Random().nextInt(AppData.rewards.length - 1)]),
+              ));
+        },
+        transitionDuration: Duration(milliseconds: 200),
+        barrierDismissible: true,
+        barrierLabel: '',
+        context: context,
+        pageBuilder: (context, animation1, animation2) {});
   }
 }
 

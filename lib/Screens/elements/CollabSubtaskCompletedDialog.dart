@@ -44,7 +44,7 @@ class _CollabSubtaskCompletedDialogState
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Text(
             "Finished?",
-            style: TextStyle(
+            style: TextStyle(fontFamily:"QuickSand",
                 color: Colors.black, fontSize: 20, fontWeight: FontWeight.w600),
           ),
           SizedBox(
@@ -67,7 +67,7 @@ class _CollabSubtaskCompletedDialogState
             minWidth: Globals.width * 0.7,
             child: Text(
               "Yes",
-              style: TextStyle(
+              style: TextStyle(fontFamily:"QuickSand",
                   color: Colors.white,
                   fontSize: 17,
                   fontWeight: FontWeight.w700),
@@ -84,7 +84,7 @@ class _CollabSubtaskCompletedDialogState
             minWidth: Globals.width * 0.7,
             child: Text(
               "Not Yet",
-              style: TextStyle(
+              style: TextStyle(fontFamily:"QuickSand",
                   color: Colors.white,
                   fontSize: 17,
                   fontWeight: FontWeight.w700),

@@ -43,7 +43,7 @@ class _CountdownShowState extends State<CountdownShow> {
                               pomModel.timeLeftDuration
                                   .toString()
                                   .substring(2, 7),
-                              style: TextStyle(
+                              style: TextStyle(fontFamily:"QuickSand",
                                   fontSize: 70,
                                   fontWeight: FontWeight.w800,
                                   color: Colors.white),
@@ -55,7 +55,7 @@ class _CountdownShowState extends State<CountdownShow> {
                             duration: pomModel.timeLeftDuration,
                             slideDirection: SlideDirection.Up,
                             separator: ":",
-                            textStyle: TextStyle(
+                            textStyle: TextStyle(fontFamily:"QuickSand",
                                 fontSize: 70,
                                 fontWeight: FontWeight.w800,
                                 color: Colors.white),
@@ -73,7 +73,7 @@ class _CountdownShowState extends State<CountdownShow> {
                   color: Colors.grey[400],
                   child: Text(
                     "Cancel",
-                    style: TextStyle(
+                    style: TextStyle(fontFamily:"QuickSand",
                         fontSize: 24,
                         fontWeight: FontWeight.w700,
                         color: Colors.white),
@@ -97,7 +97,7 @@ class _CountdownShowState extends State<CountdownShow> {
                     (pomModel.countdownState == CountdownState.Paused)
                         ? "Resume"
                         : "Pause",
-                    style: TextStyle(
+                    style: TextStyle(fontFamily:"QuickSand",
                         fontSize: 24,
                         fontWeight: FontWeight.w700,
                         color: Colors.white),

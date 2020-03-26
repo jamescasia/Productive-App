@@ -119,7 +119,7 @@ class _SoloTaskViewState extends State<SoloTaskView> {
                         Text(
                           this.soloTask.title,
                           textAlign: TextAlign.start,
-                          style: TextStyle(
+                          style: TextStyle(fontFamily:"QuickSand",
                             fontWeight: FontWeight.w800,
                             color: Colors.grey[700],
                             fontSize: 18*Globals.dheight,
@@ -129,7 +129,7 @@ class _SoloTaskViewState extends State<SoloTaskView> {
                         Text(
                           "${month[DateTime.parse(this.soloTask.deadline).month - 1]} ${DateTime.parse(this.soloTask.deadline).day}",
                           textAlign: TextAlign.start,
-                          style: TextStyle(
+                          style: TextStyle(fontFamily:"QuickSand",
                             color: Colors.grey[700],
                             fontSize: 16,
                           ),
@@ -324,7 +324,7 @@ class _SubtaskViewState extends State<SubtaskView> {
                         Text(
                           this.subtask.title,
                           textAlign: TextAlign.start,
-                          style: TextStyle(
+                          style: TextStyle(fontFamily:"QuickSand",
                             fontWeight: FontWeight.w800,
                             color: Colors.grey[700],
                             fontSize: 14,
@@ -333,7 +333,7 @@ class _SubtaskViewState extends State<SubtaskView> {
                         Text(
                           "${month[DateTime.parse(this.subtask.deadline).month - 1]} ${DateTime.parse(this.subtask.deadline).day}",
                           textAlign: TextAlign.start,
-                          style: TextStyle(
+                          style: TextStyle(fontFamily:"QuickSand",
                             color: Colors.grey[700],
                             fontSize: 12,
                           ),

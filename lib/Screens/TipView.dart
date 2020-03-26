@@ -54,7 +54,7 @@ class _TipViewState extends State<TipView> with TickerProviderStateMixin {
                               height: Globals.dheight * 100,
                             ),
                             Text("Study Tips",
-                                style: TextStyle(
+                                style: TextStyle(fontFamily:"QuickSand",
                                     fontSize: 24,
                                     fontWeight: FontWeight.w800,
                                     color: Colors.yellow[800])),
@@ -112,7 +112,7 @@ class TipCard extends StatelessWidget {
           SizedBox(height: Globals.dheight * 10),
           Text(tip.title,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: TextStyle(fontFamily:"QuickSand",
                   fontWeight: FontWeight.bold,
                   color: Colors.grey[700],
                   fontSize: 28*Globals.dheight)),
@@ -124,7 +124,7 @@ class TipCard extends StatelessWidget {
           Container(
             width: Globals.width * 0.76 * 0.9,
             child: Text(tip.text,
-                style: TextStyle(
+                style: TextStyle(fontFamily:"QuickSand",
                     fontWeight: FontWeight.w300,
                     color: Colors.grey[700],
                     fontSize: 16*Globals.dheight)),

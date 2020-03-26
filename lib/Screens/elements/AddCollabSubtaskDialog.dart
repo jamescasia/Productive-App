@@ -91,7 +91,7 @@ class _AddCollabSubtaskDialogState extends State<AddCollabSubtaskDialog> {
         width: Globals.width * 0.9,
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Text("Break it down!",
-              style: TextStyle(fontSize: 18, color: Colors.grey[600])),
+              style: TextStyle(fontFamily:"QuickSand",fontSize: 18, color: Colors.grey[600])),
           SizedBox(height: Globals.dheight * 10),
           Container(
             margin: EdgeInsets.symmetric(vertical: Globals.dheight * 7),
@@ -103,7 +103,7 @@ class _AddCollabSubtaskDialogState extends State<AddCollabSubtaskDialog> {
             padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
             width: Globals.width * 0.8,
             child: Center(
-              child: TextField(
+              child: TextField(style:TextStyle(fontFamily:"QuickSand"),
                 controller: taskTitleController,
                 decoration: new InputDecoration.collapsed(hintText: 'title'),
               ),
@@ -124,7 +124,7 @@ class _AddCollabSubtaskDialogState extends State<AddCollabSubtaskDialog> {
             padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
             width: Globals.width * 0.8,
             child: Center(
-              child: TextField(
+              child: TextField(style:TextStyle(fontFamily:"QuickSand"),
                 controller: taskAssignedController,
                 onChanged: (text) async {
                   await Future.delayed(Duration(milliseconds: 1500));
@@ -160,7 +160,7 @@ class _AddCollabSubtaskDialogState extends State<AddCollabSubtaskDialog> {
                   _selectDate(context);
                   // _showDatePicker(context);
                 },
-                child: TextField(
+                child: TextField(style:TextStyle(fontFamily:"QuickSand"),
                   focusNode: null,
                   enabled: false,
                   controller: taskDateController,
@@ -190,7 +190,7 @@ class _AddCollabSubtaskDialogState extends State<AddCollabSubtaskDialog> {
                     minWidth: Globals.width * 0.8 * 0.42,
                     child: Text(
                       "Cancel",
-                      style: TextStyle(
+                      style: TextStyle(fontFamily:"QuickSand",
                           color: Colors.white,
                           fontSize: Globals.dheight * 16,
                           fontWeight: FontWeight.w700),
@@ -230,7 +230,7 @@ class _AddCollabSubtaskDialogState extends State<AddCollabSubtaskDialog> {
                     minWidth: Globals.width * 0.8 * 0.42,
                     child: Text(
                       "Add",
-                      style: TextStyle(
+                      style: TextStyle(fontFamily:"QuickSand",
                           color: Colors.white,
                           fontSize: Globals.dheight * 16,
                           fontWeight: FontWeight.w700),

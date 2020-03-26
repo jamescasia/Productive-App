@@ -116,7 +116,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         children: <Widget>[
                                           Text(
                                             "Welcome",
-                                            style: TextStyle(
+                                            style: TextStyle(fontFamily:"QuickSand",
                                               color: Colors.grey[900],
                                               fontWeight: FontWeight.bold,
                                               fontSize: 40,
@@ -124,7 +124,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           ),
                                           Text(
                                             "Sign-up",
-                                            style: TextStyle(
+                                            style: TextStyle(fontFamily:"QuickSand",
                                               color: Colors.grey[900],
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20,
@@ -165,7 +165,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                 bottom: 10),
                                             width: Globals.width * 0.8,
                                             child: Center(
-                                              child: TextField(
+                                              child: TextField(style:TextStyle(fontFamily:"QuickSand"),
                                                 controller: nameController,
                                                 decoration: new InputDecoration
                                                         .collapsed(
@@ -189,7 +189,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                 bottom: 10),
                                             width: Globals.width * 0.8,
                                             child: Center(
-                                              child: TextField(
+                                              child: TextField(style:TextStyle(fontFamily:"QuickSand"),
                                                 controller: emailController,
                                                 decoration: new InputDecoration
                                                         .collapsed(
@@ -213,7 +213,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                 bottom: 10),
                                             width: Globals.width * 0.8,
                                             child: Center(
-                                              child: TextField(
+                                              child: TextField(style:TextStyle(fontFamily:"QuickSand"),
                                                 obscureText: true,
                                                 controller: passwordController,
                                                 decoration: new InputDecoration
@@ -238,7 +238,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                 bottom: 10),
                                             width: Globals.width * 0.8,
                                             child: Center(
-                                              child: TextField(
+                                              child: TextField(style:TextStyle(fontFamily:"QuickSand"),
                                                 obscureText: true,
                                                 controller: password2Controller,
                                                 decoration: new InputDecoration
@@ -333,7 +333,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                                 .SignedUp)
                                                     ? Text(
                                                         "CONTINUE",
-                                                        style: TextStyle(
+                                                        style: TextStyle(fontFamily:"QuickSand",
                                                             fontWeight:
                                                                 FontWeight.w600,
                                                             color: Colors.white,
@@ -343,7 +343,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                             SignUpState
                                                                 .SigningUp)
                                                         ? JumpingText("...",
-                                                            style: TextStyle(
+                                                            style: TextStyle(fontFamily:"QuickSand",
                                                                 color: Colors
                                                                     .white,
                                                                 fontWeight:
@@ -352,7 +352,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                                 fontSize: 35))
                                                         : Text(
                                                             "INVALID",
-                                                            style: TextStyle(
+                                                            style: TextStyle(fontFamily:"QuickSand",
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w600,
@@ -371,7 +371,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         Center(
                                             child: Text(
                                           "or sign up with",
-                                          style: TextStyle(
+                                          style: TextStyle(fontFamily:"QuickSand",
                                               fontWeight: FontWeight.w600,
                                               color: Colors.grey[900],
                                               fontSize: 18),
@@ -442,7 +442,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                       SizedBox(width: 1),
                                                       Text(
                                                         "GOOGLE",
-                                                        style: TextStyle(
+                                                        style: TextStyle(fontFamily:"QuickSand",
                                                             color: Colors.white,
                                                             fontSize: 17),
                                                       )
@@ -487,7 +487,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                 //       SizedBox(width: 1),
                                                 //       Text(
                                                 //         "FACEBOOK",
-                                                //         style: TextStyle(
+                                                //         style: TextStyle(fontFamily:"QuickSand",
                                                 //             color: Colors.white,
                                                 //             fontSize: 17),
                                                 //       )
@@ -505,7 +505,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       children: <Widget>[
                                         Text(
                                           "Already have an account? ",
-                                          style: TextStyle(
+                                          style: TextStyle(fontFamily:"QuickSand",
                                               color: Colors.grey[900],
                                               fontSize: 17),
                                         ),
@@ -515,7 +515,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           },
                                           child: Text(
                                             "Log-in",
-                                            style: TextStyle(
+                                            style: TextStyle(fontFamily:"QuickSand",
                                                 color: Colors.blue,
                                                 fontSize: 17),
                                           ),

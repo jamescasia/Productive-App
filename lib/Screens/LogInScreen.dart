@@ -21,7 +21,9 @@ class Mansana extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScopedModel<AppModel>(
         model: AppModel(context),
+        
         child: MaterialApp(
+          theme: ThemeData(fontFamily: 'QuickSand'),
           debugShowCheckedModeBanner: false,
           home: LogInScreen(),
         ));
@@ -130,7 +132,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                         children: <Widget>[
                                           Text(
                                             "Welcome",
-                                            style: TextStyle(
+                                            style: TextStyle(fontFamily:"QuickSand",
                                               color: Colors.grey[900],
                                               fontWeight: FontWeight.bold,
                                               fontSize: 40,
@@ -138,7 +140,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                           ),
                                           Text(
                                             "Log-in",
-                                            style: TextStyle(
+                                            style: TextStyle(fontFamily:"QuickSand",
                                               color: Colors.grey[900],
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20,
@@ -178,7 +180,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                                 bottom: 10),
                                             width: Globals.width * 0.8,
                                             child: Center(
-                                              child: TextField(
+                                              child: TextField(style:TextStyle(fontFamily:"QuickSand"),
                                                 controller: emailController,
                                                 decoration: new InputDecoration
                                                         .collapsed(
@@ -202,7 +204,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                                 bottom: 10),
                                             width: Globals.width * 0.8,
                                             child: Center(
-                                              child: TextField(
+                                              child: TextField(style:TextStyle(fontFamily:"QuickSand"),
                                                 controller: passwordController,
                                                 obscureText: true,
                                                 decoration: new InputDecoration
@@ -275,7 +277,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                                             AuthState.LoggedIn)
                                                     ? Text(
                                                         "LOG IN",
-                                                        style: TextStyle(
+                                                        style: TextStyle(fontFamily:"QuickSand",
                                                             fontWeight:
                                                                 FontWeight.w600,
                                                             color: Colors.white,
@@ -284,7 +286,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                                     : (appModel.authState ==
                                                             AuthState.LoggingIn)
                                                         ? JumpingText("...",
-                                                            style: TextStyle(
+                                                            style: TextStyle(fontFamily:"QuickSand",
                                                                 color: Colors
                                                                     .white,
                                                                 fontWeight:
@@ -293,7 +295,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                                                 fontSize: 35))
                                                         : Text(
                                                             "INVALID",
-                                                            style: TextStyle(
+                                                            style: TextStyle(fontFamily:"QuickSand",
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w600,
@@ -350,7 +352,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                             SizedBox(width: 1),
                                             Text(
                                               "GOOGLE",
-                                              style: TextStyle(
+                                              style: TextStyle(fontFamily:"QuickSand",
                                                   color: Colors.white,
                                                   fontSize: 17),
                                             )
@@ -366,7 +368,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                       children: <Widget>[
                                         Text(
                                           "Don't have an account? ",
-                                          style: TextStyle(
+                                          style: TextStyle(fontFamily:"QuickSand",
                                               color: Colors.grey[900],
                                               fontSize: 17),
                                         ),
@@ -382,7 +384,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                           },
                                           child: Text(
                                             "Sign-up",
-                                            style: TextStyle(
+                                            style: TextStyle(fontFamily:"QuickSand",
                                                 color: Colors.blue,
                                                 fontSize: 17),
                                           ),
