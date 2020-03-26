@@ -79,14 +79,15 @@ class _ProfileMissionRowUIElementState
                               style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                   color: Colors.black,
-                                  fontSize: 16)),
+                                  fontSize: 16 * Globals.dheight)),
                           Flexible(
                             child: Text(this.mission.desc,
                                 overflow: TextOverflow.clip,
                                 textAlign: TextAlign.left,
                                 maxLines: 2,
                                 style: TextStyle(
-                                    color: Colors.grey, fontSize: 16)),
+                                    color: Colors.grey,
+                                    fontSize: 14 * Globals.dheight)),
                           ),
                           Text(
                               (this.current < 10)
@@ -94,8 +95,9 @@ class _ProfileMissionRowUIElementState
                                   : "",
                               overflow: TextOverflow.clip,
                               textAlign: TextAlign.left,
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 16)),
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 14 * Globals.dheight)),
                         ]),
                   ),
                 )

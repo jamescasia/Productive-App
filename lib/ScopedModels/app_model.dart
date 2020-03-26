@@ -26,7 +26,7 @@ class AppModel extends Model {
   ProfileTabModel profileTabModel;
   CollabTabModel collabTabModel;
   UserAdapter userAdapter;
-  AppAuth appAuth; 
+  AppAuth appAuth;
   AppDatabase appDatabase;
   AuthState authState = AuthState.LoggedOut;
   SignUpState signUpState = SignUpState.NotSignedUp;
@@ -63,6 +63,7 @@ class AppModel extends Model {
       await homeTabFetchSoloTasks();
       await collabTabFetchCollabTasks();
       await profileTabFetchUserInfo();
+      await fetchCollabNotifications();
       collabTablistenForChangesInCollabTasks();
       notifyListeners();
     } catch (E) {
@@ -144,6 +145,7 @@ class AppModel extends Model {
       await homeTabFetchSoloTasks();
       await collabTabFetchCollabTasks();
       await profileTabFetchUserInfo();
+      await fetchCollabNotifications();
 
       collabTablistenForChangesInCollabTasks();
       notifyListeners();
@@ -192,6 +194,7 @@ class AppModel extends Model {
         await homeTabFetchSoloTasks();
         await collabTabFetchCollabTasks();
         await profileTabFetchUserInfo();
+        await fetchCollabNotifications();
 
         collabTablistenForChangesInCollabTasks();
 
@@ -212,6 +215,8 @@ class AppModel extends Model {
         await homeTabFetchSoloTasks();
         await collabTabFetchCollabTasks();
         await profileTabFetchUserInfo();
+
+        await fetchCollabNotifications();
         notifyListeners();
       }
     } catch (E) {
@@ -253,6 +258,8 @@ class AppModel extends Model {
       profileTabUpdateStats();
       await homeTabFetchSoloTasks();
       await profileTabFetchUserInfo();
+
+      await fetchCollabNotifications();
       notifyListeners();
       print(signUpState);
       print(await FirebaseAuth.instance.currentUser());
@@ -566,15 +573,20 @@ class AppModel extends Model {
 
   collabTabUpdateCollabTasks() {
     collabTabUpdateAllTasksProgress();
-    collabTabUpdateCollabTabState(); 
+    collabTabUpdateCollabTabState();
     notifyListeners();
   }
 
-  collabTabNotifyUser(String uid, String taskName, String message) async{
+  collabTabNotifyUser(String uid, String taskName, String message) async {
+    appDatabase.notifyUser(
+        uid, Notification(taskName, DateTime.now().toIso8601String(), message));
+  }
 
-    appDatabase.notifyUser(uid, Notification(taskName, DateTime.now().toIso8601String(), message));
-
-
+  fetchCollabNotifications() async {
+    try {
+      userAdapter.user.notifications =
+          await appDatabase.fetchNotifications(userAdapter.uid);
+    } catch (E) {}
   }
 }
 

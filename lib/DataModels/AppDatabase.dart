@@ -236,4 +236,20 @@ class AppDatabase {
       await userDataRef.child("$uid/Notifications").push().set(notif.toJson());
     } catch (e) {}
   }
+
+  fetchNotifications(String uid) async {
+    List<Notification> notifs = [];
+
+    try {
+      await personalUserRef.child("Notifications").once().then((data) {
+        data.value.forEach((k, value) {
+          Notification nf = Notification.fromJson(jsonDecode(value.toString()));
+          notifs.add(nf);
+        });
+      });
+    } catch (e) {
+      print(e);
+    }
+    return notifs;
+  }
 }

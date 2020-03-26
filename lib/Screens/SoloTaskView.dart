@@ -122,7 +122,7 @@ class _SoloTaskViewState extends State<SoloTaskView> {
                           style: TextStyle(
                             fontWeight: FontWeight.w800,
                             color: Colors.grey[700],
-                            fontSize: 18,
+                            fontSize: 18*Globals.dheight,
                           ),
                         ),
                         SizedBox(height: Globals.dheight * 5),
