@@ -8,7 +8,7 @@ import 'package:ProductiveApp/DataModels/Stats.dart';
 import 'package:ProductiveApp/DataModels/UserInfo.dart';
 import 'CollabTask.dart';
 
-import 'package:ProductiveApp/DataModels/Notification.dart';
+import 'package:ProductiveApp/DataModels/CollabNotification.dart';
 
 class AppDatabase {
   FirebaseDatabase fDatabase;
@@ -231,19 +231,22 @@ class AppDatabase {
     } catch (e) {}
   }
 
-  notifyUser(String uid, Notification notif) async {
+  notifyUser(String uid, CollabNotification notif) async {
     try {
-      await userDataRef.child("$uid/Notifications").push().set(notif.toJson());
+      await userDataRef
+          .child("$uid/Notifications/${notif.taskName}")
+          .set(notif.toJson());
     } catch (e) {}
   }
 
   fetchNotifications(String uid) async {
-    List<Notification> notifs = [];
+    List<CollabNotification> notifs = [];
 
     try {
       await personalUserRef.child("Notifications").once().then((data) {
         data.value.forEach((k, value) {
-          Notification nf = Notification.fromJson(jsonDecode(value.toString()));
+          CollabNotification nf =
+              CollabNotification.fromJson(jsonDecode(value.toString()));
           notifs.add(nf);
         });
       });
@@ -251,5 +254,11 @@ class AppDatabase {
       print(e);
     }
     return notifs;
+  }
+
+  deleteNotification(String taskName) async {
+    try {
+      await personalUserRef.child("Notifications/$taskName").set(null);
+    } catch (E) {}
   }
 }

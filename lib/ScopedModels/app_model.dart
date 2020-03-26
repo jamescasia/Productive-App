@@ -10,7 +10,7 @@ import 'package:ProductiveApp/Screens/LogInScreen.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:ProductiveApp/DataModels/AppData.dart';
 import 'package:ProductiveApp/DataModels/AppAuth.dart';
-import 'package:ProductiveApp/DataModels/Notification.dart';
+import 'package:ProductiveApp/DataModels/CollabNotification.dart';
 import 'package:ProductiveApp/UtilityModels/UserAdapter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
@@ -65,6 +65,7 @@ class AppModel extends Model {
       await profileTabFetchUserInfo();
       await fetchCollabNotifications();
       collabTablistenForChangesInCollabTasks();
+      listenForNotifications();
       notifyListeners();
     } catch (E) {
       authState = AuthState.InvalidLogIn;
@@ -148,6 +149,8 @@ class AppModel extends Model {
       await fetchCollabNotifications();
 
       collabTablistenForChangesInCollabTasks();
+
+      listenForNotifications();
       notifyListeners();
 
       print(authState);
@@ -197,6 +200,8 @@ class AppModel extends Model {
         await fetchCollabNotifications();
 
         collabTablistenForChangesInCollabTasks();
+
+        listenForNotifications();
 
         notifyListeners();
         return signUpState;
@@ -554,11 +559,6 @@ class AppModel extends Model {
   }
 
   collabTablistenForChangesInCollabTasks() async {
-    print("before");
-    userAdapter.user.collabTasks.forEach((collabTask) {
-      print(collabTask.toJson());
-    });
-
     appDatabase.collabTasksRef.onChildChanged.listen((data) {
       print("changed!");
       for (int i = 0; i < userAdapter.user.collabTasks.length; i++) {
@@ -571,6 +571,37 @@ class AppModel extends Model {
     });
   }
 
+  listenForNotifications() async {
+    appDatabase.personalUserRef
+        .child("Notifications")
+        .onChildAdded
+        .listen((data) {
+      userAdapter.user.collabNotification.add(CollabNotification.fromJson(
+          jsonDecode(data.snapshot.value.toString())));
+    });
+  }
+
+  showNotifications(){
+    appModel.userAdapter.user.collabNotification.forEach((notif) {
+          showGeneralDialog(
+              barrierColor: Colors.black.withOpacity(0.5),
+              transitionBuilder: (context, a1, a2, widget) {
+                return Transform.scale(
+                  scale: a1.value,
+                  child: Opacity(
+                      opacity: a1.value,
+                      child: NotificationDialog(appModel, notif, UniqueKey())),
+                );
+              },
+              transitionDuration: Duration(milliseconds: 200),
+              barrierDismissible: true,
+              barrierLabel: '',
+              context: context,
+              pageBuilder: (context, animation1, animation2) {});
+        });
+
+  }
+
   collabTabUpdateCollabTasks() {
     collabTabUpdateAllTasksProgress();
     collabTabUpdateCollabTabState();
@@ -579,14 +610,23 @@ class AppModel extends Model {
 
   collabTabNotifyUser(String uid, String taskName, String message) async {
     appDatabase.notifyUser(
-        uid, Notification(taskName, DateTime.now().toIso8601String(), message));
+        uid,
+        CollabNotification(
+            taskName, DateTime.now().toIso8601String(), message));
   }
 
   fetchCollabNotifications() async {
     try {
-      userAdapter.user.notifications =
+      userAdapter.user.collabNotification =
           await appDatabase.fetchNotifications(userAdapter.uid);
     } catch (E) {}
+
+    showNotifications();
+  }
+
+  confirmReadNotification(CollabNotification notif) async {
+    userAdapter.user.collabNotification.remove(notif);
+    await appDatabase.deleteNotification(notif.taskName);
   }
 }
 

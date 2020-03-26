@@ -1,8 +1,8 @@
-class Notification {
+class CollabNotification {
   String time;
   String taskName;
   String message;
-  Notification(this.taskName, this.time, this.message);
+  CollabNotification(this.taskName, this.time, this.message);
 
   Map<String, dynamic> toJson() => {
         '"taskName"': '"$taskName"',
@@ -10,7 +10,7 @@ class Notification {
         '"time"': '"$time"',
       };
 
-  Notification.fromJson(Map<String, dynamic> json)
+  CollabNotification.fromJson(Map<String, dynamic> json)
       : taskName = json["taskName"],
         message = json["message"],
         time = json["time"];

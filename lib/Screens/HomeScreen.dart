@@ -11,6 +11,8 @@ import 'package:ProductiveApp/ScopedModels/app_model.dart';
 import 'package:ProductiveApp/ScopedModels/tab_changer_model.dart';
 import './SignUpScreen.dart';
 import './LogInScreen.dart';
+import './NotificationDialog.dart';
+import 'package:ProductiveApp/DataModels/CollabNotification.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -59,10 +61,11 @@ class _HomeScreenState extends State<HomeScreen>
       systemNavigationBarColor: const Color(0xFF1BA977),
       // #61C350
     ));
-    
+
     return SafeArea(
       child: ScopedModelDescendant<AppModel>(
           builder: (context, snapshot, appModel) {
+        
         return Material(
           child: DefaultTabController(
             length: 4,
