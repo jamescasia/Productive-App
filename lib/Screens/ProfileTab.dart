@@ -209,9 +209,9 @@ class _ProfileTabState extends State<ProfileTab> {
                                     ProfileMissionRowUIElement(
                                         AppData.missions[3],
                                         appModel.userAdapter.user.stats
-                                            .missionsCompleted[3],
+                                            .missionsCompleted[4],
                                         appModel.userAdapter.user.stats
-                                            .numOfFriendsCollaboratedWith),
+                                            .numOfCollabTasksCompleted),
                                     ProfileMissionRowUIElement(
                                         AppData.missions[4],
                                         appModel.userAdapter.user.stats

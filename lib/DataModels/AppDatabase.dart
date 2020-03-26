@@ -64,9 +64,9 @@ class AppDatabase {
   }
 
   updateCollabTask(CollabTask collabTask) {
-    personalUserRef
-        .child('CollabTasks/${collabTask.id}')
-        .set(collabTask.completed);
+    // personalUserRef
+    //     .child('CollabTasks/${collabTask.id}')
+    //     .set(collabTask.completed);
     collabTasksRef.child(collabTask.id).set(collabTask.toJson());
     print("solo task in json");
     print(collabTask.toJson());
@@ -85,17 +85,23 @@ class AppDatabase {
     List<CollabTask> listOfCollabTasks = [];
 
     try {
-      await personalUserRef.child("CollabTasks").once().then((data) {
+      await personalUserRef.child("CollabTasks").once().then((data) async {
         // print("collabtasks");
         // print(data.value);
         data.value.forEach((k, value) {
-          listOfCollabTaskIds.add(k.toString());
+          print("dafaf");
+          print(k);
+          print(value);
+          if (!value) {
+
+            listOfCollabTaskIds.add(k.toString());
+          }
         });
       });
 
       print(listOfCollabTaskIds);
 
-      await collabTasksRef.once().then((data) {
+      await collabTasksRef.once().then((data) async {
         data.value.forEach((k, value) {
           // print(k);
           // print(value);
@@ -284,5 +290,26 @@ class AppDatabase {
     try {
       await soloTasksRef.child("${st.id}/archived").set(true);
     } catch (E) {}
+  }
+
+  archiveCollabTask(CollabTask ct) async {
+    try {
+      await personalUserRef.child("CollabTasks/${ct.id}").set(true);
+    } catch (E) {}
+  }
+
+  isCollabTaskArchived(CollabTask ct) async {
+    print("is it achived?");
+    bool isArchived = false;
+    try {
+      await personalUserRef.child("CollabTasks/${ct.id}").once().then((data) {
+        isArchived = data.value;
+      });
+    } catch (e) {
+      isArchived = false;
+    }
+    print(isArchived);
+
+    return isArchived;
   }
 }
