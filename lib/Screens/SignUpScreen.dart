@@ -260,8 +260,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                   borderRadius:
                                                       BorderRadius.all(
                                                           Radius.circular(10))),
-                                              onPressed: (!(emailController
-                                                                  .text
+                                              onPressed: ((emailController.text
                                                                   .toString()
                                                                   .length ==
                                                               0 ||
@@ -285,10 +284,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                                   .toString() !=
                                                               passwordController
                                                                   .text
-                                                                  .toString()) &&
-                                                      appModel.signUpState !=
-                                                          SignUpState.SigningUp)
-                                                  ? () async {
+                                                                  .toString()) )
+                                                  ? null
+                                                  : () async {
                                                       FocusScope.of(context)
                                                           .requestFocus(
                                                               FocusNode());
@@ -306,6 +304,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                                   .text,
                                                               passwordController
                                                                   .text);
+                                                      setState(() {});
                                                       if (success ==
                                                           SignUpState
                                                               .SignedUp) {
@@ -316,8 +315,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                                         context) =>
                                                                     HomeScreen()));
                                                       }
-                                                    }
-                                                  : null,
+                                                    },
                                               disabledColor:
                                                   Colors.greenAccent[400],
                                               color: (appModel.signUpState ==

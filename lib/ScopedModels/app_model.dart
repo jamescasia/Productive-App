@@ -67,7 +67,6 @@ class AppModel extends Model {
       await homeTabFetchSoloTasks();
       await collabTabFetchCollabTasks();
       await profileTabFetchUserInfo();
-      // await fetchCollabNotifications();
       collabTablistenForChangesInCollabTasks();
       collabTablistenForNewCollabTasks();
       listenForNotifications();
@@ -140,10 +139,6 @@ class AppModel extends Model {
         return authState;
       }
 
-      // check if the uid exists in user list
-      // if it does, continue signing in
-      // if it doesn't, just show toast and show Invalid login
-
       await appDatabase.initializeUserDatabase(userAdapter.uid);
       await profileTabFetchUserStats();
       userAdapter.user.stats.numOfLoginsCompleted += 1;
@@ -151,8 +146,6 @@ class AppModel extends Model {
       await homeTabFetchSoloTasks();
       await collabTabFetchCollabTasks();
       await profileTabFetchUserInfo();
-      // await fetchCollabNotifications();
-
       collabTablistenForChangesInCollabTasks();
       collabTablistenForNewCollabTasks();
 
@@ -198,12 +191,12 @@ class AppModel extends Model {
         await appDatabase.initializeUserDatabase(userAdapter.uid);
         await profileTabFetchUserStats();
 
+      authState = AuthState.LoggedIn;
         userAdapter.user.stats.numOfLoginsCompleted += 1;
         profileTabUpdateStats();
         await homeTabFetchSoloTasks();
         await collabTabFetchCollabTasks();
         await profileTabFetchUserInfo();
-        // await fetchCollabNotifications();
 
         collabTablistenForChangesInCollabTasks();
         collabTablistenForNewCollabTasks();
@@ -222,13 +215,18 @@ class AppModel extends Model {
         await appDatabase.initializeUserDatabase(userAdapter.uid);
         userAdapter.user.stats.numOfLoginsCompleted += 1;
 
+      authState = AuthState.LoggedIn;
         await profileTabFetchUserStats();
         profileTabUpdateStats();
         await homeTabFetchSoloTasks();
         await collabTabFetchCollabTasks();
         await profileTabFetchUserInfo();
 
-        // await fetchCollabNotifications();
+        collabTablistenForChangesInCollabTasks();
+        collabTablistenForNewCollabTasks();
+
+        listenForNotifications();
+
         notifyListeners();
       }
     } catch (E) {
@@ -261,6 +259,7 @@ class AppModel extends Model {
 
       signUpState = SignUpState.SignedUp;
 
+      authState = AuthState.LoggedIn;
       await appDatabase.addNewUser(
           username, userAdapter.fUser.email.toString(), userAdapter.uid);
       await appDatabase.initializeUserDatabase(userAdapter.uid);
@@ -269,9 +268,13 @@ class AppModel extends Model {
       await profileTabFetchUserStats();
       profileTabUpdateStats();
       await homeTabFetchSoloTasks();
+      await collabTabFetchCollabTasks();
       await profileTabFetchUserInfo();
 
-      // await fetchCollabNotifications();
+      collabTablistenForChangesInCollabTasks();
+      collabTablistenForNewCollabTasks();
+
+      listenForNotifications();
       notifyListeners();
       print(signUpState);
       print(await FirebaseAuth.instance.currentUser());
@@ -566,33 +569,37 @@ class AppModel extends Model {
   }
 
   collabTablistenForChangesInCollabTasks() async {
-    appDatabase.collabTasksRef.onChildChanged.listen((data) {
-      print("changed!");
-      for (int i = 0; i < userAdapter.user.collabTasks.length; i++) {
-        if (userAdapter.user.collabTasks[i].id == data.snapshot.key) {
-          userAdapter.user.collabTasks[i] =
-              CollabTask.fromJson(jsonDecode(data.snapshot.value.toString()));
-          collabTabUpdateCollabTasks();
+    try {
+      appDatabase.collabTasksRef.onChildChanged.listen((data) {
+        print("changed!");
+        for (int i = 0; i < userAdapter.user.collabTasks.length; i++) {
+          if (userAdapter.user.collabTasks[i].id == data.snapshot.key) {
+            userAdapter.user.collabTasks[i] =
+                CollabTask.fromJson(jsonDecode(data.snapshot.value.toString()));
+            collabTabUpdateCollabTasks();
+          }
         }
-      }
-    });
+      });
+    } catch (e) {}
   }
 
   collabTablistenForNewCollabTasks() async {
-    appDatabase.personalUserRef
-        .child('CollabTasks')
-        .onChildAdded
-        .listen((data) async {
-      print("new collab task");
-      print(data.snapshot.key.toString());
-      CollabTask clb = await appDatabase
-          .userFetchCollabTaskUsingId(data.snapshot.key.toString());
-      if (!clb.completed) {
-        userAdapter.user.collabTasks.add(clb);
+    try {
+      appDatabase.personalUserRef
+          .child('CollabTasks')
+          .onChildAdded
+          .listen((data) async {
+        print("new collab task");
+        print(data.snapshot.key.toString());
+        CollabTask clb = await appDatabase
+            .userFetchCollabTaskUsingId(data.snapshot.key.toString());
+        if (!clb.completed) {
+          userAdapter.user.collabTasks.add(clb);
 
-        collabTabUpdateCollabTasks();
-      }
-    });
+          collabTabUpdateCollabTasks();
+        }
+      });
+    } catch (e) {}
   }
 
   listenForNotifications() async {
@@ -603,9 +610,7 @@ class AppModel extends Model {
       print(data.snapshot.value);
       CollabNotification clb = CollabNotification.fromJson(
           jsonDecode(data.snapshot.value.toString()));
-      // userAdapter.user.collabNotification.add();
       if (authState == AuthState.LoggedIn) {
-        // showNotifications();
         showNotificationDialog(clb);
       }
     });
