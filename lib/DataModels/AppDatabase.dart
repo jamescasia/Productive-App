@@ -101,7 +101,7 @@ class AppDatabase {
           // print(value);
 
           CollabTask cT = CollabTask.fromJson(jsonDecode(value.toString()));
-          if (listOfCollabTaskIds.contains(k.toString()) && !cT.completed) {
+          if (listOfCollabTaskIds.contains(k.toString())  ) {
             listOfCollabTasks.add(cT);
           }
         });
@@ -135,7 +135,7 @@ class AppDatabase {
           // print(value);
 
           SoloTask sT = SoloTask.fromJson(jsonDecode(value.toString()));
-          if (listOfSoloTaskIds.contains(k.toString()) && !sT.completed) {
+          if (listOfSoloTaskIds.contains(k.toString())  ) {
             listOfSoloTasks.add(sT);
           }
         });

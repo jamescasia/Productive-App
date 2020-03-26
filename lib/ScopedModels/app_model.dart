@@ -85,9 +85,11 @@ class AppModel extends Model {
       print(data.snapshot.key.toString());
       CollabTask clb = await appDatabase
           .userFetchCollabTaskUsingId(data.snapshot.key.toString());
-      if (!clb.completed && !userAdapter.user.collabTasks.contains(clb)) {
+      if (
+          !userAdapter.user.collabTasks.contains(clb) &&
+          !collabTaskIds.contains(clb.id)) {
         userAdapter.user.collabTasks.add(clb);
-
+        collabTaskIds.add(clb.id);
         collabTabUpdateCollabTasks();
       }
     });
@@ -149,9 +151,11 @@ class AppModel extends Model {
   }
 
   logInScreenLogOut() async {
-    collabTablistenForNewCollabTasks.cancel();
-    collabTablistenForChangesInCollabTasks.cancel();
-    listenForNotifications.cancel();
+    try {
+      collabTablistenForNewCollabTasks.cancel();
+      collabTablistenForChangesInCollabTasks.cancel();
+      listenForNotifications.cancel();
+    } catch (e) {}
     initialize();
 
     try {
@@ -268,7 +272,7 @@ class AppModel extends Model {
         profileTabUpdateStats();
         await homeTabFetchSoloTasks();
 
-      await collabTabFetchCollabTasks();
+        await collabTabFetchCollabTasks();
         await profileTabFetchUserInfo();
         initializeListeners();
         // await collabTablistenForNewCollabTasks();
@@ -294,7 +298,7 @@ class AppModel extends Model {
         // await collabTablistenForNewCollabTasks();
         await profileTabFetchUserInfo();
 
-      await collabTabFetchCollabTasks();
+        await collabTabFetchCollabTasks();
         // collabTablistenForChangesInCollabTasks();
 
         // listenForNotifications();
@@ -400,7 +404,7 @@ class AppModel extends Model {
 
     collabTask.title = taskTitle;
     collabTask.deadline = dateDeadline.toIso8601String();
-    userAdapter.user.collabTasks.add(collabTask);
+    // userAdapter.user.collabTasks.add(collabTask);
     // soloTask.subtasks = [ Subtask("dummySubTask", "title", "deadline", false), Subtask("dummySubTask2", "title", "deadline", false)];
 
     try {
@@ -582,6 +586,11 @@ class AppModel extends Model {
 
   collabTabFetchCollabTasks() async {
     userAdapter.user.collabTasks = await appDatabase.fetchCollabTasks();
+    userAdapter.user.collabTasks.forEach((clb) {
+      if (!collabTaskIds.contains(clb.id)) {
+        collabTaskIds.add(clb.id);
+      }
+    });
 
     collabTabUpdateAllTasksProgress();
     collabTabUpdateCollabTabState();

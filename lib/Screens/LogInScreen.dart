@@ -41,7 +41,7 @@ class _LogInScreenState extends State<LogInScreen> {
 
   afterBuild() {
     print("done");
-    sc.jumpTo(29);
+    sc.jumpTo(safePadding);
   }
 
   @override

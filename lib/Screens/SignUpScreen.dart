@@ -31,7 +31,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   afterBuild() {
     print("done");
-    sc.jumpTo(29);
+    sc.jumpTo(safePadding);
   }
 
   @override
