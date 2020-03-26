@@ -49,7 +49,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
         initialDate: selectedDate,
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate)
+    if (picked != null)
       setState(() {
         var month = [
           "Jan",

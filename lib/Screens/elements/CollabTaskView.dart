@@ -228,7 +228,7 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
         children: <Widget>[
           Container(
             // color: Colors.grey,
-            height: Globals.dheight * 80,
+            height: Globals.dheight * 90,
             child: Stack(
               children: <Widget>[
                 Center(
@@ -359,7 +359,7 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
                 ),
                 Positioned(
                   left: Globals.dwidth * 20,
-                  top: -5 * Globals.dheight,
+                  top: 0,
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

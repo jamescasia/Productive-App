@@ -90,7 +90,7 @@ class TipCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: Globals.width * 0.76,
-      height: Globals.height * 0.5,
+      height: Globals.height * 0.65,
       decoration: BoxDecoration(
           color: Colors.amber[100],
           boxShadow: [
@@ -99,8 +99,8 @@ class TipCard extends StatelessWidget {
               blurRadius: 3.0,
               spreadRadius: 3.0,
               offset: Offset(
-                -5.0,
-                8.0,
+                -3.0,
+                3.0,
               ),
             )
           ],
@@ -115,7 +115,7 @@ class TipCard extends StatelessWidget {
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.grey[700],
-                  fontSize: 28)),
+                  fontSize: 28*Globals.dheight)),
           Container(
             height: Globals.dheight * 2,
             width: Globals.width * 0.76 * 0.9,
@@ -127,11 +127,11 @@ class TipCard extends StatelessWidget {
                 style: TextStyle(
                     fontWeight: FontWeight.w300,
                     color: Colors.grey[700],
-                    fontSize: 16)),
+                    fontSize: 16*Globals.dheight)),
           ),
           Image.asset(
-            tip.imagePath,
-            height: Globals.dheight * 220,
+            tip.imagePath, 
+            fit: BoxFit.scaleDown,
           ),
         ]),
       ),

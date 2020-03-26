@@ -28,32 +28,15 @@ class _AddSubtaskDialogState extends State<AddSubtaskDialog> {
   _AddSubtaskDialogState(this.appModel, this.soloTask);
   TextEditingController taskTitleController = TextEditingController();
   TextEditingController taskDateController = TextEditingController();
-  DateTime selectedDate = DateTime.now();
-  void _showDatePicker(BuildContext context) {
-    showModalBottomSheet(
-        context: context,
-        builder: (context) {
-          return CupertinoDatePicker(
-            onDateTimeChanged: (DateTime value) {
-              setState(() {
-                selectedDate = value;
-              });
-            },
-            initialDateTime: DateTime.now(),
-            mode: CupertinoDatePickerMode.date,
-            maximumYear: 2025,
-            minimumYear: 2020,
-          );
-        });
-  }
+  DateTime selectedDate = DateTime.now(); 
 
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
+        firstDate: DateTime.now(),
         lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate)
+    if (picked != null  )
       setState(() {
         var month = [
           "Jan",
