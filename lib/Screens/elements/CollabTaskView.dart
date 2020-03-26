@@ -101,7 +101,7 @@ class _CollabTaskViewState extends State<CollabTaskView> {
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(500))),
                               child: Image.asset("assets/app_icons/basket.png",
-                                  fit: BoxFit.cover),
+                                  fit: BoxFit.fitHeight),
                             ),
                           ),
                         ],
@@ -238,7 +238,7 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
                     width: Globals.width,
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         Container(
                           child: Stack(
@@ -352,13 +352,14 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
                             ),
                           ),
                         ),
+                        SizedBox(width: Globals.dwidth * 4),
                       ],
                     ),
                   ),
                 ),
                 Positioned(
-                  left: Globals.dwidth * 10,
-                  top: 0,
+                  left: Globals.dwidth * 20,
+                  top: -5 * Globals.dheight,
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -368,7 +369,7 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
                           style: TextStyle(
                             fontWeight: FontWeight.w800,
                             color: Colors.grey[700],
-                            fontSize: 14,
+                            fontSize: 16 * Globals.dwidth,
                           ),
                         ),
                         Row(
@@ -379,8 +380,8 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                   color: Colors.grey[700],
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w700),
+                                  fontSize: 14 * Globals.dwidth,
+                                  fontWeight: FontWeight.w600),
                             ),
                             SizedBox(width: 10),
                             Text(
@@ -388,7 +389,7 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                 color: Colors.grey[700],
-                                fontSize: 12,
+                                fontSize: 14 * Globals.dwidth,
                               ),
                             ),
                           ],
