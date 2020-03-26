@@ -65,10 +65,10 @@ class AppModel extends Model {
       profileTabUpdateStats();
 
       await homeTabFetchSoloTasks();
-      await collabTabFetchCollabTasks();
+      await collabTablistenForNewCollabTasks();
       await profileTabFetchUserInfo();
       collabTablistenForChangesInCollabTasks();
-      collabTablistenForNewCollabTasks();
+      
       listenForNotifications();
       notifyListeners();
     } catch (E) {
@@ -144,10 +144,9 @@ class AppModel extends Model {
       userAdapter.user.stats.numOfLoginsCompleted += 1;
       profileTabUpdateStats();
       await homeTabFetchSoloTasks();
-      await collabTabFetchCollabTasks();
+      await collabTablistenForNewCollabTasks();
       await profileTabFetchUserInfo();
-      collabTablistenForChangesInCollabTasks();
-      collabTablistenForNewCollabTasks();
+      collabTablistenForChangesInCollabTasks(); 
 
       listenForNotifications();
       notifyListeners();
@@ -195,12 +194,10 @@ class AppModel extends Model {
         userAdapter.user.stats.numOfLoginsCompleted += 1;
         profileTabUpdateStats();
         await homeTabFetchSoloTasks();
-        await collabTabFetchCollabTasks();
+        await collabTablistenForNewCollabTasks();
         await profileTabFetchUserInfo();
 
-        collabTablistenForChangesInCollabTasks();
-        collabTablistenForNewCollabTasks();
-
+        collabTablistenForChangesInCollabTasks(); 
         listenForNotifications();
 
         notifyListeners();
@@ -219,11 +216,10 @@ class AppModel extends Model {
         await profileTabFetchUserStats();
         profileTabUpdateStats();
         await homeTabFetchSoloTasks();
-        await collabTabFetchCollabTasks();
+        await collabTablistenForNewCollabTasks();
         await profileTabFetchUserInfo();
 
-        collabTablistenForChangesInCollabTasks();
-        collabTablistenForNewCollabTasks();
+        collabTablistenForChangesInCollabTasks(); 
 
         listenForNotifications();
 
@@ -268,11 +264,10 @@ class AppModel extends Model {
       await profileTabFetchUserStats();
       profileTabUpdateStats();
       await homeTabFetchSoloTasks();
-      await collabTabFetchCollabTasks();
+      await collabTablistenForNewCollabTasks();
       await profileTabFetchUserInfo();
 
-      collabTablistenForChangesInCollabTasks();
-      collabTablistenForNewCollabTasks();
+      collabTablistenForChangesInCollabTasks(); 
 
       listenForNotifications();
       notifyListeners();
