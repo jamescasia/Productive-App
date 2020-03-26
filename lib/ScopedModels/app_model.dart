@@ -7,6 +7,8 @@ import 'package:ProductiveApp/ScopedModels/profile_tab_model.dart';
 import 'package:ProductiveApp/ScopedModels/collab_tab_model.dart';
 import 'package:ProductiveApp/ScopedModels/tab_changer_model.dart';
 import 'package:ProductiveApp/Screens/LogInScreen.dart';
+import 'package:ProductiveApp/Screens/NotificationDialog.dart';
+import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:ProductiveApp/DataModels/AppData.dart';
 import 'package:ProductiveApp/DataModels/AppAuth.dart';
@@ -30,9 +32,10 @@ class AppModel extends Model {
   AppDatabase appDatabase;
   AuthState authState = AuthState.LoggedOut;
   SignUpState signUpState = SignUpState.NotSignedUp;
+  BuildContext context;
 
   TabChangerModel tabChangerModel;
-  AppModel() {
+  AppModel(BuildContext context) {
     tabChangerModel = TabChangerModel();
     pomModel = PomodoroModel();
     homeTabModel = HomeTabModel();
@@ -41,6 +44,7 @@ class AppModel extends Model {
     appDatabase = AppDatabase();
     profileTabModel = ProfileTabModel();
     collabTabModel = CollabTabModel();
+    this.context = context;
   }
 
   logInScreenLogIn(email, pass) async {
@@ -63,7 +67,7 @@ class AppModel extends Model {
       await homeTabFetchSoloTasks();
       await collabTabFetchCollabTasks();
       await profileTabFetchUserInfo();
-      await fetchCollabNotifications();
+      // await fetchCollabNotifications();
       collabTablistenForChangesInCollabTasks();
       collabTablistenForNewCollabTasks();
       listenForNotifications();
@@ -147,7 +151,7 @@ class AppModel extends Model {
       await homeTabFetchSoloTasks();
       await collabTabFetchCollabTasks();
       await profileTabFetchUserInfo();
-      await fetchCollabNotifications();
+      // await fetchCollabNotifications();
 
       collabTablistenForChangesInCollabTasks();
       collabTablistenForNewCollabTasks();
@@ -199,7 +203,7 @@ class AppModel extends Model {
         await homeTabFetchSoloTasks();
         await collabTabFetchCollabTasks();
         await profileTabFetchUserInfo();
-        await fetchCollabNotifications();
+        // await fetchCollabNotifications();
 
         collabTablistenForChangesInCollabTasks();
         collabTablistenForNewCollabTasks();
@@ -224,7 +228,7 @@ class AppModel extends Model {
         await collabTabFetchCollabTasks();
         await profileTabFetchUserInfo();
 
-        await fetchCollabNotifications();
+        // await fetchCollabNotifications();
         notifyListeners();
       }
     } catch (E) {
@@ -267,7 +271,7 @@ class AppModel extends Model {
       await homeTabFetchSoloTasks();
       await profileTabFetchUserInfo();
 
-      await fetchCollabNotifications();
+      // await fetchCollabNotifications();
       notifyListeners();
       print(signUpState);
       print(await FirebaseAuth.instance.currentUser());
@@ -581,10 +585,13 @@ class AppModel extends Model {
         .listen((data) async {
       print("new collab task");
       print(data.snapshot.key.toString());
-      userAdapter.user.collabTasks.add(await appDatabase
-          .userFetchCollabTaskUsingId(data.snapshot.key.toString()));
+      CollabTask clb = await appDatabase
+          .userFetchCollabTaskUsingId(data.snapshot.key.toString());
+      if (!clb.completed) {
+        userAdapter.user.collabTasks.add(clb);
 
-      collabTabUpdateCollabTasks();
+        collabTabUpdateCollabTasks();
+      }
     });
   }
 
@@ -593,12 +600,46 @@ class AppModel extends Model {
         .child("Notifications")
         .onChildAdded
         .listen((data) {
-      userAdapter.user.collabNotification.add(CollabNotification.fromJson(
-          jsonDecode(data.snapshot.value.toString())));
+      print(data.snapshot.value);
+      CollabNotification clb = CollabNotification.fromJson(
+          jsonDecode(data.snapshot.value.toString()));
+      // userAdapter.user.collabNotification.add();
+      if (authState == AuthState.LoggedIn) {
+        // showNotifications();
+        showNotificationDialog(clb);
+      }
     });
   }
 
-  showNotifications() {}
+  showNotifications() {
+    List<String> showed = [];
+
+    userAdapter.user.collabNotification.forEach((collabNotif) {
+      if (!showed.contains(collabNotif.taskName)) {
+        showNotificationDialog(collabNotif);
+        showed.add(collabNotif.taskName);
+      }
+    });
+    userAdapter.user.collabNotification = <CollabNotification>[];
+  }
+
+  showNotificationDialog(CollabNotification collabNotif) {
+    showGeneralDialog(
+        barrierColor: Colors.black.withOpacity(0.5),
+        transitionBuilder: (context, a1, a2, widget) {
+          return Transform.scale(
+            scale: a1.value,
+            child: Opacity(
+                opacity: a1.value,
+                child: NotificationDialog(this, collabNotif, UniqueKey())),
+          );
+        },
+        transitionDuration: Duration(milliseconds: 200),
+        barrierDismissible: true,
+        barrierLabel: '',
+        context: context,
+        pageBuilder: (context, animation1, animation2) {});
+  }
 
   collabTabUpdateCollabTasks() {
     collabTabUpdateAllTasksProgress();
@@ -621,7 +662,17 @@ class AppModel extends Model {
   }
 
   confirmReadNotification(CollabNotification notif) async {
-    userAdapter.user.collabNotification.remove(notif);
+    List<CollabNotification> newList = [];
+
+    userAdapter.user.collabNotification.forEach((clbNotif) {
+      if (clbNotif.taskName.replaceAll('"', "") !=
+          notif.taskName.replaceAll('"', "")) {
+        newList.add(clbNotif);
+      }
+    });
+
+    userAdapter.user.collabNotification = newList;
+
     await appDatabase.deleteNotification(notif.taskName);
   }
 }

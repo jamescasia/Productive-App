@@ -20,7 +20,7 @@ class Mansana extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScopedModel<AppModel>(
-        model: AppModel(),
+        model: AppModel(context),
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           home: LogInScreen(),

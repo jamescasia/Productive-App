@@ -99,8 +99,9 @@ class AppDatabase {
         data.value.forEach((k, value) {
           // print(k);
           // print(value);
-          if (listOfCollabTaskIds.contains(k.toString())) {
-            CollabTask cT = CollabTask.fromJson(jsonDecode(value.toString()));
+
+          CollabTask cT = CollabTask.fromJson(jsonDecode(value.toString()));
+          if (listOfCollabTaskIds.contains(k.toString()) && !cT.completed) {
             listOfCollabTasks.add(cT);
           }
         });
@@ -132,8 +133,9 @@ class AppDatabase {
         data.value.forEach((k, value) {
           // print(k);
           // print(value);
-          if (listOfSoloTaskIds.contains(k.toString())) {
-            SoloTask sT = SoloTask.fromJson(jsonDecode(value.toString()));
+
+          SoloTask sT = SoloTask.fromJson(jsonDecode(value.toString()));
+          if (listOfSoloTaskIds.contains(k.toString()) && !sT.completed) {
             listOfSoloTasks.add(sT);
           }
         });

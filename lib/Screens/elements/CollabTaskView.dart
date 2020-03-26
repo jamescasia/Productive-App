@@ -336,6 +336,8 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
                         InkWell(
                           customBorder: CircleBorder(),
                           onTap: () {
+                            if (collabSubtask.assignedUid ==
+                                appModel.userAdapter.uid) return;
                             appModel.collabTabNotifyUser(
                                 collabSubtask.assignedUid,
                                 collabTask.title,

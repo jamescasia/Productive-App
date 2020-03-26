@@ -32,6 +32,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      backgroundColor: Colors.amber[200],
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20))),
       child: Container(
@@ -39,23 +40,30 @@ class _NotificationDialogState extends State<NotificationDialog> {
         width: Globals.width * 0.9,
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Text(
-            "Alert",
+            "You've been dinged!",
             style: TextStyle(
                 color: Colors.black,
-                fontSize: 22 * Globals.dheight,
-                fontWeight: FontWeight.w900),
+                fontSize: 26 * Globals.dheight,
+                fontWeight: FontWeight.w600),
+          ),
+          SizedBox(height: Globals.dheight * 30),
+          Icon(
+            FontAwesomeIcons.conciergeBell,
+            size: Globals.dheight * 80,
+            color: Colors.grey[700],
           ),
           SizedBox(
             height: Globals.dheight * 15,
           ),
           Text(
-            "A gentle reminder to do your part in ${collabNotif.taskName.replaceAll('""', "")}",
+            "A gentle reminder to do your part in ${collabNotif.taskName.replaceAll('""', "")} task.",
             style: TextStyle(
                 color: Colors.black,
                 fontSize: 18 * Globals.dheight,
-                fontWeight: FontWeight.w900),
+                fontWeight: FontWeight.w400),
             textAlign: TextAlign.center,
           ),
+          SizedBox(height: Globals.dheight * 30),
           MaterialButton(
             color: Colors.green[400],
             shape: RoundedRectangleBorder(
@@ -65,7 +73,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
               Navigator.pop(context);
             },
             height: Globals.dheight * 40,
-            minWidth: Globals.width * 0.7,
+            // minWidth: Globals.width * 0.7,
             child: Text(
               "Got it",
               style: TextStyle(
