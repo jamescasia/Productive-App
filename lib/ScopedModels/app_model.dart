@@ -65,6 +65,7 @@ class AppModel extends Model {
       await profileTabFetchUserInfo();
       await fetchCollabNotifications();
       collabTablistenForChangesInCollabTasks();
+      collabTablistenForNewCollabTasks();
       listenForNotifications();
       notifyListeners();
     } catch (E) {
@@ -149,6 +150,7 @@ class AppModel extends Model {
       await fetchCollabNotifications();
 
       collabTablistenForChangesInCollabTasks();
+      collabTablistenForNewCollabTasks();
 
       listenForNotifications();
       notifyListeners();
@@ -200,6 +202,7 @@ class AppModel extends Model {
         await fetchCollabNotifications();
 
         collabTablistenForChangesInCollabTasks();
+        collabTablistenForNewCollabTasks();
 
         listenForNotifications();
 
@@ -571,6 +574,20 @@ class AppModel extends Model {
     });
   }
 
+  collabTablistenForNewCollabTasks() async {
+    appDatabase.personalUserRef
+        .child('CollabTasks')
+        .onChildAdded
+        .listen((data) async {
+      print("new collab task");
+      print(data.snapshot.key.toString());
+      userAdapter.user.collabTasks.add(await appDatabase
+          .userFetchCollabTaskUsingId(data.snapshot.key.toString()));
+
+      collabTabUpdateCollabTasks();
+    });
+  }
+
   listenForNotifications() async {
     appDatabase.personalUserRef
         .child("Notifications")
@@ -581,26 +598,7 @@ class AppModel extends Model {
     });
   }
 
-  showNotifications(){
-    appModel.userAdapter.user.collabNotification.forEach((notif) {
-          showGeneralDialog(
-              barrierColor: Colors.black.withOpacity(0.5),
-              transitionBuilder: (context, a1, a2, widget) {
-                return Transform.scale(
-                  scale: a1.value,
-                  child: Opacity(
-                      opacity: a1.value,
-                      child: NotificationDialog(appModel, notif, UniqueKey())),
-                );
-              },
-              transitionDuration: Duration(milliseconds: 200),
-              barrierDismissible: true,
-              barrierLabel: '',
-              context: context,
-              pageBuilder: (context, animation1, animation2) {});
-        });
-
-  }
+  showNotifications() {}
 
   collabTabUpdateCollabTasks() {
     collabTabUpdateAllTasksProgress();
@@ -620,8 +618,6 @@ class AppModel extends Model {
       userAdapter.user.collabNotification =
           await appDatabase.fetchNotifications(userAdapter.uid);
     } catch (E) {}
-
-    showNotifications();
   }
 
   confirmReadNotification(CollabNotification notif) async {

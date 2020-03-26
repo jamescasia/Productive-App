@@ -64,8 +64,8 @@ class _HomeScreenState extends State<HomeScreen>
 
     return SafeArea(
       child: ScopedModelDescendant<AppModel>(
-          builder: (context, snapshot, appModel) {
-        
+          builder: (context, snapshot, appModel) { 
+
         return Material(
           child: DefaultTabController(
             length: 4,

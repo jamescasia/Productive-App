@@ -231,6 +231,20 @@ class AppDatabase {
     } catch (e) {}
   }
 
+  userFetchCollabTaskUsingId(String id) async {
+    CollabTask clbTsk = CollabTask();
+    try {
+      await collabTasksRef.child(id).once().then((data) {
+        clbTsk = CollabTask.fromJson(jsonDecode(data.value.toString()));
+      });
+    } catch (E) {}
+
+    print("fetched through uid");
+    print(clbTsk.toJson());
+
+    return clbTsk;
+  }
+
   notifyUser(String uid, CollabNotification notif) async {
     try {
       await userDataRef

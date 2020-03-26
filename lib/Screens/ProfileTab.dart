@@ -178,8 +178,7 @@ class _ProfileTabState extends State<ProfileTab> {
                                 ]),
                           ),
                           Expanded(
-                            child: Container(
-                              color: Colors.red,
+                            child: Container( 
                               child: ScrollConfiguration(
                                 behavior: NoScrollLimitIndicator(),
                                 child: SingleChildScrollView(
