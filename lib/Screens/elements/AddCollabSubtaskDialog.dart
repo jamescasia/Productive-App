@@ -173,61 +173,71 @@ class _AddCollabSubtaskDialogState extends State<AddCollabSubtaskDialog> {
           SizedBox(
             height: Globals.dheight * 15,
           ),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            MaterialButton(
-              color: Colors.red,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(6))),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              height: Globals.dheight * 40,
-              minWidth: Globals.width * 0.8 * 0.42,
-              child: Text(
-                "Cancel",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w700),
-              ),
-            ),
-            MaterialButton(
-              color: Colors.green[400],
-              disabledColor: Colors.green[400],
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(6))),
-              onPressed: (userExists == UserExistence.Exist)
-                  ? () async {
-                      String name =
-                          await appModel.collabTabFetchNameThroughUid(userUid);
+          Flex(
+              direction: Axis.horizontal,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: MaterialButton(
+                    color: Colors.red,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(6))),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    height: Globals.dheight * 40,
+                    minWidth: Globals.width * 0.8 * 0.42,
+                    child: Text(
+                      "Cancel",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: Globals.dheight * 16,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                ),
+                SizedBox(width: Globals.dwidth * 8),
+                Expanded(
+                  flex: 1,
+                  child: MaterialButton(
+                    color: Colors.green[400],
+                    disabledColor: Colors.green[400],
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(6))),
+                    onPressed: (userExists == UserExistence.Exist)
+                        ? () async {
+                            String name = await appModel
+                                .collabTabFetchNameThroughUid(userUid);
 
-                      print("addiong subtask");
-                      print(name);
-                      var collabSubtask = await CollabSubtask(
-                          "0",
-                          taskTitleController.text.toString(),
-                          selectedDate.toIso8601String(),
-                          name,
-                          userUid,
-                          false);
-                      await appModel.collabTabAddCollabSubTask(
-                          collabTask, collabSubtask);
-                      await appModel.collabTabAddCollabTaskToCollaborator(
-                          userUid, collabTask);
-                      Navigator.pop(context);
-                    }
-                  : null,
-              height: Globals.dheight * 40,
-              minWidth: Globals.width * 0.8 * 0.42,
-              child: Text(
-                "Add subtask",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w700),
-              ),
-            ),
-          ])
+                            print("addiong subtask");
+                            print(name);
+                            var collabSubtask = await CollabSubtask(
+                                "0",
+                                taskTitleController.text.toString(),
+                                selectedDate.toIso8601String(),
+                                name,
+                                userUid,
+                                false);
+                            await appModel.collabTabAddCollabSubTask(
+                                collabTask, collabSubtask);
+                            await appModel.collabTabAddCollabTaskToCollaborator(
+                                userUid, collabTask);
+                            Navigator.pop(context);
+                          }
+                        : null,
+                    height: Globals.dheight * 40,
+                    minWidth: Globals.width * 0.8 * 0.42,
+                    child: Text(
+                      "Add",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: Globals.dheight * 16,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                ),
+              ])
         ]),
         // decoration: BoxDecoration(
         //   color: Colors.red,

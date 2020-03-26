@@ -73,7 +73,7 @@ class _LogInScreenState extends State<LogInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Globals.dheight = MediaQuery.of(context).size.height / 822;
+    Globals.dheight = MediaQuery.of(context).size.height / 793;
     Globals.dwidth = MediaQuery.of(context).size.width / 393;
     Globals.height = MediaQuery.of(context).size.height;
     Globals.width = MediaQuery.of(context).size.width;
@@ -86,6 +86,11 @@ class _LogInScreenState extends State<LogInScreen> {
     return SafeArea(
       child: LayoutBuilder(builder: (context, constraints) {
         safePadding = Globals.height - constraints.maxHeight;
+        Globals.height = constraints.maxHeight;
+        Globals.width = constraints.maxWidth;
+        print("globals");
+        // print(Globals.height);
+        // print(Globals.width);
         return ScopedModelDescendant<AppModel>(
             builder: (context, child, appModel) {
           return Material(

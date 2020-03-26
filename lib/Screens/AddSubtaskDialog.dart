@@ -133,45 +133,59 @@ class _AddSubtaskDialogState extends State<AddSubtaskDialog> {
           SizedBox(
             height: Globals.dheight * 15,
           ),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            MaterialButton(
-              color: Colors.red,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(6))),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              height: Globals.dheight * 40,
-              minWidth: Globals.width * 0.8 * 0.42,
-              child: Text(
-                "Cancel",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w700),
-              ),
-            ),
-            MaterialButton(
-              color: Colors.green[400],
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(6))),
-              onPressed: () async {
-                var subtask = Subtask("0", taskTitleController.text.toString(),
-                    selectedDate.toIso8601String(), false);
-                await appModel.homeTabAddSubTask(soloTask, subtask);
-                Navigator.pop(context);
-              },
-              height: Globals.dheight * 40,
-              minWidth: Globals.width * 0.8 * 0.42,
-              child: Text(
-                "Add subtask",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w700),
-              ),
-            ),
-          ])
+          Flex(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              direction: Axis.horizontal,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: MaterialButton(
+                    color: Colors.red,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(6))),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    height: Globals.dheight * 40,
+                    // minWidth: Globals.width * 0.8 * 0.42,
+
+                    child: Text(
+                      "Cancel",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: Globals.dheight * 16,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                ),
+                SizedBox(width: Globals.dwidth * 8),
+                Expanded(
+                  flex: 1,
+                  child: MaterialButton(
+                    color: Colors.green[400],
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(6))),
+                    onPressed: () async {
+                      var subtask = Subtask(
+                          "0",
+                          taskTitleController.text.toString(),
+                          selectedDate.toIso8601String(),
+                          false);
+                      await appModel.homeTabAddSubTask(soloTask, subtask);
+                      Navigator.pop(context);
+                    },
+                    height: Globals.dheight * 40,
+                    // minWidth: Globals.width * 0.8 * 0.42,
+                    child: Text(
+                      "Add",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: Globals.dheight * 16,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                ),
+              ])
         ]),
         // decoration: BoxDecoration(
         //   color: Colors.red,
