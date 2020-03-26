@@ -8,7 +8,7 @@ class PomodoroModel extends Model {
   CountdownState countdownState;
 
   Timer pomTimer;
-  Duration lastSetDuration = Duration(seconds: 0, minutes: 15);
+  Duration lastSetDuration = Duration(seconds: 30, minutes: 15);
   Duration timeLeftDuration;
   bool paused;
 
