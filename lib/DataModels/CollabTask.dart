@@ -2,6 +2,7 @@ class CollabTask {
   String id = "";
   bool completed = false;
   String deadline = "";
+  bool archived = false;
   String title = "";
   double totalProgress = 0.0;
   List<CollabSubtask> collabSubtasks = [];
@@ -20,6 +21,7 @@ class CollabTask {
         '"title"': '"$title"',
         '"deadline"': '"$deadline"',
         '"completed"': completed,
+        '"archived"': archived,
         '"totalProgress"': totalProgress,
         '"CollabSubtasks"': collabSubtasks.map((f) => f.toJson()).toList(),
       };

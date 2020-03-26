@@ -21,7 +21,7 @@ class SoloTask {
         '"title"': '"$title"',
         '"deadline"': '"$deadline"',
         '"completed"': completed,
-        '"completed"': completed,
+        '"archived"': archived,
         '"totalProgress"': totalProgress,
         '"subtasks"': subtasks.map((f) => f.toJson()).toList(),
       };

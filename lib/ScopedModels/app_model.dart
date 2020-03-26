@@ -553,7 +553,7 @@ class AppModel extends Model {
       sumOfProgressPercentages += ct.totalProgress;
 
       if (ct.completed) {
-        showReward();
+        // showReward();
         collabTasksCompleted += 1;
       }
     }
@@ -567,21 +567,20 @@ class AppModel extends Model {
 
   homeTabUpdateAllTasksProgress() {
     double sumOfProgressPercentages = 0.0;
-    int soloTasksCompleted = 0;
     for (SoloTask st in userAdapter.user.soloTasks) {
       sumOfProgressPercentages += st.totalProgress;
-      if (st.completed) {
-        showReward();
-
-        soloTasksCompleted += 1;
+      if (st.completed) { 
+        if (!st.archived) {
+          showReward(st);
+        }
       }
     }
     homeTabModel.percentCompletedTasks =
         (userAdapter.user.soloTasks.length == 0)
             ? 0
             : sumOfProgressPercentages / userAdapter.user.soloTasks.length;
-    userAdapter.user.stats.numOfSoloTasksCompleted = soloTasksCompleted;
     profileTabUpdateStats();
+    homeTabUpdateHomeState();
   }
 
   collabTabUpdateCollabTabState() {
@@ -664,56 +663,6 @@ class AppModel extends Model {
     await appDatabase.userAddCollabTaskToCollaborator(uid, collabTask);
   }
 
-  // collabTablistenForChangesInCollabTasks() async {
-  //   try {
-  //     appDatabase.collabTasksRef.onChildChanged.listen((data) {
-  //       print("changed!");
-  //       for (int i = 0; i < userAdapter.user.collabTasks.length; i++) {
-  //         if (userAdapter.user.collabTasks[i].id == data.snapshot.key) {
-  //           userAdapter.user.collabTasks[i] =
-  //               CollabTask.fromJson(jsonDecode(data.snapshot.value.toString()));
-  //           collabTabUpdateCollabTasks();
-  //         }
-  //       }
-  //     });
-  //   } catch (e) {}
-  // }
-
-  // collabTablistenForNewCollabTasks() async {
-  //   print("num of collab tasks");
-  //   print(userAdapter.user.collabTasks.length);
-  //   try {
-  //     appDatabase.personalUserRef
-  //         .child('CollabTasks')
-  //         .onChildAdded
-  //         .listen((data) async {
-  //       print("new collab task");
-  //       print(data.snapshot.key.toString());
-  //       CollabTask clb = await appDatabase
-  //           .userFetchCollabTaskUsingId(data.snapshot.key.toString());
-  //       if (!clb.completed && !userAdapter.user.collabTasks.contains(clb)) {
-  //         userAdapter.user.collabTasks.add(clb);
-
-  //         collabTabUpdateCollabTasks();
-  //       }
-  //     });
-  //   } catch (e) {}
-  // }
-
-  // listenForNotifications() async {
-  //   appDatabase.personalUserRef
-  //       .child("Notifications")
-  //       .onChildAdded
-  //       .listen((data) {
-  //     print(data.snapshot.value);
-  //     CollabNotification clb = CollabNotification.fromJson(
-  //         jsonDecode(data.snapshot.value.toString()));
-  //     if (authState == AuthState.LoggedIn) {
-  //       showNotificationDialog(clb);
-  //     }
-  //   });
-  // }
-
   showNotifications() {
     List<String> showed = [];
 
@@ -781,7 +730,20 @@ class AppModel extends Model {
     await appDatabase.deleteNotification(notif.taskName);
   }
 
-  showReward() {
+  homeTabArchiveSoloTask(SoloTask soloTask) async {
+    List<SoloTask> temp = [];
+    userAdapter.user.soloTasks.forEach((st) {
+      if (soloTask.id != st.id) {
+        temp.add(st);
+      }
+    });
+    userAdapter.user.soloTasks = temp;
+    homeTabUpdateAllTasksProgress();
+    
+    await appDatabase.archiveSoloTask(soloTask);
+  }
+
+  showReward(SoloTask st) {
     showGeneralDialog(
         barrierColor: Colors.black.withOpacity(0.5),
         transitionBuilder: (context, a1, a2, widget) {
@@ -789,8 +751,11 @@ class AppModel extends Model {
               scale: a1.value,
               child: Opacity(
                 opacity: a1.value,
-                child: RewardDialog(AppData
-                    .rewards[Random().nextInt(AppData.rewards.length - 1)]),
+                child: RewardDialog(
+                    AppData
+                        .rewards[Random().nextInt(AppData.rewards.length - 1)],
+                    st,
+                    this),
               ));
         },
         transitionDuration: Duration(milliseconds: 200),
@@ -798,6 +763,7 @@ class AppModel extends Model {
         barrierLabel: '',
         context: context,
         pageBuilder: (context, animation1, animation2) {});
+    // homeTabUpdateAllTasksProgress();
   }
 }
 

@@ -51,14 +51,14 @@ class AppData {
   ];
 
   static List<Reward> rewards = [
-    Reward("Chill, Sweet Thing", 'assets/tips/ChillSweetThing.png'),
+    Reward("Chill, Sweet Thing.", 'assets/tips/ChillSweetThing.png'),
     Reward("Fast Food Friends!", 'assets/tips/FastFoodFriends.png'),
 
     Reward("Have a Cookie!", 'assets/tips/HaveACookie.png'),
 
     Reward("Social Media Scroll!", 'assets/tips/ChillSweetThing.png'),
 
-    Reward("Power Nap!", 'assets/tips/PowerNap.png'),
+    Reward("Take a Power Nap!", 'assets/tips/PowerNap.png'),
 
   ];
 }

@@ -101,7 +101,7 @@ class AppDatabase {
           // print(value);
 
           CollabTask cT = CollabTask.fromJson(jsonDecode(value.toString()));
-          if (listOfCollabTaskIds.contains(k.toString())  ) {
+          if (listOfCollabTaskIds.contains(k.toString())) {
             listOfCollabTasks.add(cT);
           }
         });
@@ -135,8 +135,10 @@ class AppDatabase {
           // print(value);
 
           SoloTask sT = SoloTask.fromJson(jsonDecode(value.toString()));
-          if (listOfSoloTaskIds.contains(k.toString())  ) {
-            listOfSoloTasks.add(sT);
+          if (listOfSoloTaskIds.contains(k.toString())) {
+            if (!sT.archived) {
+              listOfSoloTasks.add(sT);
+            }
           }
         });
       });
@@ -275,6 +277,12 @@ class AppDatabase {
   deleteNotification(String taskName) async {
     try {
       await personalUserRef.child("Notifications/$taskName").set(null);
+    } catch (E) {}
+  }
+
+  archiveSoloTask(SoloTask st) async {
+    try {
+      await soloTasksRef.child("${st.id}/archived").set(true);
     } catch (E) {}
   }
 }

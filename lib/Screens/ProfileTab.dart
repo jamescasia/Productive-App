@@ -59,7 +59,8 @@ class _ProfileTabState extends State<ProfileTab> {
                                                 Center(
                                                   child: Text(
                                                     "Profile",
-                                                    style: TextStyle(fontFamily:"QuickSand",
+                                                    style: TextStyle(
+                                                        fontFamily: "QuickSand",
                                                         fontSize: 22,
                                                         color: Colors.grey,
                                                         fontWeight:
@@ -125,7 +126,8 @@ class _ProfileTabState extends State<ProfileTab> {
                                         Text(
                                           appModel
                                               .userAdapter.user.userInfo.name,
-                                          style: TextStyle(fontFamily:"QuickSand",
+                                          style: TextStyle(
+                                              fontFamily: "QuickSand",
                                               fontSize: 23,
                                               color: Colors.grey[600],
                                               fontWeight: FontWeight.w500),
@@ -215,7 +217,7 @@ class _ProfileTabState extends State<ProfileTab> {
                                         appModel.userAdapter.user.stats
                                             .missionsCompleted[4],
                                         appModel.userAdapter.user.stats
-                                            .numOfGroupSubtasksCompleted),
+                                            .numOfCollabTasksCompleted),
                                   ]
 
                                   //     AppData.missions.map((m) {

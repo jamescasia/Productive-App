@@ -1,5 +1,6 @@
 import 'package:ProductiveApp/DataModels/AppData.dart';
 import 'package:ProductiveApp/DataModels/CollabTask.dart';
+import 'package:ProductiveApp/DataModels/SoloTask.dart';
 import 'package:ProductiveApp/Libraries/SwipeableCardStack/SwipeableCardStack.dart';
 import 'package:ProductiveApp/ScopedModels/app_model.dart';
 import 'package:ProductiveApp/ScopedModels/home_tab_model.dart';
@@ -16,15 +17,20 @@ import 'package:ProductiveApp/DataModels/Globals.dart';
 
 class RewardDialog extends StatefulWidget {
   Reward reward;
+  SoloTask soloTask;
+  AppModel appModel;
 
-  RewardDialog(this.reward);
+  RewardDialog(this.reward, this.soloTask, this.appModel);
   @override
-  _RewardDialogState createState() => _RewardDialogState(this.reward);
+  _RewardDialogState createState() =>
+      _RewardDialogState(this.reward, this.soloTask, this.appModel);
 }
 
 class _RewardDialogState extends State<RewardDialog> {
   Reward reward;
-  _RewardDialogState(this.reward);
+  SoloTask soloTask;
+  AppModel appModel;
+  _RewardDialogState(this.reward, this.soloTask, this.appModel);
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +43,10 @@ class _RewardDialogState extends State<RewardDialog> {
         width: Globals.width * 0.9,
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Text(
-            reward.message,
-            
-            style: TextStyle(fontFamily:"QuickSand" ,
+            "${reward.message} You deserve it.",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontFamily: "QuickSand",
                 color: Colors.black,
                 fontSize: 26 * Globals.dheight,
                 fontWeight: FontWeight.w600),
@@ -58,13 +65,15 @@ class _RewardDialogState extends State<RewardDialog> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(6))),
             onPressed: () async {
+              await appModel.homeTabArchiveSoloTask(soloTask);
               Navigator.pop(context);
             },
             height: Globals.dheight * 40,
             // minWidth: Globals.width * 0.7,
             child: Text(
               "Alright",
-              style: TextStyle(fontFamily:"QuickSand",
+              style: TextStyle(
+                  fontFamily: "QuickSand",
                   color: Colors.white,
                   fontSize: 17,
                   fontWeight: FontWeight.w700),
