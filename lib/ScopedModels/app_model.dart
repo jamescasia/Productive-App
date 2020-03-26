@@ -36,6 +36,11 @@ class AppModel extends Model {
 
   TabChangerModel tabChangerModel;
   AppModel(BuildContext context) {
+    initialize();
+    this.context = context;
+  }
+
+  initialize() {
     tabChangerModel = TabChangerModel();
     pomModel = PomodoroModel();
     homeTabModel = HomeTabModel();
@@ -44,10 +49,10 @@ class AppModel extends Model {
     appDatabase = AppDatabase();
     profileTabModel = ProfileTabModel();
     collabTabModel = CollabTabModel();
-    this.context = context;
   }
 
   logInScreenLogIn(email, pass) async {
+    initialize();
     try {
       authState = AuthState.LoggingIn;
       print(authState);
@@ -68,7 +73,7 @@ class AppModel extends Model {
       await collabTablistenForNewCollabTasks();
       await profileTabFetchUserInfo();
       collabTablistenForChangesInCollabTasks();
-      
+
       listenForNotifications();
       notifyListeners();
     } catch (E) {
@@ -103,10 +108,12 @@ class AppModel extends Model {
 
     notifyListeners();
     print(authState);
+
     return authState;
   }
 
   logInScreenGoogleLogIn() async {
+    initialize();
     try {
       authState = AuthState.LoggingIn;
       print(authState);
@@ -146,7 +153,7 @@ class AppModel extends Model {
       await homeTabFetchSoloTasks();
       await collabTablistenForNewCollabTasks();
       await profileTabFetchUserInfo();
-      collabTablistenForChangesInCollabTasks(); 
+      collabTablistenForChangesInCollabTasks();
 
       listenForNotifications();
       notifyListeners();
@@ -167,7 +174,9 @@ class AppModel extends Model {
   }
 
   signUpScreenGoogleSignUp() async {
+    initialize();
     appAuth.logOut();
+
     try {
       signUpState = SignUpState.SigningUp;
       print(signUpState);
@@ -190,14 +199,14 @@ class AppModel extends Model {
         await appDatabase.initializeUserDatabase(userAdapter.uid);
         await profileTabFetchUserStats();
 
-      authState = AuthState.LoggedIn;
+        authState = AuthState.LoggedIn;
         userAdapter.user.stats.numOfLoginsCompleted += 1;
         profileTabUpdateStats();
         await homeTabFetchSoloTasks();
         await collabTablistenForNewCollabTasks();
         await profileTabFetchUserInfo();
 
-        collabTablistenForChangesInCollabTasks(); 
+        collabTablistenForChangesInCollabTasks();
         listenForNotifications();
 
         notifyListeners();
@@ -212,14 +221,14 @@ class AppModel extends Model {
         await appDatabase.initializeUserDatabase(userAdapter.uid);
         userAdapter.user.stats.numOfLoginsCompleted += 1;
 
-      authState = AuthState.LoggedIn;
+        authState = AuthState.LoggedIn;
         await profileTabFetchUserStats();
         profileTabUpdateStats();
         await homeTabFetchSoloTasks();
         await collabTablistenForNewCollabTasks();
         await profileTabFetchUserInfo();
 
-        collabTablistenForChangesInCollabTasks(); 
+        collabTablistenForChangesInCollabTasks();
 
         listenForNotifications();
 
@@ -242,6 +251,7 @@ class AppModel extends Model {
   }
 
   signUpScreenSignUp(username, email, pass) async {
+    initialize();
     try {
       signUpState = SignUpState.SigningUp;
       print(signUpState);
@@ -267,7 +277,7 @@ class AppModel extends Model {
       await collabTablistenForNewCollabTasks();
       await profileTabFetchUserInfo();
 
-      collabTablistenForChangesInCollabTasks(); 
+      collabTablistenForChangesInCollabTasks();
 
       listenForNotifications();
       notifyListeners();
@@ -578,9 +588,7 @@ class AppModel extends Model {
     } catch (e) {}
   }
 
-
   collabTablistenForNewCollabTasks() async {
-
     print("num of collab tasks");
     print(userAdapter.user.collabTasks.length);
     try {
@@ -598,8 +606,6 @@ class AppModel extends Model {
           collabTabUpdateCollabTasks();
         }
       });
-
-
     } catch (e) {}
   }
 
@@ -654,7 +660,6 @@ class AppModel extends Model {
   }
 
   collabTabNotifyUser(String uid, String taskName, String message) async {
-
     print("num of collab tasksd");
     print(userAdapter.user.collabTasks.length);
     appDatabase.notifyUser(
