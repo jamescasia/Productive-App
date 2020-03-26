@@ -121,7 +121,7 @@ class _CollabTaskViewState extends State<CollabTaskView> {
                           style: TextStyle(fontFamily:"QuickSand",
                             fontWeight: FontWeight.w800,
                             color: Colors.grey[700],
-                            fontSize: 18,
+                            fontSize: 18*Globals.dheight,
                           ),
                         ),
                         SizedBox(height: Globals.dheight * 5),
@@ -130,7 +130,7 @@ class _CollabTaskViewState extends State<CollabTaskView> {
                           textAlign: TextAlign.start,
                           style: TextStyle(fontFamily:"QuickSand",
                             color: Colors.grey[700],
-                            fontSize: 16,
+                            fontSize: 16*Globals.dheight
                           ),
                         )
                       ]),
@@ -228,7 +228,7 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
         children: <Widget>[
           Container(
             // color: Colors.grey,
-            height: Globals.dheight * 90,
+            height: Globals.dheight * 95,
             child: Stack(
               children: <Widget>[
                 Center(

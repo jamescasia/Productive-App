@@ -119,19 +119,21 @@ class _SoloTaskViewState extends State<SoloTaskView> {
                         Text(
                           this.soloTask.title,
                           textAlign: TextAlign.start,
-                          style: TextStyle(fontFamily:"QuickSand",
+                          style: TextStyle(
+                            fontFamily: "QuickSand",
                             fontWeight: FontWeight.w800,
                             color: Colors.grey[700],
-                            fontSize: 18*Globals.dheight,
+                            fontSize: 18 * Globals.dheight,
                           ),
                         ),
                         SizedBox(height: Globals.dheight * 5),
                         Text(
                           "${month[DateTime.parse(this.soloTask.deadline).month - 1]} ${DateTime.parse(this.soloTask.deadline).day}",
                           textAlign: TextAlign.start,
-                          style: TextStyle(fontFamily:"QuickSand",
+                          style: TextStyle(
+                            fontFamily: "QuickSand",
                             color: Colors.grey[700],
-                            fontSize: 16,
+                            fontSize: 16 * Globals.dheight,
                           ),
                         )
                       ]),
@@ -227,7 +229,7 @@ class _SubtaskViewState extends State<SubtaskView> {
         children: <Widget>[
           Container(
             // color: Colors.grey,
-            height: Globals.dheight * 80,
+            height: Globals.dheight * 95,
             child: Stack(
               children: <Widget>[
                 Center(
@@ -324,18 +326,20 @@ class _SubtaskViewState extends State<SubtaskView> {
                         Text(
                           this.subtask.title,
                           textAlign: TextAlign.start,
-                          style: TextStyle(fontFamily:"QuickSand",
+                          style: TextStyle(
+                            fontFamily: "QuickSand",
                             fontWeight: FontWeight.w800,
                             color: Colors.grey[700],
-                            fontSize: 14,
+                            fontSize: 16 * Globals.dheight,
                           ),
                         ),
                         Text(
                           "${month[DateTime.parse(this.subtask.deadline).month - 1]} ${DateTime.parse(this.subtask.deadline).day}",
                           textAlign: TextAlign.start,
-                          style: TextStyle(fontFamily:"QuickSand",
+                          style: TextStyle(
+                            fontFamily: "QuickSand",
                             color: Colors.grey[700],
-                            fontSize: 12,
+                            fontSize: 14 * Globals.dheight,
                           ),
                         )
                       ]),
