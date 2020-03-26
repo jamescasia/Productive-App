@@ -33,6 +33,10 @@ class AppModel extends Model {
   AuthState authState = AuthState.LoggedOut;
   SignUpState signUpState = SignUpState.NotSignedUp;
   BuildContext context;
+  StreamSubscription collabTablistenForNewCollabTasks;
+  StreamSubscription collabTablistenForChangesInCollabTasks;
+  StreamSubscription listenForNotifications;
+  List<String> collabTaskIds;
 
   TabChangerModel tabChangerModel;
   AppModel(BuildContext context) {
@@ -40,7 +44,11 @@ class AppModel extends Model {
     this.context = context;
   }
 
+  // await collabTablistenForNewCollabTasks();
+  // collabTablistenForChangesInCollabTasks();
+  // listenForNotifications();
   initialize() {
+    collabTaskIds = [];
     tabChangerModel = TabChangerModel();
     pomModel = PomodoroModel();
     homeTabModel = HomeTabModel();
@@ -51,8 +59,54 @@ class AppModel extends Model {
     collabTabModel = CollabTabModel();
   }
 
+  initializeListeners() {
+    try {
+      collabTablistenForNewCollabTasks.cancel();
+      collabTablistenForChangesInCollabTasks.cancel();
+      listenForNotifications.cancel();
+    } catch (e) {}
+    collabTablistenForChangesInCollabTasks =
+        appDatabase.collabTasksRef.onChildChanged.listen((data) {
+      print("changed!");
+      for (int i = 0; i < userAdapter.user.collabTasks.length; i++) {
+        if (userAdapter.user.collabTasks[i].id == data.snapshot.key) {
+          userAdapter.user.collabTasks[i] =
+              CollabTask.fromJson(jsonDecode(data.snapshot.value.toString()));
+          collabTabUpdateCollabTasks();
+        }
+      }
+    });
+
+    collabTablistenForNewCollabTasks = appDatabase.personalUserRef
+        .child('CollabTasks')
+        .onChildAdded
+        .listen((data) async {
+      print("new collab task");
+      print(data.snapshot.key.toString());
+      CollabTask clb = await appDatabase
+          .userFetchCollabTaskUsingId(data.snapshot.key.toString());
+      if (!clb.completed && !userAdapter.user.collabTasks.contains(clb)) {
+        userAdapter.user.collabTasks.add(clb);
+
+        collabTabUpdateCollabTasks();
+      }
+    });
+
+    listenForNotifications = appDatabase.personalUserRef
+        .child("Notifications")
+        .onChildAdded
+        .listen((data) {
+      print(data.snapshot.value);
+      CollabNotification clb = CollabNotification.fromJson(
+          jsonDecode(data.snapshot.value.toString()));
+      if (authState == AuthState.LoggedIn) {
+        showNotificationDialog(clb);
+      }
+    });
+  }
+
   logInScreenLogIn(email, pass) async {
-    initialize();
+    // initialize();
     try {
       authState = AuthState.LoggingIn;
       print(authState);
@@ -70,11 +124,13 @@ class AppModel extends Model {
       profileTabUpdateStats();
 
       await homeTabFetchSoloTasks();
-      await collabTablistenForNewCollabTasks();
-      await profileTabFetchUserInfo();
-      collabTablistenForChangesInCollabTasks();
+      await collabTabFetchCollabTasks();
 
-      listenForNotifications();
+      await profileTabFetchUserInfo();
+      initializeListeners();
+      // await collabTablistenForNewCollabTasks();
+      // collabTablistenForChangesInCollabTasks();
+      // listenForNotifications();
       notifyListeners();
     } catch (E) {
       authState = AuthState.InvalidLogIn;
@@ -93,6 +149,11 @@ class AppModel extends Model {
   }
 
   logInScreenLogOut() async {
+    collabTablistenForNewCollabTasks.cancel();
+    collabTablistenForChangesInCollabTasks.cancel();
+    listenForNotifications.cancel();
+    initialize();
+
     try {
       authState = AuthState.LoggingOut;
       print(authState);
@@ -113,7 +174,7 @@ class AppModel extends Model {
   }
 
   logInScreenGoogleLogIn() async {
-    initialize();
+    // initialize();
     try {
       authState = AuthState.LoggingIn;
       print(authState);
@@ -151,11 +212,14 @@ class AppModel extends Model {
       userAdapter.user.stats.numOfLoginsCompleted += 1;
       profileTabUpdateStats();
       await homeTabFetchSoloTasks();
-      await collabTablistenForNewCollabTasks();
-      await profileTabFetchUserInfo();
-      collabTablistenForChangesInCollabTasks();
+      // await collabTablistenForNewCollabTasks();
 
-      listenForNotifications();
+      await collabTabFetchCollabTasks();
+      await profileTabFetchUserInfo();
+      // collabTablistenForChangesInCollabTasks();
+
+      // listenForNotifications();
+      initializeListeners();
       notifyListeners();
 
       print(authState);
@@ -174,7 +238,7 @@ class AppModel extends Model {
   }
 
   signUpScreenGoogleSignUp() async {
-    initialize();
+    // initialize();
     appAuth.logOut();
 
     try {
@@ -203,11 +267,13 @@ class AppModel extends Model {
         userAdapter.user.stats.numOfLoginsCompleted += 1;
         profileTabUpdateStats();
         await homeTabFetchSoloTasks();
-        await collabTablistenForNewCollabTasks();
-        await profileTabFetchUserInfo();
 
-        collabTablistenForChangesInCollabTasks();
-        listenForNotifications();
+      await collabTabFetchCollabTasks();
+        await profileTabFetchUserInfo();
+        initializeListeners();
+        // await collabTablistenForNewCollabTasks();
+        // collabTablistenForChangesInCollabTasks();
+        // listenForNotifications();
 
         notifyListeners();
         return signUpState;
@@ -225,12 +291,14 @@ class AppModel extends Model {
         await profileTabFetchUserStats();
         profileTabUpdateStats();
         await homeTabFetchSoloTasks();
-        await collabTablistenForNewCollabTasks();
+        // await collabTablistenForNewCollabTasks();
         await profileTabFetchUserInfo();
 
-        collabTablistenForChangesInCollabTasks();
+      await collabTabFetchCollabTasks();
+        // collabTablistenForChangesInCollabTasks();
 
-        listenForNotifications();
+        // listenForNotifications();
+        initializeListeners();
 
         notifyListeners();
       }
@@ -251,7 +319,7 @@ class AppModel extends Model {
   }
 
   signUpScreenSignUp(username, email, pass) async {
-    initialize();
+    // initialize();
     try {
       signUpState = SignUpState.SigningUp;
       print(signUpState);
@@ -274,12 +342,14 @@ class AppModel extends Model {
       await profileTabFetchUserStats();
       profileTabUpdateStats();
       await homeTabFetchSoloTasks();
-      await collabTablistenForNewCollabTasks();
+      // await collabTablistenForNewCollabTasks();
       await profileTabFetchUserInfo();
 
-      collabTablistenForChangesInCollabTasks();
+      // collabTablistenForChangesInCollabTasks();
 
-      listenForNotifications();
+      await collabTabFetchCollabTasks();
+      // listenForNotifications();
+      initializeListeners();
       notifyListeners();
       print(signUpState);
       print(await FirebaseAuth.instance.currentUser());
@@ -573,55 +643,55 @@ class AppModel extends Model {
     await appDatabase.userAddCollabTaskToCollaborator(uid, collabTask);
   }
 
-  collabTablistenForChangesInCollabTasks() async {
-    try {
-      appDatabase.collabTasksRef.onChildChanged.listen((data) {
-        print("changed!");
-        for (int i = 0; i < userAdapter.user.collabTasks.length; i++) {
-          if (userAdapter.user.collabTasks[i].id == data.snapshot.key) {
-            userAdapter.user.collabTasks[i] =
-                CollabTask.fromJson(jsonDecode(data.snapshot.value.toString()));
-            collabTabUpdateCollabTasks();
-          }
-        }
-      });
-    } catch (e) {}
-  }
+  // collabTablistenForChangesInCollabTasks() async {
+  //   try {
+  //     appDatabase.collabTasksRef.onChildChanged.listen((data) {
+  //       print("changed!");
+  //       for (int i = 0; i < userAdapter.user.collabTasks.length; i++) {
+  //         if (userAdapter.user.collabTasks[i].id == data.snapshot.key) {
+  //           userAdapter.user.collabTasks[i] =
+  //               CollabTask.fromJson(jsonDecode(data.snapshot.value.toString()));
+  //           collabTabUpdateCollabTasks();
+  //         }
+  //       }
+  //     });
+  //   } catch (e) {}
+  // }
 
-  collabTablistenForNewCollabTasks() async {
-    print("num of collab tasks");
-    print(userAdapter.user.collabTasks.length);
-    try {
-      appDatabase.personalUserRef
-          .child('CollabTasks')
-          .onChildAdded
-          .listen((data) async {
-        print("new collab task");
-        print(data.snapshot.key.toString());
-        CollabTask clb = await appDatabase
-            .userFetchCollabTaskUsingId(data.snapshot.key.toString());
-        if (!clb.completed && !userAdapter.user.collabTasks.contains(clb)) {
-          userAdapter.user.collabTasks.add(clb);
+  // collabTablistenForNewCollabTasks() async {
+  //   print("num of collab tasks");
+  //   print(userAdapter.user.collabTasks.length);
+  //   try {
+  //     appDatabase.personalUserRef
+  //         .child('CollabTasks')
+  //         .onChildAdded
+  //         .listen((data) async {
+  //       print("new collab task");
+  //       print(data.snapshot.key.toString());
+  //       CollabTask clb = await appDatabase
+  //           .userFetchCollabTaskUsingId(data.snapshot.key.toString());
+  //       if (!clb.completed && !userAdapter.user.collabTasks.contains(clb)) {
+  //         userAdapter.user.collabTasks.add(clb);
 
-          collabTabUpdateCollabTasks();
-        }
-      });
-    } catch (e) {}
-  }
+  //         collabTabUpdateCollabTasks();
+  //       }
+  //     });
+  //   } catch (e) {}
+  // }
 
-  listenForNotifications() async {
-    appDatabase.personalUserRef
-        .child("Notifications")
-        .onChildAdded
-        .listen((data) {
-      print(data.snapshot.value);
-      CollabNotification clb = CollabNotification.fromJson(
-          jsonDecode(data.snapshot.value.toString()));
-      if (authState == AuthState.LoggedIn) {
-        showNotificationDialog(clb);
-      }
-    });
-  }
+  // listenForNotifications() async {
+  //   appDatabase.personalUserRef
+  //       .child("Notifications")
+  //       .onChildAdded
+  //       .listen((data) {
+  //     print(data.snapshot.value);
+  //     CollabNotification clb = CollabNotification.fromJson(
+  //         jsonDecode(data.snapshot.value.toString()));
+  //     if (authState == AuthState.LoggedIn) {
+  //       showNotificationDialog(clb);
+  //     }
+  //   });
+  // }
 
   showNotifications() {
     List<String> showed = [];
