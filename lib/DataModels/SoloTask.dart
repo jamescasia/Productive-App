@@ -32,6 +32,7 @@ class SoloTask {
     r.title = json["title"];
     r.deadline = json["deadline"];
     r.completed = json["completed"];
+    r.archived = json["archived"];
     try {
       r.totalProgress = (json["totalProgress"]).toDouble();
     } catch (E) {}

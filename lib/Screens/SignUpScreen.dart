@@ -12,8 +12,8 @@ import 'package:progress_indicators/progress_indicators.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:ProductiveApp/ScopedModels/app_model.dart';
 import 'package:ProductiveApp/ScopedModels/tab_changer_model.dart';
-
-import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+// import 'package:keyboard_visibility/keyboard_visibility.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -26,6 +26,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController password2Controller = TextEditingController();
   double safePadding = 0;
+  KeyboardVisibilityNotification _keyboardVisibility =
+      new KeyboardVisibilityNotification();
+  int _keyboardVisibilitySubscriberId;
+  bool _keyboardState;
 
   ScrollController sc = ScrollController();
 
@@ -36,29 +40,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState\
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => afterBuild());
-    KeyboardVisibilityNotification().addNewListener(onChange: (bool visible) {
-      print("Keyboardd is");
-      print(visible);
-
-      setState(() {
-        if (visible) {
-          Future.delayed(Duration(milliseconds: 40)).then((_) {
-            sc.animateTo(sc.position.maxScrollExtent * 0.5,
-                duration: Duration(milliseconds: 100), curve: Curves.easeOut);
-          });
-        }
-        if (!visible) {
-          Future.delayed(Duration(milliseconds: 40)).then((_) {
-            sc.animateTo(safePadding,
-                duration: Duration(milliseconds: 100), curve: Curves.easeOut);
-          });
-        }
-      });
-    });
     super.initState();
+
+    _keyboardState = _keyboardVisibility.isKeyboardVisible;
+
+    _keyboardVisibilitySubscriberId = _keyboardVisibility.addNewListener(
+      onChange: (bool visible) {
+        setState(() {
+          _keyboardState = visible;
+          if (visible) {
+            Future.delayed(Duration(milliseconds: 40)).then((_) {
+              sc.animateTo(sc.position.maxScrollExtent * 0.5,
+                  duration: Duration(milliseconds: 100), curve: Curves.easeOut);
+            });
+          }
+          if (!visible) {
+            Future.delayed(Duration(milliseconds: 40)).then((_) {
+              sc.animateTo(safePadding,
+                  duration: Duration(milliseconds: 100), curve: Curves.easeOut);
+            });
+          }
+        });
+      },
+    );
+    WidgetsBinding.instance.addPostFrameCallback((_) => afterBuild());
+ 
+   
   }
 
   @override

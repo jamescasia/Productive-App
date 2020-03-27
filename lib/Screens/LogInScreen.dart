@@ -12,7 +12,8 @@ import 'package:ProductiveApp/ScopedModels/app_model.dart';
 import 'package:ProductiveApp/ScopedModels/tab_changer_model.dart';
 import './SignUpScreen.dart';
 import 'dart:async';
-import 'package:keyboard_visibility/keyboard_visibility.dart';
+// import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -21,7 +22,6 @@ class Mansana extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScopedModel<AppModel>(
         model: AppModel(context),
-        
         child: MaterialApp(
           theme: ThemeData(fontFamily: 'QuickSand'),
           debugShowCheckedModeBanner: false,
@@ -40,6 +40,10 @@ class _LogInScreenState extends State<LogInScreen> {
   TextEditingController passwordController = TextEditingController();
   double safePadding = 0;
   ScrollController sc = ScrollController();
+  KeyboardVisibilityNotification _keyboardVisibility =
+      new KeyboardVisibilityNotification();
+  int _keyboardVisibilitySubscriberId;
+  bool _keyboardState;
 
   afterBuild() {
     print("done");
@@ -48,29 +52,32 @@ class _LogInScreenState extends State<LogInScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState\
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => afterBuild());
-    KeyboardVisibilityNotification().addNewListener(onChange: (bool visible) {
-      print("Keyboardd is");
-      print(visible);
-
-      setState(() {
-        if (visible) {
-          Future.delayed(Duration(milliseconds: 40)).then((_) {
-            sc.animateTo(sc.position.maxScrollExtent * 0.5,
-                duration: Duration(milliseconds: 100), curve: Curves.easeOut);
-          });
-        }
-        if (!visible) {
-          Future.delayed(Duration(milliseconds: 40)).then((_) {
-            sc.animateTo(safePadding,
-                duration: Duration(milliseconds: 100), curve: Curves.easeOut);
-          });
-        }
-      });
-    });
+    // TODO: implement initState
     super.initState();
+
+    _keyboardState = _keyboardVisibility.isKeyboardVisible;
+
+    _keyboardVisibilitySubscriberId = _keyboardVisibility.addNewListener(
+      onChange: (bool visible) {
+        setState(() {
+          _keyboardState = visible;
+          if (visible) {
+            Future.delayed(Duration(milliseconds: 40)).then((_) {
+              sc.animateTo(sc.position.maxScrollExtent * 0.5,
+                  duration: Duration(milliseconds: 100), curve: Curves.easeOut);
+            });
+          }
+          if (!visible) {
+            Future.delayed(Duration(milliseconds: 40)).then((_) {
+              sc.animateTo(safePadding,
+                  duration: Duration(milliseconds: 100), curve: Curves.easeOut);
+            });
+          }
+        });
+      },
+    );
+    WidgetsBinding.instance.addPostFrameCallback((_) => afterBuild());
+ 
   }
 
   @override
@@ -132,7 +139,8 @@ class _LogInScreenState extends State<LogInScreen> {
                                         children: <Widget>[
                                           Text(
                                             "Welcome",
-                                            style: TextStyle(fontFamily:"QuickSand",
+                                            style: TextStyle(
+                                              fontFamily: "QuickSand",
                                               color: Colors.grey[900],
                                               fontWeight: FontWeight.bold,
                                               fontSize: 40,
@@ -140,7 +148,8 @@ class _LogInScreenState extends State<LogInScreen> {
                                           ),
                                           Text(
                                             "Log-in",
-                                            style: TextStyle(fontFamily:"QuickSand",
+                                            style: TextStyle(
+                                              fontFamily: "QuickSand",
                                               color: Colors.grey[900],
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20,
@@ -180,7 +189,9 @@ class _LogInScreenState extends State<LogInScreen> {
                                                 bottom: 10),
                                             width: Globals.width * 0.8,
                                             child: Center(
-                                              child: TextField(style:TextStyle(fontFamily:"QuickSand"),
+                                              child: TextField(
+                                                style: TextStyle(
+                                                    fontFamily: "QuickSand"),
                                                 controller: emailController,
                                                 decoration: new InputDecoration
                                                         .collapsed(
@@ -204,7 +215,9 @@ class _LogInScreenState extends State<LogInScreen> {
                                                 bottom: 10),
                                             width: Globals.width * 0.8,
                                             child: Center(
-                                              child: TextField(style:TextStyle(fontFamily:"QuickSand"),
+                                              child: TextField(
+                                                style: TextStyle(
+                                                    fontFamily: "QuickSand"),
                                                 controller: passwordController,
                                                 obscureText: true,
                                                 decoration: new InputDecoration
@@ -277,7 +290,9 @@ class _LogInScreenState extends State<LogInScreen> {
                                                             AuthState.LoggedIn)
                                                     ? Text(
                                                         "LOG IN",
-                                                        style: TextStyle(fontFamily:"QuickSand",
+                                                        style: TextStyle(
+                                                            fontFamily:
+                                                                "QuickSand",
                                                             fontWeight:
                                                                 FontWeight.w600,
                                                             color: Colors.white,
@@ -286,7 +301,9 @@ class _LogInScreenState extends State<LogInScreen> {
                                                     : (appModel.authState ==
                                                             AuthState.LoggingIn)
                                                         ? JumpingText("...",
-                                                            style: TextStyle(fontFamily:"QuickSand",
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    "QuickSand",
                                                                 color: Colors
                                                                     .white,
                                                                 fontWeight:
@@ -295,7 +312,9 @@ class _LogInScreenState extends State<LogInScreen> {
                                                                 fontSize: 35))
                                                         : Text(
                                                             "INVALID",
-                                                            style: TextStyle(fontFamily:"QuickSand",
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    "QuickSand",
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w600,
@@ -352,7 +371,8 @@ class _LogInScreenState extends State<LogInScreen> {
                                             SizedBox(width: 1),
                                             Text(
                                               "GOOGLE",
-                                              style: TextStyle(fontFamily:"QuickSand",
+                                              style: TextStyle(
+                                                  fontFamily: "QuickSand",
                                                   color: Colors.white,
                                                   fontSize: 17),
                                             )
@@ -368,7 +388,8 @@ class _LogInScreenState extends State<LogInScreen> {
                                       children: <Widget>[
                                         Text(
                                           "Don't have an account? ",
-                                          style: TextStyle(fontFamily:"QuickSand",
+                                          style: TextStyle(
+                                              fontFamily: "QuickSand",
                                               color: Colors.grey[900],
                                               fontSize: 17),
                                         ),
@@ -384,7 +405,8 @@ class _LogInScreenState extends State<LogInScreen> {
                                           },
                                           child: Text(
                                             "Sign-up",
-                                            style: TextStyle(fontFamily:"QuickSand",
+                                            style: TextStyle(
+                                                fontFamily: "QuickSand",
                                                 color: Colors.blue,
                                                 fontSize: 17),
                                           ),

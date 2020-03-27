@@ -148,6 +148,7 @@ class AppDatabase {
           }
         });
       });
+      print(listOfSoloTasks);
     } catch (E) {
       print("error fetching solo tasks ${E.toString()}");
     }
@@ -288,7 +289,7 @@ class AppDatabase {
 
   archiveSoloTask(SoloTask st) async {
     try {
-      await soloTasksRef.child("${st.id}/archived").set(true);
+      await soloTasksRef.child('${st.id}/"archived"').set(true);
     } catch (E) {}
   }
 
