@@ -26,10 +26,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController password2Controller = TextEditingController();
   double safePadding = 0;
-  KeyboardVisibilityNotification _keyboardVisibility =
-      new KeyboardVisibilityNotification();
-  int _keyboardVisibilitySubscriberId;
-  bool _keyboardState;
 
   ScrollController sc = ScrollController();
 
@@ -40,21 +36,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   void initState() {
-    super.initState();
-
-    _keyboardState = _keyboardVisibility.isKeyboardVisible;
-
-    _keyboardVisibilitySubscriberId = _keyboardVisibility.addNewListener(
+    KeyboardVisibilityNotification().addNewListener(
       onChange: (bool visible) {
+        print(visible);
         setState(() {
-          _keyboardState = visible;
           if (visible) {
+            print("opened");
             Future.delayed(Duration(milliseconds: 40)).then((_) {
               sc.animateTo(sc.position.maxScrollExtent * 0.5,
                   duration: Duration(milliseconds: 100), curve: Curves.easeOut);
             });
           }
           if (!visible) {
+            print("closed");
             Future.delayed(Duration(milliseconds: 40)).then((_) {
               sc.animateTo(safePadding,
                   duration: Duration(milliseconds: 100), curve: Curves.easeOut);
@@ -64,12 +58,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
       },
     );
     WidgetsBinding.instance.addPostFrameCallback((_) => afterBuild());
- 
-   
+
+    super.initState();
+  }
+
+  bool _keyboardIsVisible() {
+    return !(MediaQuery.of(context).viewInsets.bottom == 0.0);
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_keyboardIsVisible()) {
+      Future.delayed(Duration(milliseconds: 40)).then((_) {
+        sc.animateTo(sc.position.maxScrollExtent * 0.5,
+            duration: Duration(milliseconds: 100), curve: Curves.easeOut);
+      });
+    } else {
+      print("closedZ");
+      Future.delayed(Duration(milliseconds: 40)).then((_) {
+        sc.animateTo(safePadding,
+            duration: Duration(milliseconds: 100), curve: Curves.easeOut);
+      });
+    }
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
       statusBarColor: Colors.grey[100],
       systemNavigationBarColor: const Color(0xFF1BA977),
@@ -123,7 +133,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         children: <Widget>[
                                           Text(
                                             "Welcome",
-                                            style: TextStyle(fontFamily:"QuickSand",
+                                            style: TextStyle(
+                                              fontFamily: "QuickSand",
                                               color: Colors.grey[900],
                                               fontWeight: FontWeight.bold,
                                               fontSize: 40,
@@ -131,7 +142,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           ),
                                           Text(
                                             "Sign-up",
-                                            style: TextStyle(fontFamily:"QuickSand",
+                                            style: TextStyle(
+                                              fontFamily: "QuickSand",
                                               color: Colors.grey[900],
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20,
@@ -172,7 +184,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                 bottom: 10),
                                             width: Globals.width * 0.8,
                                             child: Center(
-                                              child: TextField(style:TextStyle(fontFamily:"QuickSand"),
+                                              child: TextField(
+                                                style: TextStyle(
+                                                    fontFamily: "QuickSand"),
                                                 controller: nameController,
                                                 decoration: new InputDecoration
                                                         .collapsed(
@@ -196,7 +210,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                 bottom: 10),
                                             width: Globals.width * 0.8,
                                             child: Center(
-                                              child: TextField(style:TextStyle(fontFamily:"QuickSand"),
+                                              child: TextField(
+                                                style: TextStyle(
+                                                    fontFamily: "QuickSand"),
                                                 controller: emailController,
                                                 decoration: new InputDecoration
                                                         .collapsed(
@@ -220,7 +236,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                 bottom: 10),
                                             width: Globals.width * 0.8,
                                             child: Center(
-                                              child: TextField(style:TextStyle(fontFamily:"QuickSand"),
+                                              child: TextField(
+                                                style: TextStyle(
+                                                    fontFamily: "QuickSand"),
                                                 obscureText: true,
                                                 controller: passwordController,
                                                 decoration: new InputDecoration
@@ -245,7 +263,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                 bottom: 10),
                                             width: Globals.width * 0.8,
                                             child: Center(
-                                              child: TextField(style:TextStyle(fontFamily:"QuickSand"),
+                                              child: TextField(
+                                                style: TextStyle(
+                                                    fontFamily: "QuickSand"),
                                                 obscureText: true,
                                                 controller: password2Controller,
                                                 decoration: new InputDecoration
@@ -268,30 +288,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                       BorderRadius.all(
                                                           Radius.circular(10))),
                                               onPressed: ((emailController.text
-                                                                  .toString()
-                                                                  .length ==
-                                                              0 ||
+                                                              .toString()
+                                                              .length ==
+                                                          0 ||
+                                                      passwordController.text
+                                                              .toString()
+                                                              .length ==
+                                                          0 ||
+                                                      nameController.text
+                                                              .toString()
+                                                              .length ==
+                                                          0 ||
+                                                      password2Controller.text
+                                                              .toString()
+                                                              .length ==
+                                                          0 ||
+                                                      password2Controller.text
+                                                              .toString() !=
                                                           passwordController
-                                                                  .text
-                                                                  .toString()
-                                                                  .length ==
-                                                              0 ||
-                                                          nameController
-                                                                  .text
-                                                                  .toString()
-                                                                  .length ==
-                                                              0 ||
-                                                          password2Controller
-                                                                  .text
-                                                                  .toString()
-                                                                  .length ==
-                                                              0 ||
-                                                          password2Controller
-                                                                  .text
-                                                                  .toString() !=
-                                                              passwordController
-                                                                  .text
-                                                                  .toString()) )
+                                                              .text
+                                                              .toString()))
                                                   ? null
                                                   : () async {
                                                       FocusScope.of(context)
@@ -340,7 +356,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                                 .SignedUp)
                                                     ? Text(
                                                         "CONTINUE",
-                                                        style: TextStyle(fontFamily:"QuickSand",
+                                                        style: TextStyle(
+                                                            fontFamily:
+                                                                "QuickSand",
                                                             fontWeight:
                                                                 FontWeight.w600,
                                                             color: Colors.white,
@@ -350,7 +368,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                             SignUpState
                                                                 .SigningUp)
                                                         ? JumpingText("...",
-                                                            style: TextStyle(fontFamily:"QuickSand",
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    "QuickSand",
                                                                 color: Colors
                                                                     .white,
                                                                 fontWeight:
@@ -359,7 +379,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                                 fontSize: 35))
                                                         : Text(
                                                             "INVALID",
-                                                            style: TextStyle(fontFamily:"QuickSand",
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    "QuickSand",
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w600,
@@ -378,7 +400,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         Center(
                                             child: Text(
                                           "or sign up with",
-                                          style: TextStyle(fontFamily:"QuickSand",
+                                          style: TextStyle(
+                                              fontFamily: "QuickSand",
                                               fontWeight: FontWeight.w600,
                                               color: Colors.grey[900],
                                               fontSize: 18),
@@ -449,7 +472,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                       SizedBox(width: 1),
                                                       Text(
                                                         "GOOGLE",
-                                                        style: TextStyle(fontFamily:"QuickSand",
+                                                        style: TextStyle(
+                                                            fontFamily:
+                                                                "QuickSand",
                                                             color: Colors.white,
                                                             fontSize: 17),
                                                       )
@@ -512,7 +537,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       children: <Widget>[
                                         Text(
                                           "Already have an account? ",
-                                          style: TextStyle(fontFamily:"QuickSand",
+                                          style: TextStyle(
+                                              fontFamily: "QuickSand",
                                               color: Colors.grey[900],
                                               fontSize: 17),
                                         ),
@@ -522,7 +548,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           },
                                           child: Text(
                                             "Log-in",
-                                            style: TextStyle(fontFamily:"QuickSand",
+                                            style: TextStyle(
+                                                fontFamily: "QuickSand",
                                                 color: Colors.blue,
                                                 fontSize: 17),
                                           ),

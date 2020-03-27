@@ -40,10 +40,6 @@ class _LogInScreenState extends State<LogInScreen> {
   TextEditingController passwordController = TextEditingController();
   double safePadding = 0;
   ScrollController sc = ScrollController();
-  KeyboardVisibilityNotification _keyboardVisibility =
-      new KeyboardVisibilityNotification();
-  int _keyboardVisibilitySubscriberId;
-  bool _keyboardState;
 
   afterBuild() {
     print("done");
@@ -53,21 +49,19 @@ class _LogInScreenState extends State<LogInScreen> {
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
-
-    _keyboardState = _keyboardVisibility.isKeyboardVisible;
-
-    _keyboardVisibilitySubscriberId = _keyboardVisibility.addNewListener(
+    KeyboardVisibilityNotification().addNewListener(
       onChange: (bool visible) {
+        print(visible);
         setState(() {
-          _keyboardState = visible;
           if (visible) {
+            print("opened");
             Future.delayed(Duration(milliseconds: 40)).then((_) {
               sc.animateTo(sc.position.maxScrollExtent * 0.5,
                   duration: Duration(milliseconds: 100), curve: Curves.easeOut);
             });
           }
           if (!visible) {
+            print("closed");
             Future.delayed(Duration(milliseconds: 40)).then((_) {
               sc.animateTo(safePadding,
                   duration: Duration(milliseconds: 100), curve: Curves.easeOut);
@@ -77,11 +71,28 @@ class _LogInScreenState extends State<LogInScreen> {
       },
     );
     WidgetsBinding.instance.addPostFrameCallback((_) => afterBuild());
- 
+
+    super.initState();
+  }
+
+  bool _keyboardIsVisible() {
+    return !(MediaQuery.of(context).viewInsets.bottom == 0.0);
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_keyboardIsVisible()) {
+      Future.delayed(Duration(milliseconds: 40)).then((_) {
+        sc.animateTo(sc.position.maxScrollExtent * 0.5,
+            duration: Duration(milliseconds: 100), curve: Curves.easeOut);
+      });
+    } else {
+      print("closedZ");
+      Future.delayed(Duration(milliseconds: 40)).then((_) {
+        sc.animateTo(safePadding,
+            duration: Duration(milliseconds: 100), curve: Curves.easeOut);
+      });
+    }
     Globals.dheight = MediaQuery.of(context).size.height / 793;
     Globals.dwidth = MediaQuery.of(context).size.width / 393;
     Globals.height = MediaQuery.of(context).size.height;
@@ -97,7 +108,6 @@ class _LogInScreenState extends State<LogInScreen> {
         safePadding = Globals.height - constraints.maxHeight;
         Globals.height = constraints.maxHeight;
         Globals.width = constraints.maxWidth;
-        print("globals");
         // print(Globals.height);
         // print(Globals.width);
         return ScopedModelDescendant<AppModel>(
