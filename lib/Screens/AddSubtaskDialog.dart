@@ -35,7 +35,7 @@ class _AddSubtaskDialogState extends State<AddSubtaskDialog> {
         context: context,
         initialDate: selectedDate,
         firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
+        lastDate: DateTime.parse(soloTask.deadline));
     if (picked != null  )
       setState(() {
         var month = [

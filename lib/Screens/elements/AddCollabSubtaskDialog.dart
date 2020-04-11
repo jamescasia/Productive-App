@@ -58,7 +58,7 @@ class _AddCollabSubtaskDialogState extends State<AddCollabSubtaskDialog> {
         context: context,
         initialDate: selectedDate,
         firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
+        lastDate: DateTime.parse(collabTask.deadline));
     if (picked != null )
       setState(() {
         var month = [
