@@ -72,7 +72,6 @@ class AppModel extends Model {
       listenForNotifications.cancel();
     } catch (e) {}
 
-
     collabTablistenForChangesInCollabTasks =
         appDatabase.collabTasksRef.onChildChanged.listen((data) {
       print("changed!");
@@ -94,7 +93,8 @@ class AppModel extends Model {
       CollabTask clb = await appDatabase
           .userFetchCollabTaskUsingId(data.snapshot.key.toString());
       if (!userAdapter.user.collabTasks.contains(clb) &&
-          !collabTaskIds.contains(clb.id) && !data.snapshot.value) {
+          !collabTaskIds.contains(clb.id) &&
+          !data.snapshot.value) {
         userAdapter.user.collabTasks.add(clb);
         collabTaskIds.add(clb.id);
 
@@ -454,6 +454,29 @@ class AppModel extends Model {
     }
   }
 
+  homeTabDeleteSoloSubtask(SoloTask soloTask, Subtask subtask) async {
+    for (SoloTask st in userAdapter.user.soloTasks) {
+      if (st.id == soloTask.id) {
+        st.subtasks.remove(subtask);
+        await homeTabUpdateSoloTask(st);
+
+        break;
+      }
+    }
+  }
+
+  homeTabEditSoloTask(SoloTask soloTask) async {
+    for (SoloTask st in userAdapter.user.soloTasks) {
+      if (st.id == soloTask.id) {
+        st = soloTask;
+
+        homeTabUpdateSoloTask(st);
+
+        break;
+      }
+    }
+  }
+
   collabTabUpdateCollabTask(CollabTask collabTask) async {
     var completedCollabSubtasks = 0;
     for (CollabSubtask collabSubtask in collabTask.collabSubtasks) {
@@ -482,6 +505,18 @@ class AppModel extends Model {
 
     profileTabUpdateStats();
     notifyListeners();
+  }
+
+  homeTabDeleteSoloTask(SoloTask soloTask) async {
+    userAdapter.user.soloTasks.remove(soloTask);
+    try {
+      await appDatabase.deleteSoloTask(soloTask);
+
+      homeTabUpdateAllTasksProgress();
+    } catch (E) {
+      print("Error");
+      print(E);
+    }
   }
 
   homeTabUpdateSoloTask(SoloTask soloTask) async {
@@ -552,16 +587,16 @@ class AppModel extends Model {
     userAdapter.user.soloTasks.removeLast();
     homeTabUpdateSoloTask(soloTask);
   }
-   subCollabTabUpdateAllTasksProgress() {
-    double sumOfProgressPercentages = 0.0; 
+
+  subCollabTabUpdateAllTasksProgress() {
+    double sumOfProgressPercentages = 0.0;
     for (CollabTask ct in userAdapter.user.collabTasks) {
       sumOfProgressPercentages += ct.totalProgress;
-
     }
     collabTabModel.percentCompletedTasks =
         (userAdapter.user.collabTasks.length == 0)
             ? 0
-            : sumOfProgressPercentages / userAdapter.user.collabTasks.length; 
+            : sumOfProgressPercentages / userAdapter.user.collabTasks.length;
     profileTabUpdateStats();
     collabTabUpdateCollabTabState();
   }
@@ -576,13 +611,13 @@ class AppModel extends Model {
         if (!collabTasksArchives[ct.id]) {
           showCollabReward(ct);
         }
-          userAdapter.user.stats.numOfCollabTasksCompleted += 1;
+        userAdapter.user.stats.numOfCollabTasksCompleted += 1;
       }
     }
     collabTabModel.percentCompletedTasks =
         (userAdapter.user.collabTasks.length == 0)
             ? 0
-            : sumOfProgressPercentages / userAdapter.user.collabTasks.length; 
+            : sumOfProgressPercentages / userAdapter.user.collabTasks.length;
     profileTabUpdateStats();
     collabTabUpdateCollabTabState();
   }

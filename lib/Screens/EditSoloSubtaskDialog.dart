@@ -1,3 +1,4 @@
+import 'package:ProductiveApp/DataModels/SoloTask.dart';
 import 'package:ProductiveApp/Libraries/SwipeableCardStack/SwipeableCardStack.dart';
 import 'package:ProductiveApp/ScopedModels/app_model.dart';
 import 'package:ProductiveApp/ScopedModels/home_tab_model.dart';
@@ -12,63 +13,60 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:ProductiveApp/DataModels/Globals.dart';
 
-class AddTaskDialog extends StatefulWidget {
+class EditSoloSubtaskDialog extends StatefulWidget {
   AppModel appModel;
-  AddTaskDialog(this.appModel);
+  SoloTask soloTask;
+  Subtask subtask;
+  EditSoloSubtaskDialog(this.appModel, this.soloTask, this.subtask);
   @override
-  _AddTaskDialogState createState() => _AddTaskDialogState(this.appModel);
+  _EditSoloSubtaskDialogState createState() =>
+      _EditSoloSubtaskDialogState(this.appModel, this.soloTask, this.subtask);
 }
 
-class _AddTaskDialogState extends State<AddTaskDialog> {
+class _EditSoloSubtaskDialogState extends State<EditSoloSubtaskDialog> {
+  var month = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+  ];
   AppModel appModel;
-  _AddTaskDialogState(this.appModel);
+  SoloTask soloTask;
+  Subtask subtask;
+  _EditSoloSubtaskDialogState(this.appModel, this.soloTask, this.subtask);
   TextEditingController taskTitleController = TextEditingController();
   TextEditingController taskDateController = TextEditingController();
   DateTime selectedDate = DateTime.now();
-  void _showDatePicker(BuildContext context) {
-    showModalBottomSheet(
-        context: context,
-        builder: (context) {
-          return CupertinoDatePicker(
-            onDateTimeChanged: (DateTime value) {
-              setState(() {
-                selectedDate = value;
-              });
-            },
-            initialDateTime: DateTime.now(),
-            mode: CupertinoDatePickerMode.date,
-            maximumYear: 2025,
-            minimumYear: 2020,
-          );
-        });
-  }
 
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
         firstDate: DateTime.now(),
-        lastDate: DateTime(2101));
+        lastDate: DateTime.parse(soloTask.deadline));
     if (picked != null)
       setState(() {
-        var month = [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec"
-        ];
         selectedDate = picked;
         taskDateController.text =
             "${month[selectedDate.month - 1]} ${selectedDate.day}, ${selectedDate.year} ";
       });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    taskTitleController.text = subtask.title;
+    var deadline = DateTime.parse(subtask.deadline);
+    taskDateController.text =
+        "${month[deadline.month - 1]} ${deadline.day}, ${deadline.year} ";
   }
 
   @override
@@ -80,11 +78,13 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
         padding: EdgeInsets.all(Globals.dheight * 18),
         width: Globals.width * 0.9,
         child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Text("What's the task?",
-              style: TextStyle(
-                  fontFamily: "QuickSand",
-                  fontSize: 18,
-                  color: Colors.grey[600])),
+          Center(
+            child: Text("Edit subtask",
+                style: TextStyle(
+                    fontFamily: "QuickSand",
+                    fontSize: 18,
+                    color: Colors.grey[600])),
+          ),
           SizedBox(height: Globals.dheight * 10),
           Container(
             margin: EdgeInsets.symmetric(vertical: Globals.dheight * 7),
@@ -100,7 +100,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                 style: TextStyle(fontFamily: "QuickSand"),
                 controller: taskTitleController,
                 decoration:
-                    new InputDecoration.collapsed(hintText: 'Task name'),
+                    new InputDecoration.collapsed(hintText: 'Subtask title'),
               ),
             ),
           ),
@@ -125,18 +125,37 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                   focusNode: null,
                   enabled: false,
                   controller: taskDateController,
-                  decoration:
-                      new InputDecoration.collapsed(hintText: 'Task Due date'),
+                  decoration: new InputDecoration.collapsed(
+                      hintText: 'Subtask due date'),
                 ),
               ),
             ),
           ),
           SizedBox(
-            height: Globals.dheight * 15,
+            height: Globals.dheight * 6,
+          ),
+          MaterialButton(
+            color: Colors.red[400],
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(6))),
+            onPressed: () async {
+              Navigator.pop(context);
+              appModel.homeTabDeleteSoloSubtask(soloTask, subtask);
+            },
+            height: Globals.dheight * 40,
+            minWidth: double.infinity,
+            child: Text(
+              "Delete",
+              style: TextStyle(
+                  fontFamily: "QuickSand",
+                  color: Colors.white,
+                  fontSize: Globals.dheight * 16,
+                  fontWeight: FontWeight.w700),
+            ),
           ),
           Flex(
-              direction: Axis.horizontal,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              direction: Axis.horizontal,
               children: [
                 Expanded(
                   flex: 1,
@@ -148,7 +167,8 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                       Navigator.of(context).pop();
                     },
                     height: Globals.dheight * 40,
-                    minWidth: Globals.width * 0.8 * 0.42,
+                    // minWidth: Globals.width * 0.8 * 0.42,
+
                     child: Text(
                       "Cancel",
                       style: TextStyle(
@@ -166,15 +186,24 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                     color: Colors.green[400],
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(6))),
-                    onPressed: () {
-                      appModel.homeTabDialogAddNewTask(
-                          taskTitleController.text, selectedDate);
+                    onPressed: () async {
+                      // var subtask = Subtask(
+                      //     "0",
+                      //     taskTitleController.text.toString(),
+                      //     selectedDate.toIso8601String(),
+                      //     false);
+                      setState(() {
+                        subtask.title = taskTitleController.text.toString();
+                        subtask.deadline = selectedDate.toIso8601String();
+                      });
+                      soloTask.subtasks[int.parse(subtask.id)] = subtask;
+                      await appModel.homeTabEditSoloTask(soloTask);
                       Navigator.pop(context);
                     },
                     height: Globals.dheight * 40,
-                    minWidth: Globals.width * 0.8 * 0.42,
+                    // minWidth: Globals.width * 0.8 * 0.42,
                     child: Text(
-                      "Start Task",
+                      "Confirm",
                       style: TextStyle(
                           fontFamily: "QuickSand",
                           color: Colors.white,

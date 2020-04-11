@@ -48,9 +48,9 @@ class _AddCollabTaskDialogState extends State<AddCollabTaskDialog> {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
+        firstDate: DateTime.now(),
         lastDate: DateTime(2101));
-    if (picked != null )
+    if (picked != null)
       setState(() {
         var month = [
           "Jan",
@@ -82,7 +82,10 @@ class _AddCollabTaskDialogState extends State<AddCollabTaskDialog> {
         width: Globals.width * 0.9,
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Text("What's the task?",
-              style: TextStyle(fontFamily:"QuickSand",fontSize: 18, color: Colors.grey[600])),
+              style: TextStyle(
+                  fontFamily: "QuickSand",
+                  fontSize: 18,
+                  color: Colors.grey[600])),
           SizedBox(height: Globals.dheight * 10),
           Container(
             margin: EdgeInsets.symmetric(vertical: Globals.dheight * 7),
@@ -94,7 +97,8 @@ class _AddCollabTaskDialogState extends State<AddCollabTaskDialog> {
             padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
             width: Globals.width * 0.8,
             child: Center(
-              child: TextField(style:TextStyle(fontFamily:"QuickSand"),
+              child: TextField(
+                style: TextStyle(fontFamily: "QuickSand"),
                 controller: taskTitleController,
                 decoration:
                     new InputDecoration.collapsed(hintText: 'Task name'),
@@ -117,7 +121,8 @@ class _AddCollabTaskDialogState extends State<AddCollabTaskDialog> {
                   _selectDate(context);
                   // _showDatePicker(context);
                 },
-                child: TextField(style:TextStyle(fontFamily:"QuickSand"),
+                child: TextField(
+                  style: TextStyle(fontFamily: "QuickSand"),
                   focusNode: null,
                   enabled: false,
                   controller: taskDateController,
@@ -147,7 +152,8 @@ class _AddCollabTaskDialogState extends State<AddCollabTaskDialog> {
                     minWidth: Globals.width * 0.8 * 0.42,
                     child: Text(
                       "Cancel",
-                      style: TextStyle(fontFamily:"QuickSand",
+                      style: TextStyle(
+                          fontFamily: "QuickSand",
                           color: Colors.white,
                           fontSize: Globals.dheight * 16,
                           fontWeight: FontWeight.w700),
@@ -170,7 +176,8 @@ class _AddCollabTaskDialogState extends State<AddCollabTaskDialog> {
                     minWidth: Globals.width * 0.8 * 0.42,
                     child: Text(
                       "Start Task",
-                      style: TextStyle(fontFamily:"QuickSand",
+                      style: TextStyle(
+                          fontFamily: "QuickSand",
                           color: Colors.white,
                           fontSize: Globals.dheight * 16,
                           fontWeight: FontWeight.w700),

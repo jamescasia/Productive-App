@@ -34,7 +34,7 @@ class _AddSubtaskDialogState extends State<AddSubtaskDialog> {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
+        firstDate: DateTime.now(),
         lastDate: DateTime.parse(soloTask.deadline));
     if (picked != null  )
       setState(() {

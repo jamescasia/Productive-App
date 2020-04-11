@@ -56,7 +56,7 @@ class AppData {
 
     Reward("Have a Cookie!", 'assets/tips/HaveACookie.png'),
 
-    Reward("Social Media Scroll!", 'assets/tips/ChillSweetThing.png'),
+    Reward("Social Media Scroll!", 'assets/tips/SocialMediaScroll.png'),
 
     Reward("Take a Power Nap!", 'assets/tips/PowerNap.png'),
 

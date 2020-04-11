@@ -57,7 +57,7 @@ class _AddCollabSubtaskDialogState extends State<AddCollabSubtaskDialog> {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
+        firstDate: DateTime.now(),
         lastDate: DateTime.parse(collabTask.deadline));
     if (picked != null )
       setState(() {
