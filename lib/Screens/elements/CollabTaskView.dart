@@ -7,6 +7,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ProductiveApp/DataModels/CollabTask.dart';
 import 'package:scoped_model/scoped_model.dart';
 
+import 'package:fluttertoast/fluttertoast.dart';
+
 class CollabTaskView extends StatefulWidget {
   CollabTask collabTask;
   AppModel appModel;
@@ -118,20 +120,21 @@ class _CollabTaskViewState extends State<CollabTaskView> {
                         Text(
                           this.collabTask.title,
                           textAlign: TextAlign.start,
-                          style: TextStyle(fontFamily:"QuickSand",
+                          style: TextStyle(
+                            fontFamily: "QuickSand",
                             fontWeight: FontWeight.w800,
                             color: Colors.grey[700],
-                            fontSize: 18*Globals.dheight,
+                            fontSize: 18 * Globals.dheight,
                           ),
                         ),
                         SizedBox(height: Globals.dheight * 5),
                         Text(
                           "${month[DateTime.parse(this.collabTask.deadline).month - 1]} ${DateTime.parse(this.collabTask.deadline).day}",
                           textAlign: TextAlign.start,
-                          style: TextStyle(fontFamily:"QuickSand",
-                            color: Colors.grey[700],
-                            fontSize: 16*Globals.dheight
-                          ),
+                          style: TextStyle(
+                              fontFamily: "QuickSand",
+                              color: Colors.grey[700],
+                              fontSize: 16 * Globals.dheight),
                         )
                       ]),
                 ),
@@ -337,11 +340,30 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
                           customBorder: CircleBorder(),
                           onTap: () {
                             if (collabSubtask.assignedUid ==
-                                appModel.userAdapter.uid) return;
+                                appModel.userAdapter.uid) {
+                              Fluttertoast.showToast(
+                                  msg: "Can't notify self.",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                              return;
+                            }
                             appModel.collabTabNotifyUser(
                                 collabSubtask.assignedUid,
                                 collabTask.title,
                                 "Do your part!");
+
+                            Fluttertoast.showToast(
+                                msg: "Succesfully notified.",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
                           },
                           child: Container(
                             width: Globals.dheight * 50,
@@ -366,7 +388,8 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
                         Text(
                           this.collabSubtask.title,
                           textAlign: TextAlign.start,
-                          style: TextStyle(fontFamily:"QuickSand",
+                          style: TextStyle(
+                            fontFamily: "QuickSand",
                             fontWeight: FontWeight.w800,
                             color: Colors.grey[700],
                             fontSize: 16 * Globals.dwidth,
@@ -378,7 +401,8 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
                             Text(
                               collabSubtask.assignedName.replaceAll('"', ""),
                               textAlign: TextAlign.start,
-                              style: TextStyle(fontFamily:"QuickSand",
+                              style: TextStyle(
+                                  fontFamily: "QuickSand",
                                   color: Colors.grey[700],
                                   fontSize: 14 * Globals.dwidth,
                                   fontWeight: FontWeight.w600),
@@ -387,7 +411,8 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
                             Text(
                               "${month[DateTime.parse(this.collabSubtask.deadline).month - 1]} ${DateTime.parse(this.collabSubtask.deadline).day}",
                               textAlign: TextAlign.start,
-                              style: TextStyle(fontFamily:"QuickSand",
+                              style: TextStyle(
+                                fontFamily: "QuickSand",
                                 color: Colors.grey[700],
                                 fontSize: 14 * Globals.dwidth,
                               ),

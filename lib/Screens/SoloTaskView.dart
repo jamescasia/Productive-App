@@ -252,22 +252,10 @@ class _SoloTaskViewState extends State<SoloTaskView> {
               ),
               SizedBox(width: Globals.dwidth * 30),
               MaterialButton(
-                onPressed: () {
-                  showGeneralDialog(
-                      barrierColor: Colors.black.withOpacity(0.5),
-                      transitionBuilder: (context, a1, a2, widget) {
-                        return Transform.scale(
-                          scale: a1.value,
-                          child: Opacity(
-                              opacity: a1.value,
-                              child: AddSubtaskDialog(appModel, soloTask)),
-                        );
-                      },
-                      transitionDuration: Duration(milliseconds: 200),
-                      barrierDismissible: true,
-                      barrierLabel: '',
-                      context: context,
-                      pageBuilder: (context, animation1, animation2) {});
+                onPressed: () async {
+                  await appModel.homeTabDeleteSoloTask(soloTask);
+
+                  // Navigator.pop(context);
                 },
                 color: Colors.red,
                 shape: CircleBorder(),
