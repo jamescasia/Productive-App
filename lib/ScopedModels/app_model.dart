@@ -136,7 +136,7 @@ class AppModel extends Model {
     return (await appAuth.isUserLoggedIn());
   }
 
-  logInScreenLoginAutomatically() async {adff
+  logInScreenLoginAutomatically() async { 
     authState = AuthState.LoggedIn;
     var loginType = await appAuth.loginType();
     print("the damn login type");
