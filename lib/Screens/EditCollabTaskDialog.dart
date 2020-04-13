@@ -1,29 +1,35 @@
-import 'package:ProductiveApp/DataModels/SoloTask.dart';
+import 'package:ProductiveApp/DataModels/CollabTask.dart';
 import 'package:ProductiveApp/Libraries/SwipeableCardStack/SwipeableCardStack.dart';
 import 'package:ProductiveApp/ScopedModels/app_model.dart';
 import 'package:ProductiveApp/ScopedModels/home_tab_model.dart';
+import 'package:ProductiveApp/Screens/ConfirmDeleteTaskDialog.dart';
 import 'package:ProductiveApp/Screens/HomeScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:ProductiveApp/DataModels/Globals.dart';
-import './TipView.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:ProductiveApp/DataModels/Globals.dart';
 
-class EditSoloSubtaskDialog extends StatefulWidget {
+class EditCollabTaskDialog extends StatefulWidget {
   AppModel appModel;
-  SoloTask soloTask;
-  Subtask subtask;
-  EditSoloSubtaskDialog(this.appModel, this.soloTask, this.subtask);
+  CollabTask collabTask;
+  EditCollabTaskDialog(this.appModel, this.collabTask);
   @override
-  _EditSoloSubtaskDialogState createState() =>
-      _EditSoloSubtaskDialogState(this.appModel, this.soloTask, this.subtask);
+  _AddCollabTaskDialogState createState() =>
+      _AddCollabTaskDialogState(this.appModel, this.collabTask);
 }
 
-class _EditSoloSubtaskDialogState extends State<EditSoloSubtaskDialog> {
+class _AddCollabTaskDialogState extends State<EditCollabTaskDialog> {
+  AppModel appModel;
+  CollabTask collabTask;
+  _AddCollabTaskDialogState(this.appModel, this.collabTask);
+  TextEditingController taskTitleController = TextEditingController();
+  TextEditingController taskDateController = TextEditingController();
+
+  DateTime selectedDate = DateTime.now();
   var month = [
     "Jan",
     "Feb",
@@ -38,36 +44,27 @@ class _EditSoloSubtaskDialogState extends State<EditSoloSubtaskDialog> {
     "Nov",
     "Dec"
   ];
-  AppModel appModel;
-  SoloTask soloTask;
-  Subtask subtask;
-  _EditSoloSubtaskDialogState(this.appModel, this.soloTask, this.subtask);
-  TextEditingController taskTitleController = TextEditingController();
-  TextEditingController taskDateController = TextEditingController();
-  DateTime selectedDate;
+  @override
+  void initState() {
+    taskTitleController.text = collabTask.title;
+
+    var deadline = DateTime.parse(collabTask.deadline);
+    taskDateController.text =
+        "${month[deadline.month - 1]} ${deadline.day}, ${deadline.year} ";
+  }
 
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime.now(),
-        lastDate: DateTime.parse(soloTask.deadline));
+        initialDate: DateTime.parse(collabTask.deadline),
+        firstDate: DateTime.parse(collabTask.deadline),
+        lastDate: DateTime(2101));
     if (picked != null)
       setState(() {
         selectedDate = picked;
         taskDateController.text =
             "${month[selectedDate.month - 1]} ${selectedDate.day}, ${selectedDate.year} ";
       });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    selectedDate = DateTime.parse(subtask.deadline);
-    taskTitleController.text = subtask.title;
-    var deadline = DateTime.parse(subtask.deadline);
-    taskDateController.text =
-        "${month[deadline.month - 1]} ${deadline.day}, ${deadline.year} ";
   }
 
   @override
@@ -79,13 +76,11 @@ class _EditSoloSubtaskDialogState extends State<EditSoloSubtaskDialog> {
         padding: EdgeInsets.all(Globals.dheight * 18),
         width: Globals.width * 0.9,
         child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Center(
-            child: Text("Edit subtask",
-                style: TextStyle(
-                    fontFamily: "QuickSand",
-                    fontSize: 18,
-                    color: Colors.grey[600])),
-          ),
+          Text("Edit task",
+              style: TextStyle(
+                  fontFamily: "QuickSand",
+                  fontSize: 18,
+                  color: Colors.grey[600])),
           SizedBox(height: Globals.dheight * 10),
           Container(
             margin: EdgeInsets.symmetric(vertical: Globals.dheight * 7),
@@ -101,7 +96,7 @@ class _EditSoloSubtaskDialogState extends State<EditSoloSubtaskDialog> {
                 style: TextStyle(fontFamily: "QuickSand"),
                 controller: taskTitleController,
                 decoration:
-                    new InputDecoration.collapsed(hintText: 'Subtask title'),
+                    new InputDecoration.collapsed(hintText: 'Task name'),
               ),
             ),
           ),
@@ -126,8 +121,8 @@ class _EditSoloSubtaskDialogState extends State<EditSoloSubtaskDialog> {
                   focusNode: null,
                   enabled: false,
                   controller: taskDateController,
-                  decoration: new InputDecoration.collapsed(
-                      hintText: 'Subtask due date'),
+                  decoration:
+                      new InputDecoration.collapsed(hintText: 'Task Due date'),
                 ),
               ),
             ),
@@ -140,8 +135,25 @@ class _EditSoloSubtaskDialogState extends State<EditSoloSubtaskDialog> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(6))),
             onPressed: () async {
+              setState(() {});
+
               Navigator.pop(context);
-              appModel.homeTabDeleteSoloSubtask(soloTask, subtask);
+              showGeneralDialog(
+                  barrierColor: Colors.black.withOpacity(0.5),
+                  transitionBuilder: (context, a1, a2, widget) {
+                    return Transform.scale(
+                      scale: a1.value,
+                      child: Opacity(
+                          opacity: a1.value,
+                          child: ConfirmDeleteTaskDialog(
+                              appModel, null, collabTask)),
+                    );
+                  },
+                  transitionDuration: Duration(milliseconds: 200),
+                  barrierDismissible: true,
+                  barrierLabel: '',
+                  context: context,
+                  pageBuilder: (context, animation1, animation2) {});
             },
             height: Globals.dheight * 40,
             minWidth: double.infinity,
@@ -155,8 +167,8 @@ class _EditSoloSubtaskDialogState extends State<EditSoloSubtaskDialog> {
             ),
           ),
           Flex(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               direction: Axis.horizontal,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   flex: 1,
@@ -168,8 +180,7 @@ class _EditSoloSubtaskDialogState extends State<EditSoloSubtaskDialog> {
                       Navigator.of(context).pop();
                     },
                     height: Globals.dheight * 40,
-                    // minWidth: Globals.width * 0.8 * 0.42,
-
+                    minWidth: Globals.width * 0.8 * 0.42,
                     child: Text(
                       "Cancel",
                       style: TextStyle(
@@ -187,22 +198,16 @@ class _EditSoloSubtaskDialogState extends State<EditSoloSubtaskDialog> {
                     color: Colors.green[400],
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(6))),
-                    onPressed: () async {
-                      // var subtask = Subtask(
-                      //     "0",
-                      //     taskTitleController.text.toString(),
-                      //     selectedDate.toIso8601String(),
-                      //     false);
+                    onPressed: () {
                       setState(() {
-                        subtask.title = taskTitleController.text.toString();
-                        subtask.deadline = selectedDate.toIso8601String();
+                        collabTask.title = taskTitleController.text;
+                        collabTask.deadline = selectedDate.toIso8601String();
                       });
-                      soloTask.subtasks[int.parse(subtask.id)] = subtask;
-                      await appModel.homeTabEditSoloTask(soloTask);
+                      appModel.collabTabEditCollabTask(collabTask);
                       Navigator.pop(context);
                     },
                     height: Globals.dheight * 40,
-                    // minWidth: Globals.width * 0.8 * 0.42,
+                    minWidth: Globals.width * 0.8 * 0.42,
                     child: Text(
                       "Confirm",
                       style: TextStyle(

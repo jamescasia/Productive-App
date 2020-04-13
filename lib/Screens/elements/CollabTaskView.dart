@@ -1,6 +1,9 @@
 import 'package:ProductiveApp/ScopedModels/app_model.dart';
+import 'package:ProductiveApp/Screens/EditCollabTaskDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:ProductiveApp/DataModels/Globals.dart';
+import '../ConfirmDeleteTaskDialog.dart';
+import '../EditCollabSubtaskDialog.dart';
 import './AddCollabSubtaskDialog.dart';
 import './CollabSubtaskCompletedDialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -23,6 +26,7 @@ class CollabTaskView extends StatefulWidget {
 class _CollabTaskViewState extends State<CollabTaskView> {
   CollabTask collabTask;
   AppModel appModel;
+  bool isEditing = false;
   var month = [
     "Jan",
     "Feb",
@@ -102,8 +106,41 @@ class _CollabTaskViewState extends State<CollabTaskView> {
                                       : Colors.grey[200] /*variable*/,
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(500))),
-                              child: Image.asset("assets/app_icons/basket.png",
-                                  fit: BoxFit.fitHeight),
+                              child: (!isEditing)
+                                  ? Image.asset("assets/app_icons/basket.png",
+                                      fit: BoxFit.fitHeight)
+                                  : InkWell(
+                                      borderRadius: BorderRadius.circular(1000),
+                                      onTap: () {
+                                        showGeneralDialog(
+                                            barrierColor:
+                                                Colors.black.withOpacity(0.5),
+                                            transitionBuilder:
+                                                (context, a1, a2, widget) {
+                                              return Transform.scale(
+                                                scale: a1.value,
+                                                child: Opacity(
+                                                    opacity: a1.value,
+                                                    child: EditCollabTaskDialog(
+                                                      appModel,
+                                                      collabTask,
+                                                    )),
+                                              );
+                                            },
+                                            transitionDuration:
+                                                Duration(milliseconds: 200),
+                                            barrierDismissible: true,
+                                            barrierLabel: '',
+                                            context: context,
+                                            pageBuilder: (context, animation1,
+                                                animation2) {});
+                                      },
+                                      child: Center(
+                                          child: FaIcon(
+                                        FontAwesomeIcons.pen,
+                                        color: Colors.green,
+                                      )),
+                                    ),
                             ),
                           ),
                         ],
@@ -147,39 +184,96 @@ class _CollabTaskViewState extends State<CollabTaskView> {
               children: this
                   .collabTask
                   .collabSubtasks
-                  .map((s) => CollabSubtaskView(s, this.collabTask, appModel))
+                  .map((s) => CollabSubtaskView(
+                      s, this.collabTask, appModel, isEditing, UniqueKey()))
                   .toList()),
           SizedBox(height: Globals.dheight * 20),
-          MaterialButton(
-            onPressed: () {
-              showGeneralDialog(
-                  barrierColor: Colors.black.withOpacity(0.5),
-                  transitionBuilder: (context, a1, a2, widget) {
-                    return Transform.scale(
-                      scale: a1.value,
-                      child: Opacity(
-                          opacity: a1.value,
-                          child: AddCollabSubtaskDialog(appModel, collabTask)),
-                    );
-                  },
-                  transitionDuration: Duration(milliseconds: 200),
-                  barrierDismissible: true,
-                  barrierLabel: '',
-                  context: context,
-                  pageBuilder: (context, animation1, animation2) {});
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              MaterialButton(
+                onPressed: () {
+                  setState(() {
+                    isEditing = !isEditing;
+                  });
+                },
+                color: Colors.green,
+                shape: CircleBorder(),
+                height: Globals.dheight * 28,
+                minWidth: Globals.dheight * 28,
+                child: Icon(
+                  (!isEditing) ? FontAwesomeIcons.pen : FontAwesomeIcons.check,
+                  color: Colors.white,
+                  size: Globals.dheight * 16,
+                ),
+              ),
+              SizedBox(width: Globals.dwidth * 30),
+              MaterialButton(
+                onPressed: () {
+                  showGeneralDialog(
+                      barrierColor: Colors.black.withOpacity(0.5),
+                      transitionBuilder: (context, a1, a2, widget) {
+                        return Transform.scale(
+                          scale: a1.value,
+                          child: Opacity(
+                              opacity: a1.value,
+                              child:
+                                  AddCollabSubtaskDialog(appModel, collabTask)),
+                        );
+                      },
+                      transitionDuration: Duration(milliseconds: 200),
+                      barrierDismissible: true,
+                      barrierLabel: '',
+                      context: context,
+                      pageBuilder: (context, animation1, animation2) {});
 
-              // appModel.homeTabAddSubTask(
-              //     collabTask, CollabSubtask("id", "title", collabTask.deadline, false));
-            },
-            color: Colors.blue,
-            shape: CircleBorder(),
-            height: Globals.dheight * 28,
-            minWidth: Globals.dheight * 28,
-            child: Icon(
-              FontAwesomeIcons.plus,
-              color: Colors.white,
-              size: Globals.dheight * 16,
-            ),
+                  // appModel.homeTabAddSubTask(
+                  //     collabTask, CollabSubtask("id", "title", collabTask.deadline, false));
+                },
+                color: Colors.blue,
+                shape: CircleBorder(),
+                height: Globals.dheight * 28,
+                minWidth: Globals.dheight * 28,
+                child: Icon(
+                  FontAwesomeIcons.plus,
+                  color: Colors.white,
+                  size: Globals.dheight * 16,
+                ),
+              ),
+              SizedBox(width: Globals.dwidth * 30),
+              MaterialButton(
+                onPressed: () async {
+                  showGeneralDialog(
+                      barrierColor: Colors.black.withOpacity(0.5),
+                      transitionBuilder: (context, a1, a2, widget) {
+                        return Transform.scale(
+                          scale: a1.value,
+                          child: Opacity(
+                              opacity: a1.value,
+                              child: ConfirmDeleteTaskDialog(
+                                  appModel, null, collabTask)),
+                        );
+                      },
+                      transitionDuration: Duration(milliseconds: 200),
+                      barrierDismissible: true,
+                      barrierLabel: '',
+                      context: context,
+                      pageBuilder: (context, animation1, animation2) {});
+
+                  // Navigator.pop(context);
+                },
+                color: Colors.red,
+                shape: CircleBorder(),
+                height: Globals.dheight * 28,
+                minWidth: Globals.dheight * 28,
+                child: Icon(
+                  FontAwesomeIcons.trash,
+                  color: Colors.white,
+                  size: Globals.dheight * 16,
+                ),
+              ),
+            ],
           )
         ],
       ),
@@ -191,19 +285,24 @@ class CollabSubtaskView extends StatefulWidget {
   AppModel appModel;
   CollabTask collabTask;
   CollabSubtask collabSubtask;
+  bool isEditing;
+  Key key;
 
-  CollabSubtaskView(this.collabSubtask, this.collabTask, this.appModel);
+  CollabSubtaskView(this.collabSubtask, this.collabTask, this.appModel,
+      this.isEditing, this.key);
   @override
-  _SubtaskViewState createState() =>
-      _SubtaskViewState(this.collabSubtask, this.collabTask, this.appModel);
+  _SubtaskViewState createState() => _SubtaskViewState(this.collabSubtask,
+      this.collabTask, this.appModel, this.isEditing, this.key);
 }
 
 class _SubtaskViewState extends State<CollabSubtaskView> {
   AppModel appModel;
   CollabTask collabTask;
   CollabSubtask collabSubtask;
-  _SubtaskViewState(this.collabSubtask, this.collabTask, this.appModel);
-
+  bool isEditing;
+  Key key;
+  _SubtaskViewState(this.collabSubtask, this.collabTask, this.appModel,
+      this.isEditing, this.key);
   var month = [
     "Jan",
     "Feb",
@@ -288,32 +387,58 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
                                     onTap: () {
                                       if (collabSubtask.completed) return;
 
-                                      if (appModel
-                                              .userAdapter.user.userInfo.name !=
-                                          collabSubtask.assignedName) return;
-                                      showGeneralDialog(
-                                          barrierColor:
-                                              Colors.black.withOpacity(0.5),
-                                          transitionBuilder:
-                                              (context, a1, a2, widget) {
-                                            return Transform.scale(
-                                              scale: a1.value,
-                                              child: Opacity(
-                                                  opacity: a1.value,
-                                                  child:
-                                                      CollabSubtaskCompletedDialog(
-                                                          appModel,
-                                                          collabTask,
-                                                          collabSubtask)),
-                                            );
-                                          },
-                                          transitionDuration:
-                                              Duration(milliseconds: 200),
-                                          barrierDismissible: true,
-                                          barrierLabel: '',
-                                          context: context,
-                                          pageBuilder: (context, animation1,
-                                              animation2) {});
+                                      if (!isEditing) {
+                                        if (appModel.userAdapter.user.userInfo
+                                                .name !=
+                                            collabSubtask.assignedName) return;
+                                        showGeneralDialog(
+                                            barrierColor:
+                                                Colors.black.withOpacity(0.5),
+                                            transitionBuilder:
+                                                (context, a1, a2, widget) {
+                                              return Transform.scale(
+                                                scale: a1.value,
+                                                child: Opacity(
+                                                    opacity: a1.value,
+                                                    child:
+                                                        CollabSubtaskCompletedDialog(
+                                                            appModel,
+                                                            collabTask,
+                                                            collabSubtask)),
+                                              );
+                                            },
+                                            transitionDuration:
+                                                Duration(milliseconds: 200),
+                                            barrierDismissible: true,
+                                            barrierLabel: '',
+                                            context: context,
+                                            pageBuilder: (context, animation1,
+                                                animation2) {});
+                                      } else {
+                                        showGeneralDialog(
+                                            barrierColor:
+                                                Colors.black.withOpacity(0.5),
+                                            transitionBuilder:
+                                                (context, a1, a2, widget) {
+                                              return Transform.scale(
+                                                scale: a1.value,
+                                                child: Opacity(
+                                                    opacity: a1.value,
+                                                    child:
+                                                        EditCollabSubtaskDialog(
+                                                            appModel,
+                                                            collabTask,
+                                                            collabSubtask)),
+                                              );
+                                            },
+                                            transitionDuration:
+                                                Duration(milliseconds: 200),
+                                            barrierDismissible: true,
+                                            barrierLabel: '',
+                                            context: context,
+                                            pageBuilder: (context, animation1,
+                                                animation2) {});
+                                      }
                                     },
                                     child: Container(
                                       width: Globals.dheight * 40,
@@ -324,10 +449,16 @@ class _SubtaskViewState extends State<CollabSubtaskView> {
                                               : Colors.grey[350] /*variable*/,
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(500))),
-                                      child: Image.asset(
-                                        "assets/app_icons/slice.png",
-                                        fit: BoxFit.fitHeight,
-                                      ),
+                                      child:
+                                          ((isEditing) && !collabTask.completed)
+                                              ? Center(
+                                                  child: FaIcon(
+                                                      FontAwesomeIcons.pen,
+                                                      color: Colors.green))
+                                              : Image.asset(
+                                                  "assets/app_icons/slice.png",
+                                                  fit: BoxFit.fitHeight,
+                                                ),
                                     ),
                                   ),
                                 ),

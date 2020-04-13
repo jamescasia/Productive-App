@@ -466,6 +466,9 @@ class AppModel extends Model {
   }
 
   homeTabEditSoloTask(SoloTask soloTask) async {
+    print("edited solo ask");
+    print(soloTask.title);
+    print(soloTask.completed);
     for (SoloTask st in userAdapter.user.soloTasks) {
       if (st.id == soloTask.id) {
         st = soloTask;
@@ -474,6 +477,42 @@ class AppModel extends Model {
 
         break;
       }
+    }
+  }
+
+  collabTabEditCollabTask(CollabTask collabTask) async {
+    for (CollabTask ct in userAdapter.user.collabTasks) {
+      if (ct.id == collabTask.id) {
+        ct = collabTask;
+
+        collabTabUpdateCollabTask(ct);
+
+        break;
+      }
+    }
+  }
+
+  collabTabDeleteCollabSubtask(
+      CollabTask collabTask, CollabSubtask collabSubtask) async {
+    for (CollabTask ct in userAdapter.user.collabTasks) {
+      if (ct.id == collabTask.id) {
+        ct.collabSubtasks.remove(collabSubtask);
+        await collabTabUpdateCollabTask(ct);
+
+        break;
+      }
+    }
+  }
+
+  collabTabDeleteCollabTask(CollabTask collabTask) async {
+    userAdapter.user.collabTasks.remove(collabTask);
+    try {
+      await appDatabase.deleteCollabTask(collabTask);
+
+      collabTabUpdateAllTasksProgress();
+    } catch (E) {
+      print("Error");
+      print(E);
     }
   }
 
@@ -491,7 +530,8 @@ class AppModel extends Model {
         ? 0.0
         : (completedCollabSubtasks / (collabTask.collabSubtasks.length));
     collabTask.completed =
-        completedCollabSubtasks == collabTask.collabSubtasks.length;
+        completedCollabSubtasks == collabTask.collabSubtasks.length &&
+            collabTask.collabSubtasks.length > 0;
 
     try {
       await appDatabase.updateCollabTask(collabTask);
@@ -532,7 +572,8 @@ class AppModel extends Model {
     soloTask.totalProgress = (soloTask.subtasks.length == 0)
         ? 0.0
         : (completedSubtasks / (soloTask.subtasks.length));
-    soloTask.completed = completedSubtasks == soloTask.subtasks.length;
+    soloTask.completed = (completedSubtasks == soloTask.subtasks.length &&
+        soloTask.subtasks.length > 0);
 
     try {
       await appDatabase.updateSoloTask(soloTask);

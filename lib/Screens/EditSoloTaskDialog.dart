@@ -13,6 +13,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:ProductiveApp/DataModels/Globals.dart';
 
+import 'ConfirmDeleteTaskDialog.dart';
+
 class EditSoloTaskDialog extends StatefulWidget {
   AppModel appModel;
   SoloTask soloTask;
@@ -134,10 +136,25 @@ class _EditSoloTaskDialogState extends State<EditSoloTaskDialog> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(6))),
             onPressed: () async {
-              setState(() {}); 
-              await appModel.homeTabDeleteSoloTask(soloTask);
-
+              setState(() {});
               Navigator.pop(context);
+              showGeneralDialog(
+                  barrierColor: Colors.black.withOpacity(0.5),
+                  transitionBuilder: (context, a1, a2, widget) {
+                    return Transform.scale(
+                      scale: a1.value,
+                      child: Opacity(
+                          opacity: a1.value,
+                          child: ConfirmDeleteTaskDialog(
+                              appModel, soloTask, null)),
+                    );
+                  },
+                  transitionDuration: Duration(milliseconds: 200),
+                  barrierDismissible: true,
+                  barrierLabel: '',
+                  context: context,
+                  pageBuilder: (context, animation1, animation2) {});
+              // await appModel.homeTabDeleteSoloTask(soloTask);
             },
             height: Globals.dheight * 40,
             minWidth: double.infinity,

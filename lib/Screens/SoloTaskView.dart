@@ -12,6 +12,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ProductiveApp/DataModels/SoloTask.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'ConfirmDeleteTaskDialog.dart';
+
 class SoloTaskView extends StatefulWidget {
   SoloTask soloTask;
   AppModel appModel;
@@ -253,7 +255,22 @@ class _SoloTaskViewState extends State<SoloTaskView> {
               SizedBox(width: Globals.dwidth * 30),
               MaterialButton(
                 onPressed: () async {
-                  await appModel.homeTabDeleteSoloTask(soloTask);
+                  showGeneralDialog(
+                      barrierColor: Colors.black.withOpacity(0.5),
+                      transitionBuilder: (context, a1, a2, widget) {
+                        return Transform.scale(
+                          scale: a1.value,
+                          child: Opacity(
+                              opacity: a1.value,
+                              child: ConfirmDeleteTaskDialog(
+                                  appModel, soloTask, null)),
+                        );
+                      },
+                      transitionDuration: Duration(milliseconds: 200),
+                      barrierDismissible: true,
+                      barrierLabel: '',
+                      context: context,
+                      pageBuilder: (context, animation1, animation2) {});
 
                   // Navigator.pop(context);
                 },

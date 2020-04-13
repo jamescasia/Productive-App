@@ -71,11 +71,17 @@ class AppDatabase {
     print("solo task in json");
     print(collabTask.toJson());
   }
-  deleteSoloTask(SoloTask soloTask){
-    personalUserRef.child('SoloTasks/${soloTask.id}').set(null);
-    soloTasksRef.child(soloTask.id).set(null); 
 
+  deleteSoloTask(SoloTask soloTask) {
+    personalUserRef.child('SoloTasks/${soloTask.id}').set(null);
+    soloTasksRef.child(soloTask.id).set(null);
   }
+
+  deleteCollabTask(CollabTask collabTask) {
+    personalUserRef.child('CollabTasks/${collabTask.id}').set(null);
+    collabTasksRef.child(collabTask.id).set(null);
+  }
+
   updateSoloTask(SoloTask soloTask) {
     personalUserRef.child('SoloTasks/${soloTask.id}').set(soloTask.completed);
     soloTasksRef.child(soloTask.id).set(soloTask.toJson());
@@ -97,7 +103,6 @@ class AppDatabase {
           print(k);
           print(value);
           if (!value) {
-
             listOfCollabTaskIds.add(k.toString());
           }
         });
