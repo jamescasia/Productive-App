@@ -41,6 +41,7 @@ class _LogInScreenState extends State<LogInScreen> {
   double safePadding = 0;
   ScrollController sc = ScrollController();
   bool rebuildOnChange = false;
+  bool runOnce = false;
   afterBuild() {
     sc.jumpTo(safePadding);
   }
@@ -107,326 +108,162 @@ class _LogInScreenState extends State<LogInScreen> {
         // print(Globals.height);
         // print(Globals.width);
         return ScopedModelDescendant<AppModel>(
-            rebuildOnChange: false,
             builder: (context, child, appModel) {
-              return FutureBuilder<bool>(
-                  future: appModel.initializeUser(),
-                  builder: (context, snapshot) {
-                    print(snapshot.data);
-                    if (snapshot.connectionState == ConnectionState.done &&
-                        snapshot.data) {
-                      Navigator.pushReplacement(
-                          context,
-                          new MaterialPageRoute(
-                              builder: (BuildContext context) => HomeScreen()));
-                    } else if (snapshot.connectionState ==
-                        ConnectionState.done) {
-                      return Material(
-                        child: SingleChildScrollView(
-                          controller: sc,
-                          physics: NeverScrollableScrollPhysics(),
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                height: Globals.height,
+          if (appModel.loaded) {
+            // Future.delayed(Duration(milliseconds: 500)).then((value) => null)
+            Navigator.push(
+                context,
+                new MaterialPageRoute(
+                    builder: (BuildContext context) => HomeScreen()));
+          }
+          return Material(
+            child: SingleChildScrollView(
+              controller: sc,
+              physics: NeverScrollableScrollPhysics(),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    height: Globals.height,
+                    width: Globals.width,
+                    child: Flex(
+                        direction: Axis.vertical,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: Container(
                                 width: Globals.width,
-                                child: Flex(
-                                    direction: Axis.vertical,
-                                    mainAxisSize: MainAxisSize.max,
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Expanded(
-                                        flex: 3,
-                                        child: Container(
-                                            width: Globals.width,
-                                            child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Container(
-                                                    height:
-                                                        Globals.dheight * 130,
-                                                    child: Image.asset(
-                                                      "assets/app_icons/smiley apple.png",
-                                                      height:
-                                                          Globals.dheight * 160,
-                                                      scale: 2,
-                                                    ),
-                                                    decoration: BoxDecoration(
-                                                        color: Colors
-                                                            .greenAccent[400],
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    1000))),
-                                                  ),
-                                                  SizedBox(
-                                                      height:
-                                                          Globals.dheight * 25),
-                                                  Column(
-                                                    children: <Widget>[
-                                                      Text(
-                                                        "Welcomedlafkjadldfj",
-                                                        style: TextStyle(
-                                                          fontFamily:
-                                                              "QuickSand",
-                                                          color:
-                                                              Colors.grey[900],
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 40,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        "Log-in",
-                                                        style: TextStyle(
-                                                          fontFamily:
-                                                              "QuickSand",
-                                                          color:
-                                                              Colors.grey[900],
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 20,
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ])),
+                                      Container(
+                                        height: Globals.dheight * 130,
+                                        child: Image.asset(
+                                          "assets/app_icons/smiley apple.png",
+                                          height: Globals.dheight * 160,
+                                          scale: 2,
+                                        ),
+                                        decoration: BoxDecoration(
+                                            color: Colors.greenAccent[400],
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(1000))),
                                       ),
-                                      Expanded(
-                                        flex: 4,
-                                        child: Container(
-                                            // color: Colors.red,
-                                            width: Globals.width,
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: <Widget>[
-                                                Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceEvenly,
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    children: [
-                                                      Container(
-                                                        margin: EdgeInsets
-                                                            .symmetric(
-                                                                vertical: Globals
-                                                                        .dheight *
-                                                                    7),
-                                                        height:
-                                                            Globals.dheight *
-                                                                50,
-                                                        decoration: BoxDecoration(
-                                                            color: Colors
-                                                                .grey[350],
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            10)),
-                                                            border: Border.all(
-                                                                color:
-                                                                    Colors.grey[
-                                                                        400])),
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                                left: 10,
-                                                                right: 10,
-                                                                bottom: 10),
-                                                        width:
-                                                            Globals.width * 0.8,
-                                                        child: Center(
-                                                          child: TextField(
-                                                            style: TextStyle(
-                                                                fontFamily:
-                                                                    "QuickSand"),
-                                                            controller:
-                                                                emailController,
-                                                            decoration:
-                                                                new InputDecoration
-                                                                        .collapsed(
-                                                                    hintText:
-                                                                        'Email address'),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        margin: EdgeInsets
-                                                            .symmetric(
-                                                                vertical: Globals
-                                                                        .dheight *
-                                                                    7),
-                                                        height:
-                                                            Globals.dheight *
-                                                                50,
-                                                        decoration: BoxDecoration(
-                                                            color: Colors
-                                                                .grey[350],
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            10)),
-                                                            border: Border.all(
-                                                                color:
-                                                                    Colors.grey[
-                                                                        400])),
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                                left: 10,
-                                                                right: 10,
-                                                                bottom: 10),
-                                                        width:
-                                                            Globals.width * 0.8,
-                                                        child: Center(
-                                                          child: TextField(
-                                                            style: TextStyle(
-                                                                fontFamily:
-                                                                    "QuickSand"),
-                                                            controller:
-                                                                passwordController,
-                                                            obscureText: true,
-                                                            decoration:
-                                                                new InputDecoration
-                                                                        .collapsed(
-                                                                    hintText:
-                                                                        'Password'),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        margin: EdgeInsets
-                                                            .symmetric(
-                                                                vertical: Globals
-                                                                        .dheight *
-                                                                    7),
-                                                        width:
-                                                            Globals.width * 0.8,
-                                                        child: MaterialButton(
-                                                          enableFeedback: (appModel
-                                                                  .authState ==
-                                                              AuthState
-                                                                  .LoggedOut),
-                                                          shape: RoundedRectangleBorder(
-                                                              borderRadius: BorderRadius
-                                                                  .all(Radius
-                                                                      .circular(
-                                                                          10))),
-                                                          onPressed: (!(emailController
-                                                                              .text
-                                                                              .toString()
-                                                                              .length ==
-                                                                          0 ||
-                                                                      passwordController
-                                                                              .text
-                                                                              .toString()
-                                                                              .length ==
-                                                                          0) &&
-                                                                  appModel.authState !=
-                                                                      AuthState
-                                                                          .LoggingIn)
-                                                              ? () async {
-                                                                  FocusScope.of(
-                                                                          context)
-                                                                      .requestFocus(
-                                                                          FocusNode());
-                                                                  if (appModel
-                                                                          .authState ==
-                                                                      AuthState
-                                                                          .InvalidLogIn)
-                                                                    return;
-                                                                  var success = await appModel.logInScreenLogIn(
-                                                                      emailController
-                                                                          .text,
-                                                                      passwordController
-                                                                          .text);
-                                                                  if (success ==
-                                                                      AuthState
-                                                                          .LoggedIn) {
-                                                                    Navigator.pushReplacement(
-                                                                        context,
-                                                                        new MaterialPageRoute(
-                                                                            builder: (BuildContext context) =>
-                                                                                HomeScreen()));
-                                                                  }
-                                                                }
-                                                              : null,
-                                                          disabledColor: Colors
-                                                              .greenAccent[400],
-                                                          color: (appModel
-                                                                      .authState ==
-                                                                  AuthState
-                                                                      .InvalidLogIn)
-                                                              ? Colors.red
-                                                              : Colors.greenAccent[
-                                                                  400],
-                                                          height:
-                                                              Globals.dheight *
-                                                                  50,
-                                                          minWidth:
-                                                              Globals.width *
-                                                                  0.8,
-                                                          child: Center(
-                                                            child: (appModel.authState ==
-                                                                        AuthState
-                                                                            .LoggedOut ||
-                                                                    appModel.authState ==
-                                                                        AuthState
-                                                                            .LoggedIn)
-                                                                ? Text(
-                                                                    "LOG IN",
-                                                                    style: TextStyle(
-                                                                        fontFamily:
-                                                                            "QuickSand",
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .w600,
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontSize:
-                                                                            18),
-                                                                  )
-                                                                : (appModel.authState ==
-                                                                        AuthState
-                                                                            .LoggingIn)
-                                                                    ? JumpingText(
-                                                                        "...",
-                                                                        style: TextStyle(
-                                                                            fontFamily:
-                                                                                "QuickSand",
-                                                                            color:
-                                                                                Colors.white,
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 35))
-                                                                    : Text(
-                                                                        "INVALID",
-                                                                        style: TextStyle(
-                                                                            fontFamily:
-                                                                                "QuickSand",
-                                                                            fontWeight:
-                                                                                FontWeight.w600,
-                                                                            color: Colors.white,
-                                                                            fontSize: 18),
-                                                                      ),
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ]),
-                                                SizedBox(
-                                                    height:
-                                                        Globals.dheight * 5),
-                                                Container(
-                                                  width: Globals.width * 0.8,
-                                                  child: MaterialButton(
-                                                    color: Colors.red,
-                                                    shape: RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    6))),
-                                                    onPressed: () async {
+                                      SizedBox(height: Globals.dheight * 25),
+                                      Column(
+                                        children: <Widget>[
+                                          Text(
+                                            "Welcome",
+                                            style: TextStyle(
+                                              fontFamily: "QuickSand",
+                                              color: Colors.grey[900],
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 40,
+                                            ),
+                                          ),
+                                          Text(
+                                            "Log-in",
+                                            style: TextStyle(
+                                              fontFamily: "QuickSand",
+                                              color: Colors.grey[900],
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ])),
+                          ),
+                          Expanded(
+                            flex: 4,
+                            child: Container(
+                                // color: Colors.red,
+                                width: Globals.width,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.symmetric(
+                                                vertical: Globals.dheight * 7),
+                                            height: Globals.dheight * 50,
+                                            decoration: BoxDecoration(
+                                                color: Colors.grey[350],
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(10)),
+                                                border: Border.all(
+                                                    color: Colors.grey[400])),
+                                            padding: EdgeInsets.only(
+                                                left: 10,
+                                                right: 10,
+                                                bottom: 10),
+                                            width: Globals.width * 0.8,
+                                            child: Center(
+                                              child: TextField(
+                                                style: TextStyle(
+                                                    fontFamily: "QuickSand"),
+                                                controller: emailController,
+                                                decoration: new InputDecoration
+                                                        .collapsed(
+                                                    hintText: 'Email address'),
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.symmetric(
+                                                vertical: Globals.dheight * 7),
+                                            height: Globals.dheight * 50,
+                                            decoration: BoxDecoration(
+                                                color: Colors.grey[350],
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(10)),
+                                                border: Border.all(
+                                                    color: Colors.grey[400])),
+                                            padding: EdgeInsets.only(
+                                                left: 10,
+                                                right: 10,
+                                                bottom: 10),
+                                            width: Globals.width * 0.8,
+                                            child: Center(
+                                              child: TextField(
+                                                style: TextStyle(
+                                                    fontFamily: "QuickSand"),
+                                                controller: passwordController,
+                                                obscureText: true,
+                                                decoration: new InputDecoration
+                                                        .collapsed(
+                                                    hintText: 'Password'),
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.symmetric(
+                                                vertical: Globals.dheight * 7),
+                                            width: Globals.width * 0.8,
+                                            child: MaterialButton(
+                                              enableFeedback:
+                                                  (appModel.authState ==
+                                                      AuthState.LoggedOut),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(10))),
+                                              onPressed: (!(emailController.text
+                                                                  .toString()
+                                                                  .length ==
+                                                              0 ||
+                                                          passwordController
+                                                                  .text
+                                                                  .toString()
+                                                                  .length ==
+                                                              0) &&
+                                                      appModel.authState !=
+                                                          AuthState.LoggingIn)
+                                                  ? () async {
                                                       FocusScope.of(context)
                                                           .requestFocus(
                                                               FocusNode());
@@ -435,7 +272,11 @@ class _LogInScreenState extends State<LogInScreen> {
                                                               .InvalidLogIn)
                                                         return;
                                                       var success = await appModel
-                                                          .logInScreenGoogleLogIn();
+                                                          .logInScreenLogIn(
+                                                              emailController
+                                                                  .text,
+                                                              passwordController
+                                                                  .text);
                                                       if (success ==
                                                           AuthState.LoggedIn) {
                                                         Navigator.pushReplacement(
@@ -445,102 +286,158 @@ class _LogInScreenState extends State<LogInScreen> {
                                                                         context) =>
                                                                     HomeScreen()));
                                                       }
-                                                    },
-                                                    height:
-                                                        Globals.dheight * 50,
-                                                    minWidth:
-                                                        Globals.width * 0.8,
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      children: <Widget>[
-                                                        //insert google logo here
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  bottom: 7),
-                                                          child: Image.asset(
-                                                            "assets/app_icons/google.png",
-                                                            height: Globals
-                                                                    .dheight *
-                                                                40,
-                                                            scale: 2,
-                                                          ),
-                                                        ),
-                                                        SizedBox(width: 1),
-                                                        Text(
-                                                          "GOOGLE",
-                                                          style: TextStyle(
-                                                              fontFamily:
-                                                                  "QuickSand",
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 17),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                    height:
-                                                        Globals.dheight * 14),
-                                                Center(
-                                                    child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: <Widget>[
-                                                    Text(
-                                                      "Don't have an account? ",
-                                                      style: TextStyle(
-                                                          fontFamily:
-                                                              "QuickSand",
-                                                          color:
-                                                              Colors.grey[900],
-                                                          fontSize: 17),
-                                                    ),
-                                                    InkWell(
-                                                      onTap: () {
-                                                        appModel
-                                                            .logInScreenLogOut();
-                                                        Navigator.push(
-                                                            context,
-                                                            new MaterialPageRoute(
-                                                                builder: (BuildContext
-                                                                        context) =>
-                                                                    SignUpScreen()));
-                                                      },
-                                                      child: Text(
-                                                        "Sign-up",
+                                                    }
+                                                  : null,
+                                              disabledColor:
+                                                  Colors.greenAccent[400],
+                                              color: (appModel.authState ==
+                                                      AuthState.InvalidLogIn)
+                                                  ? Colors.red
+                                                  : Colors.greenAccent[400],
+                                              height: Globals.dheight * 50,
+                                              minWidth: Globals.width * 0.8,
+                                              child: Center(
+                                                child: (appModel.authState ==
+                                                            AuthState
+                                                                .LoggedOut ||
+                                                        appModel.authState ==
+                                                            AuthState.LoggedIn)
+                                                    ? Text(
+                                                        "LOG IN",
                                                         style: TextStyle(
                                                             fontFamily:
                                                                 "QuickSand",
-                                                            color: Colors.blue,
-                                                            fontSize: 17),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                )),
-                                              ],
-                                            )),
-                                      )
-                                    ]),
-                              ),
-                              Container(height: Globals.height * 0.33)
-                            ],
-                          ),
-                        ),
-                      );
-                    } else {
-                      return Container(
-                          width: Globals.width, height: Globals.height);
-                    }
-                  });
-            });
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            color: Colors.white,
+                                                            fontSize: 18),
+                                                      )
+                                                    : (appModel.authState ==
+                                                            AuthState.LoggingIn)
+                                                        ? JumpingText("...",
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    "QuickSand",
+                                                                color: Colors
+                                                                    .white,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: 35))
+                                                        : Text(
+                                                            "INVALID",
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    "QuickSand",
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 18),
+                                                          ),
+                                              ),
+                                            ),
+                                          )
+                                        ]),
+                                    SizedBox(height: Globals.dheight * 5),
+                                    Container(
+                                      width: Globals.width * 0.8,
+                                      child: MaterialButton(
+                                        color: Colors.red,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(6))),
+                                        onPressed: () async {
+                                          FocusScope.of(context)
+                                              .requestFocus(FocusNode());
+                                          if (appModel.authState ==
+                                              AuthState.InvalidLogIn) return;
+                                          var success = await appModel
+                                              .logInScreenGoogleLogIn();
+                                          if (success == AuthState.LoggedIn) {
+                                            Navigator.pushReplacement(
+                                                context,
+                                                new MaterialPageRoute(
+                                                    builder: (BuildContext
+                                                            context) =>
+                                                        HomeScreen()));
+                                          }
+                                        },
+                                        height: Globals.dheight * 50,
+                                        minWidth: Globals.width * 0.8,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: <Widget>[
+                                            //insert google logo here
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 7),
+                                              child: Image.asset(
+                                                "assets/app_icons/google.png",
+                                                height: Globals.dheight * 40,
+                                                scale: 2,
+                                              ),
+                                            ),
+                                            SizedBox(width: 1),
+                                            Text(
+                                              "GOOGLE",
+                                              style: TextStyle(
+                                                  fontFamily: "QuickSand",
+                                                  color: Colors.white,
+                                                  fontSize: 17),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: Globals.dheight * 14),
+                                    Center(
+                                        child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text(
+                                          "Don't have an account? ",
+                                          style: TextStyle(
+                                              fontFamily: "QuickSand",
+                                              color: Colors.grey[900],
+                                              fontSize: 17),
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            appModel.logInScreenLogOut();
+                                            Navigator.push(
+                                                context,
+                                                new MaterialPageRoute(
+                                                    builder: (BuildContext
+                                                            context) =>
+                                                        SignUpScreen()));
+                                          },
+                                          child: Text(
+                                            "Sign-up",
+                                            style: TextStyle(
+                                                fontFamily: "QuickSand",
+                                                color: Colors.blue,
+                                                fontSize: 17),
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                                  ],
+                                )),
+                          )
+                        ]),
+                  ),
+                  Container(height: Globals.height * 0.33)
+                ],
+              ),
+            ),
+          );
+        });
       }),
     );
     ;

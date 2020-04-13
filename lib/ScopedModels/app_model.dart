@@ -43,12 +43,13 @@ class AppModel extends Model {
   StreamSubscription listenForNotifications;
   List<String> collabTaskIds;
   Map<String, bool> collabTasksArchives = {};
+  bool loaded = false;
 
   TabChangerModel tabChangerModel;
   AppModel(BuildContext context) {
     initialize();
-    initializeUser();
     this.context = context;
+    initializeUser();
   }
 
   // await collabTablistenForNewCollabTasks();
@@ -69,13 +70,15 @@ class AppModel extends Model {
   Future<bool> initializeUser() async {
     if (await isUserLoggedIn()) {
       print("logged in");
-      await logInScreenLoginAutomatically();
-
+      await logInScreenLoginAutomatically(); 
+      loaded = true;
       return true;
     } else {
       print("not logged in");
       return false;
     }
+
+    notifyListeners();
   }
 
   initializeListeners() {
@@ -133,7 +136,7 @@ class AppModel extends Model {
     return (await appAuth.isUserLoggedIn());
   }
 
-  logInScreenLoginAutomatically() async {
+  logInScreenLoginAutomatically() async {adff
     authState = AuthState.LoggedIn;
     var loginType = await appAuth.loginType();
     print("the damn login type");
@@ -164,7 +167,7 @@ class AppModel extends Model {
     // await collabTablistenForNewCollabTasks();
     // collabTablistenForChangesInCollabTasks();
     // listenForNotifications();
-    // notifyListeners();
+    notifyListeners();
   }
 
   logInScreenLogIn(email, pass) async {
@@ -188,7 +191,6 @@ class AppModel extends Model {
       await homeTabFetchSoloTasks();
       await collabTabFetchCollabTasks();
 
-      await profileTabFetchUserIn
       notifyListeners();
     } catch (E) {
       authState = AuthState.InvalidLogIn;

@@ -23,6 +23,10 @@ class AppAuth {
         (await gSignIn.currentUser != null);
   }
 
+  gLogInSilently() async{
+    gSignIn.signInSilently();
+  }
+
   loginType() async {
     var gUser = gSignIn.currentUser;
     var fbUser = await fbAuth.currentUser();
