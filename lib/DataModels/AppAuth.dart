@@ -10,6 +10,33 @@ class AppAuth {
     gSignIn = GoogleSignIn();
   }
 
+  Future<bool> isUserLoggedIn() async {
+    try {
+      print(await fbAuth.currentUser());
+      print(gSignIn.currentUser);
+      print(await gSignIn.isSignedIn());
+    } catch (e) {
+      print("error");
+      print(e.toString());
+    }
+    return ((await fbAuth.currentUser()) != null) ||
+        (await gSignIn.currentUser != null);
+  }
+
+  loginType() async {
+    var gUser = gSignIn.currentUser;
+    var fbUser = await fbAuth.currentUser();
+    if (fbUser != null) return LoginType.Firebase;
+    if (gUser != null) return LoginType.Google;
+  }
+
+  currentUser() async {
+    var gUser = gSignIn.currentUser;
+    var fbUser = await fbAuth.currentUser();
+    if (fbUser != null) return fbUser;
+    if (gUser != null) return gUser;
+  }
+
   signUpWithGoogle() async {
     return await gSignIn.signIn();
   }
@@ -40,3 +67,5 @@ class AppAuth {
         .user;
   }
 }
+
+enum LoginType { Firebase, Google }

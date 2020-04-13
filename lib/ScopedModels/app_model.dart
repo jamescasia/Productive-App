@@ -47,6 +47,7 @@ class AppModel extends Model {
   TabChangerModel tabChangerModel;
   AppModel(BuildContext context) {
     initialize();
+    initializeUser();
     this.context = context;
   }
 
@@ -63,6 +64,18 @@ class AppModel extends Model {
     appDatabase = AppDatabase();
     profileTabModel = ProfileTabModel();
     collabTabModel = CollabTabModel();
+  }
+
+  Future<bool> initializeUser() async {
+    if (await isUserLoggedIn()) {
+      print("logged in");
+      await logInScreenLoginAutomatically();
+
+      return true;
+    } else {
+      print("not logged in");
+      return false;
+    }
   }
 
   initializeListeners() {
@@ -116,6 +129,44 @@ class AppModel extends Model {
     });
   }
 
+  isUserLoggedIn() async {
+    return (await appAuth.isUserLoggedIn());
+  }
+
+  logInScreenLoginAutomatically() async {
+    authState = AuthState.LoggedIn;
+    var loginType = await appAuth.loginType();
+    print("the damn login type");
+    print(loginType);
+    if (loginType == LoginType.Firebase) {
+      userAdapter.fUser = await appAuth.currentUser();
+      userAdapter.uid = userAdapter.fUser.uid.toString();
+    } else if (loginType == LoginType.Google) {
+      userAdapter.gUser = await appAuth.currentUser();
+      userAdapter.uid = userAdapter.gUser.id.toString();
+    }
+
+    print(userAdapter.uid);
+    print("the damn user");
+
+    await appDatabase.initializeUserDatabase(userAdapter.uid);
+    print(userAdapter.uid);
+    print("uid");
+    await profileTabFetchUserStats();
+    userAdapter.user.stats.numOfLoginsCompleted += 1;
+    profileTabUpdateStats();
+
+    await homeTabFetchSoloTasks();
+    await collabTabFetchCollabTasks();
+
+    await profileTabFetchUserInfo();
+    initializeListeners();
+    // await collabTablistenForNewCollabTasks();
+    // collabTablistenForChangesInCollabTasks();
+    // listenForNotifications();
+    // notifyListeners();
+  }
+
   logInScreenLogIn(email, pass) async {
     // initialize();
     try {
@@ -137,11 +188,7 @@ class AppModel extends Model {
       await homeTabFetchSoloTasks();
       await collabTabFetchCollabTasks();
 
-      await profileTabFetchUserInfo();
-      initializeListeners();
-      // await collabTablistenForNewCollabTasks();
-      // collabTablistenForChangesInCollabTasks();
-      // listenForNotifications();
+      await profileTabFetchUserIn
       notifyListeners();
     } catch (E) {
       authState = AuthState.InvalidLogIn;
@@ -741,7 +788,6 @@ class AppModel extends Model {
 
   profileTabFetchUserStats() async {
     userAdapter.user.stats = await appDatabase.fetchUserStats();
-    notifyListeners();
   }
 
   profileTabFetchUserInfo() async {
